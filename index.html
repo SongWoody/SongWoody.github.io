@@ -1,19 +1,39 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="1671.6">
-  <style type="text/css">
-    p.p2 {margin: 0.0px 0.0px 12.0px 0.0px; line-height: 14.0px; font: 12.0px Times; color: #000000; -webkit-text-stroke: #000000}
-    span.s1 {font-kerning: none}
-  </style>
-</head>
-<body>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; line-height: 28.0px; font: 24.0px Times; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b>Hello World</b></span></h1>
-<p class="p2"><span class="s1">I'm hosted with GitHub Pages.</span></p>
-<p class="p2"><span class="s1">Test Push</span></p>
-</body>
-</html>
+---
+layout: default
+current: home
+class: 'home-template'
+navigation: True
+---
+
+<!-- < default -->
+<!-- The tag above means: insert everything in this file
+into the {body} of the default.hbs template -->
+
+<!-- The big featured header, it uses blog cover image as a BG if available -->
+<header class="site-header outer {% if page.cover or site.cover %}" style="background-image:  url({{ site.baseurl }}{% if page.cover %}{{ page.cover }}{% elsif site.cover %}{{ site.cover }}{% endif %}) {% else %}no-cover{% endif %}">
+    <div class="inner">
+        <div class="site-header-content">
+            <h1 class="site-title">
+                {% if site.logo %}
+                    <img class="site-logo" src="{{ site.baseurl }}{{ site.logo }}" alt="{{ site.title }}"/>
+                {% else %}
+                    {{ site.title }}
+                {% endif %}
+            </h1>
+            <h2 class="site-description">{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}</h2>
+        </div>
+        {% include site-nav.html %}
+    </div>
+</header>
+
+<!-- The main content area -->
+<main id="site-main" class="site-main outer" role="main">
+    <div class="inner">
+
+        <div class="post-feed">
+            <!-- The tag below includes the markup for each post - partials/post-card.hbs -->
+            {%  include post-card.html %}
+        </div>
+
+    </div>
+</main>
