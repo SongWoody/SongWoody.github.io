@@ -1,48 +1,55 @@
----
-layout: default
-current: page
-class: page-template
-disqus: false
----
+<!DOCTYPE HTML>
+<!--
+	Massively by HTML5 UP
+	html5up.net | @ajlkn
+  Jekyll integration by somiibo.com
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+    {% include head.html %}
+	</head>
+	<body class="is-loading">
 
-<!-- < default -->
-<!-- The tag above means: insert everything in this file
-into the {body} of the default.hbs template -->
+		<!-- Wrapper -->
+			<div id="wrapper" class="fade-in">
 
-<!-- The big featured header, it uses blog cover image as a BG if available -->
-<header class="site-header outer">
-    <div class="inner">
-        {% include site-nav.html %}
-    </div>
-</header>
+				<!-- Header -->
+				<header id="header">
+					<a href="{{ "/" | absolute_url }}" class="logo">{{site.title}}</a>
+				</header>
 
-<!-- Everything inside the #post tags pulls data from the post -->
-<!-- #post -->
+				<!-- Nav -->
+					<nav id="nav">
 
-<main id="site-main" class="site-main outer" role="main">
-    <div class="inner">
+            {% include nav.html %}
 
-        <article class="post-full {{ page.subclass }} {% unless page.cover %}no-image{% endunless %}">
+					</nav>
 
-            <header class="post-full-header">
-                <h1 class="post-full-title">{{ page.title }}</h1>
-            </header>
+				<!-- Main -->
+				<div id="main">
 
-            {% if page.cover %}
-            <figure class="post-full-image" style="background-image: url({{ site.baseurl }}{{ page.cover }})">
-            </figure>
-            {% endif %}
+					<!-- Post -->
+					<section class="post">
+						<p>{{content}}</p>
+					</section>
 
-            <section class="post-full-content">
-                {{ content }}
-            </section>
+					<!-- Footer -->
+						<footer>
+              <ul class="actions">
+								<li><a href="{{ "/blog/" | absolute_url }}" class="button">Our Blog</a></li>
+              </ul>
+						</footer>
+					</div>
 
-        </article>
+				<!-- Footer -->
+        {% include foot.html %}
 
-    </div>
-</main>
+			</div>
 
-<!-- /post -->
+			<!-- Scripts -->
+			{% include scripts-main.html %}
+			{% include tracking.html %}
 
-<!-- The #contentFor helper here will send everything inside it up to the matching #block helper found in default.hbs -->
-{% include page-scripts.html %}
+	</body>
+</html>
