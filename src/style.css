@@ -239,14 +239,48 @@ a:focus {
 /* Custom classes */
 
 .global-wrapper {
-  margin: var(--spacing-0) auto;
-  max-width: var(--maxWidth-wrapper);
-  padding: var(--spacing-10) var(--spacing-5);
+  min-height: 100vh;
+  margin: 0;
+  max-width: "100%";
+  padding: 0;
 }
 
 .global-wrapper[data-is-root-path="true"] .bio {
   margin-bottom: var(--spacing-20);
 }
+
+.layout-container {
+  
+  min-height: 100vh;
+  display: flex;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.inner-container {
+  padding-left: 12rem;
+  padding-right: 12rem;
+}
+
+@media (max-width: 82rem) {
+  .inner-container {
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
+}
+
+@media (max-width: 42rem) {
+  .inner-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+.content {
+  flex: 3;
+  margin-right: 2rem;
+}
+
 
 .global-header {
   margin-bottom: var(--spacing-12);
@@ -255,6 +289,22 @@ a:focus {
 .main-heading {
   font-size: var(--fontSize-7);
   margin: 0;
+}
+
+.sidebar {
+  flex: 1;
+  background-color: #f4f4f4;
+  padding: 1rem;
+  width: 18rem;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.sidebar li {
+  margin-bottom: 0.5rem;
 }
 
 .post-list-item {
