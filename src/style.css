@@ -258,22 +258,8 @@ a:focus {
 }
 
 .inner-container {
-  padding-left: 12rem;
-  padding-right: 12rem;
-}
-
-@media (max-width: 82rem) {
-  .inner-container {
-    padding-left: 5rem;
-    padding-right: 5rem;
-  }
-}
-
-@media (max-width: 42rem) {
-  .inner-container {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .content {
