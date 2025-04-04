@@ -1,5 +1,6 @@
-import * as React from "react"
+import React, { useState } from "react"
 import { Link } from "gatsby"
+import { useSidebar } from "./sidebarContext"
 import Sidebar from "../components/sidebar"
 import Header from "../components/hearder"
 
@@ -8,7 +9,8 @@ const Layout = ({ location, title, children }) => {
   const isRootPath = location.pathname === rootPath
   let header
 
-  console.log(`title: ${title}`)
+  // const [isMenuOpen, setIsMenuOpen] = useSidebar();
+  const { isMenuOpen } = useSidebar();
   if (isRootPath) {
     header = (
       <h1 className="main-heading">
@@ -27,7 +29,7 @@ const Layout = ({ location, title, children }) => {
     <div className="global-wrapper" data-is-root-path={isRootPath}>
       <div className="layout-container">
         <div className="inner-container">
-          <Header title={title} rootPath={rootPath}/>
+          <Header title={title} rootPath={rootPath} />
           <main className="content" >{children}</main>
           <footer>
             © {new Date().getFullYear()}, Built with

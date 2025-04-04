@@ -1,10 +1,15 @@
 import React from "react"
+import { Link } from "gatsby";
 import { StaticImage } from "gatsby-plugin-image"
+import MenuButton from "./menuButton"
+import { useSidebar } from "./sidebarContext";
 
 const Header = ({ title, rootPath }) => {
+    const { isMenuOpen, toggleMenu } = useSidebar();
+
     return (
         <header style={headerStyle}>
-            <a href={rootPath} style={logoStyle}>
+            <Link to={rootPath} style={logoStyle}>
                 <StaticImage
                     style={logoImageStyle}
                     layout="fixed"
@@ -16,7 +21,8 @@ const Header = ({ title, rootPath }) => {
                     alt="Logo picture"
                 />
                 {title}
-            </a>
+            </Link>
+            <MenuButton isOpen={isMenuOpen} toggleMenu={toggleMenu} />
         </header>
     )
 }
