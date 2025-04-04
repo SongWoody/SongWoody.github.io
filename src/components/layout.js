@@ -27,7 +27,7 @@ const Layout = ({ location, title, children }) => {
     <div className="global-wrapper" data-is-root-path={isRootPath}>
       <div className="layout-container">
         <div className="inner-container">
-          <Header title={title}/>
+          <Header title={title} rootPath={rootPath}/>
           <main className="content" >{children}</main>
           <footer>
             © {new Date().getFullYear()}, Built with
