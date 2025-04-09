@@ -1,8 +1,21 @@
 import React from "react"
-import { Link, graphql } from "gatsby"
+import { Link, useStaticQuery, graphql } from "gatsby"
 import PropTypes from "prop-types"
+import "./TagList.css"
 
-const TagList = ({ data }) => {
+const TagList = () => {
+  const data = useStaticQuery(graphql`
+    query {
+      allMarkdownRemark(sort: { frontmatter: { date: DESC } }) {
+        nodes {
+          frontmatter {
+            tags
+          }
+        }
+      }
+    }
+  `)
+
   const posts = data.allMarkdownRemark.nodes
   const tags = [...new Set(posts.flatMap(post => post.frontmatter.tags || []))].sort()
 
@@ -34,16 +47,4 @@ TagList.propTypes = {
   }).isRequired,
 }
 
-export default TagList
-
-export const query = graphql`
-  query {
-    allMarkdownRemark(sort: { frontmatter: { date: DESC } }) {
-      nodes {
-        frontmatter {
-          tags
-        }
-      }
-    }
-  }
-` 
+export default TagList 

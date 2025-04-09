@@ -10,6 +10,7 @@ const { createFilePath } = require(`gatsby-source-filesystem`)
 // Define the template for blog post
 const blogPost = path.resolve(`./src/templates/blog-post.js`)
 const tagTemplate = path.resolve(`./src/templates/tag.js`)
+const tagsTemplate = path.resolve(`./src/templates/tags.js`)
 
 /**
  * @type {import('gatsby').GatsbyNode['createPages']}
@@ -78,6 +79,16 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     }
   })
 
+  // Create tags list page
+  createPage({
+    path: `/tags`,
+    component: tagsTemplate,
+    context: {
+      tags: Array.from(tags),
+    },
+  })
+
+  // Create individual tag pages
   tags.forEach(tag => {
     createPage({
       path: `/tags/${tag}`,

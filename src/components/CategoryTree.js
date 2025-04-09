@@ -49,9 +49,15 @@ const CategoryNode = ({ category, posts, level = 0 }) => {
 
   return (
     <div className="category-node">
-      <div 
+      <button 
         className="category-header"
         onClick={() => setIsOpen(!isOpen)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            setIsOpen(!isOpen)
+          }
+        }}
       >
         {isCategory && (
           <span className={`arrow ${isOpen ? 'open' : ''}`}>▶</span>
@@ -60,7 +66,7 @@ const CategoryNode = ({ category, posts, level = 0 }) => {
         {hasPosts && (
           <span className="post-count">({posts.length})</span>
         )}
-      </div>
+      </button>
       {isOpen && (
         <div className="category-content">
           {hasChildren && (
