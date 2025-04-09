@@ -4,20 +4,17 @@ import { Link, graphql } from "gatsby"
 import Bio from "../components/bio"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
+import "./index.css"
 
 const BlogIndex = ({ data, location }) => {
-  const siteTitle = data.site.siteMetadata?.title || `Title`
+  const { title: siteTitle } = data.site.siteMetadata
   const posts = data.allMarkdownRemark.nodes
 
-  if (posts.length === 0) {
+  if (!posts.length) {
     return (
       <Layout location={location} title={siteTitle}>
         <Bio />
-        <p>
-          No blog posts found. Add markdown posts to "content/blog" (or the
-          directory you specified for the "gatsby-source-filesystem" plugin in
-          gatsby-config.js).
-        </p>
+        <p>No blog posts found. Add markdown posts to "content/blog".</p>
       </Layout>
     )
   }
@@ -25,37 +22,27 @@ const BlogIndex = ({ data, location }) => {
   return (
     <Layout location={location} title={siteTitle}>
       <Bio />
-      <ol style={{ listStyle: `none` }}>
-        {posts.map(post => {
-          const title = post.frontmatter.title || post.fields.slug
-
-          return (
-            <li key={post.fields.slug}>
-              <article
-                className="post-list-item"
-                itemScope
-                itemType="http://schema.org/Article"
-              >
+      <ol style={{ listStyle: "none", padding: 0 }}>
+        {posts.map(({ fields: { slug }, frontmatter: { title, date, description }, excerpt }) => (
+          <li key={slug}>
+            <Link to={slug} className="post-list-item-link">
+              <article className="post-list-item" itemScope itemType="http://schema.org/Article">
                 <header>
                   <h2>
-                    <Link to={post.fields.slug} itemProp="url">
-                      <span itemProp="headline">{title}</span>
-                    </Link>
+                    <span itemProp="headline">{title || slug}</span>
                   </h2>
-                  <small>{post.frontmatter.date}</small>
+                  <small>{date}</small>
                 </header>
                 <section>
                   <p
-                    dangerouslySetInnerHTML={{
-                      __html: post.frontmatter.description || post.excerpt,
-                    }}
+                    dangerouslySetInnerHTML={{ __html: description || excerpt }}
                     itemProp="description"
                   />
                 </section>
               </article>
-            </li>
-          )
-        })}
+            </Link>
+          </li>
+        ))}
       </ol>
     </Layout>
   )
