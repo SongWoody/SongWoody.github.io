@@ -13,7 +13,9 @@ const BlogIndex = ({ data, location }) => {
   if (!posts.length) {
     return (
       <Layout location={location} title={siteTitle}>
-        <Bio />
+        <div className="bio-container">
+          <Bio />
+        </div>
         <p>No blog posts found. Add markdown posts to "content/blog".</p>
       </Layout>
     )
@@ -21,7 +23,9 @@ const BlogIndex = ({ data, location }) => {
 
   return (
     <Layout location={location} title={siteTitle}>
-      <Bio />
+      <div className="bio-container">
+        <Bio />
+      </div>
       <ol style={{ listStyle: "none", padding: 0 }}>
         {posts.map(({ fields: { slug }, frontmatter: { title, date, description }, excerpt }) => (
           <li key={slug}>

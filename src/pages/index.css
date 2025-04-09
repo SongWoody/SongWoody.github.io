@@ -100,4 +100,45 @@
 
 .post-list-item section p {
   margin: 0;
+}
+
+/* Bio container styles */
+.bio-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 1rem auto;
+  padding: 1.5rem;
+}
+
+.bio-container .bio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
+}
+
+.bio-container .bio p {
+  margin: 0.5rem 0;
+  color: #666;
+  line-height: 1.5;
+}
+
+.bio-container .bio .social-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.bio-container .bio .social-links a {
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.bio-container .bio .social-links a:hover {
+  color: #007acc;
+  transform: translateY(-2px);
 } 
