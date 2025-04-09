@@ -2,48 +2,144 @@
   position: fixed;
   top: 0;
   right: -100%;
-  height: 100vh;
-  background-color: white;
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-  transition: right 0.3s ease-in-out;
+  width: 300px;
+  height: 100%;
+  background-color: #ffffff;
+  box-shadow: -2px 0 20px rgba(0, 0, 0, 0.1);
+  transition: right 0.3s ease;
   z-index: 1000;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .sidebar.open {
   right: 0;
 }
 
+.close-button {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.close-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.close-icon {
+  display: block;
+  width: 20px;
+  height: 20px;
+  position: relative;
+}
+
+.close-icon:before,
+.close-icon:after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #333;
+  transition: background-color 0.2s;
+}
+
+.close-icon:before {
+  transform: rotate(45deg);
+}
+
+.close-icon:after {
+  transform: rotate(-45deg);
+}
+
 .sidebar-content {
-  padding: 72px 24px 24px;
+  padding: 48px 16px 16px;
   height: 100%;
   overflow-y: auto;
 }
 
-.sidebar h4 {
-  margin-bottom: 20px;
-  font-size: 1.5rem;
-  color: #333;
+.sidebar-content h4 {
+  margin: 0 0 12px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2c3e50;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.sidebar ul {
+.sidebar-content ul {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0 0 20px 0;
 }
 
-.sidebar li {
-  margin-bottom: 16px;
+.sidebar-content ul li {
+  margin-bottom: 10px;
 }
 
-.sidebar a {
-  color: #666;
-  text-decoration: none;
-  font-size: 1.1rem;
-  transition: color 0.2s ease;
-}
-
-.sidebar a:hover {
+.sidebar-content ul li a {
   color: #333;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.sidebar-content ul li a:hover {
+  color: #007acc;
+}
+
+.tag-list {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.tag-list .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag-list .tag {
+  display: inline-block;
+  padding: 4px 10px;
+  background-color: #f8f9fa;
+  color: #495057;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 1px solid #e9ecef;
+}
+
+.tag-list .tag:hover {
+  background-color: #e9ecef;
+  color: #212529;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* 스크롤바 스타일 */
+.sidebar-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
 }
 
 /* 모바일 버전 스타일 */
@@ -58,51 +154,4 @@
   .sidebar {
     width: 320px;
   }
-}
-
-.close-button {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 32px;
-  height: 32px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1001;
-}
-
-.close-icon {
-  position: relative;
-  width: 20px;
-  height: 20px;
-}
-
-.close-icon::before,
-.close-icon::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background-color: #333;
-  transition: background-color 0.2s ease;
-}
-
-.close-icon::before {
-  transform: rotate(45deg);
-}
-
-.close-icon::after {
-  transform: rotate(-45deg);
-}
-
-.close-button:hover .close-icon::before,
-.close-button:hover .close-icon::after {
-  background-color: #666;
 } 

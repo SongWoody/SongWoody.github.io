@@ -1,43 +1,70 @@
 import React from "react"
-import { Link } from "gatsby"
+import { Link, StaticQuery, graphql } from "gatsby"
 import PropTypes from "prop-types"
 import { useSidebar } from "./sidebarContext"
+import CategoryTree from "./CategoryTree"
 import "./sidebarStyle.css"
 
-const MenuItem = ({ to, children }) => (
-  <li>
-    <Link to={to}>{children}</Link>
-  </li>
+const TagList = ({ tags }) => (
+  <div className="tag-list">
+    <h4>Tags</h4>
+    <div className="tags">
+      {tags.map((tag, index) => (
+        <Link key={index} to={`/tags/${tag}`} className="tag">
+          #{tag}
+        </Link>
+      ))}
+    </div>
+  </div>
 );
 
-MenuItem.propTypes = {
-  to: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
+TagList.propTypes = {
+  tags: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 const Sidebar = () => {
   const { isMenuOpen, toggleMenu } = useSidebar();
 
   return (
-    <aside className={`sidebar ${isMenuOpen ? 'open' : ''}`}>
-      <button 
-        className="close-button" 
-        onClick={toggleMenu} 
-        aria-label="Close Menu"
-      >
-        <span className="close-icon" />
-      </button>
-      <nav className="sidebar-content">
-        <h4>Menu</h4>
-        <ul>
-          <MenuItem to="/spring">Spring Boot</MenuItem>
-          <MenuItem to="/android">Android</MenuItem>
-          <MenuItem to="/javascript">JavaScript</MenuItem>
-          {/* 필요 시 추가 */}
-        </ul>
-      </nav>
-    </aside>
-  )
-}
+    <StaticQuery
+      query={graphql`
+        query {
+          allMarkdownRemark(sort: { frontmatter: { date: DESC } }) {
+            nodes {
+              frontmatter {
+                tags
+                categories
+                title
+              }
+              fields {
+                slug
+              }
+            }
+          }
+        }
+      `}
+      render={data => {
+        const posts = data.allMarkdownRemark.nodes;
+        const tags = [...new Set(posts.flatMap(post => post.frontmatter.tags || []))].sort();
 
-export default Sidebar
+        return (
+          <aside className={`sidebar ${isMenuOpen ? 'open' : ''}`}>
+            <button 
+              className="close-button" 
+              onClick={toggleMenu} 
+              aria-label="Close Menu"
+            >
+              <span className="close-icon" />
+            </button>
+            <nav className="sidebar-content">
+              <CategoryTree data={data} />
+              <TagList tags={tags} />
+            </nav>
+          </aside>
+        );
+      }}
+    />
+  );
+};
+
+export default Sidebar;

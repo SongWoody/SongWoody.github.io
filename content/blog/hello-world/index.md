@@ -2,6 +2,8 @@
 title: Markdown 사용법
 date: "2025-03-12T21:27:03.284Z"
 description: "First Post"
+categories: ["기타", "마크다운"]
+tags: ["Markdown"]
 ---
 
 개발자면 git Rrepository 를 만들다보면 README.md 파일을 많이 접해봤을 겁니다.

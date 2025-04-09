@@ -9,6 +9,7 @@ const { createFilePath } = require(`gatsby-source-filesystem`)
 
 // Define the template for blog post
 const blogPost = path.resolve(`./src/templates/blog-post.js`)
+const tagTemplate = path.resolve(`./src/templates/tag.js`)
 
 /**
  * @type {import('gatsby').GatsbyNode['createPages']}
@@ -17,18 +18,26 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const { createPage } = actions
 
   // Get all markdown blog posts sorted by date
-  const result = await graphql(`
-    {
-      allMarkdownRemark(sort: { frontmatter: { date: ASC } }, limit: 1000) {
-        nodes {
-          id
-          fields {
-            slug
+  const result = await graphql(
+    `
+      {
+        allMarkdownRemark(
+          sort: { frontmatter: { date: DESC } }
+          limit: 1000
+        ) {
+          nodes {
+            id
+            fields {
+              slug
+            }
+            frontmatter {
+              tags
+            }
           }
         }
       }
-    }
-  `)
+    `
+  )
 
   if (result.errors) {
     reporter.panicOnBuild(
@@ -60,6 +69,24 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       })
     })
   }
+
+  // Create tag pages
+  const tags = new Set()
+  posts.forEach(post => {
+    if (post.frontmatter.tags) {
+      post.frontmatter.tags.forEach(tag => tags.add(tag))
+    }
+  })
+
+  tags.forEach(tag => {
+    createPage({
+      path: `/tags/${tag}`,
+      component: tagTemplate,
+      context: {
+        tag,
+      },
+    })
+  })
 }
 
 /**
@@ -116,6 +143,7 @@ exports.createSchemaCustomization = ({ actions }) => {
       title: String
       description: String
       date: Date @dateformat
+      tags: [String]
     }
 
     type Fields {
