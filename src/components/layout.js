@@ -1,27 +1,30 @@
 import React from "react"
 import PropTypes from "prop-types"
-import Header from "./hearder"
+import Header from "./header"
 import Sidebar from "./sidebar"
+import { SidebarProvider } from "./sidebarContext"
 
 const Layout = ({ location, title, children }) => {
   const rootPath = `${__PATH_PREFIX__}/`
   const isRootPath = location.pathname === rootPath
 
   return (
-    <div className="global-wrapper" data-is-root-path={isRootPath}>
-      <Header title={title} rootPath={rootPath} />
-      <div className="layout-container">
-        <div className="inner-container">
-          <main className="content">{children}</main>
-          <footer>
-            © {new Date().getFullYear()}, Built with
-            {` `}
-            <a href="https://www.gatsbyjs.com">Gatsby</a>
-          </footer>
+    <SidebarProvider>
+      <div className="global-wrapper" data-is-root-path={isRootPath}>
+        <Header title={title} rootPath={rootPath} />
+        <div className="layout-container">
+          <div className="inner-container">
+            <main className="content">{children}</main>
+            <footer>
+              <a href="https://github.com/SongWoody" target="_blank" rel="noopener noreferrer">
+                GitHub
+              </a>
+            </footer>
+          </div>
+          <Sidebar />
         </div>
-        <Sidebar />
       </div>
-    </div>
+    </SidebarProvider>
   )
 }
 
