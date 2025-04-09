@@ -1,4 +1,5 @@
 import React from "react"
+import PropTypes from "prop-types"
 import "./menuButtonStytle.css"
 
 const MenuButton = ({ isOpen, toggleMenu }) => {
@@ -7,12 +8,18 @@ const MenuButton = ({ isOpen, toggleMenu }) => {
       onClick={toggleMenu}
       className={`menu-button ${isOpen ? "open" : ""}`}
       aria-label="Toggle Menu"
+      aria-expanded={isOpen}
     >
-      <div className="bar top"></div>
-      <div className="bar middle"></div>
-      <div className="bar bottom"></div>
+      <div className="bar top" />
+      <div className="bar middle" />
+      <div className="bar bottom" />
     </button>
   )
 }
+
+MenuButton.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  toggleMenu: PropTypes.func.isRequired,
+};
 
 export default MenuButton

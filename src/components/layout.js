@@ -1,6 +1,7 @@
 import React from "react"
-import Sidebar from "../components/sidebar"
-import Header from "../components/hearder"
+import PropTypes from "prop-types"
+import Header from "./hearder"
+import Sidebar from "./sidebar"
 
 const Layout = ({ location, title, children }) => {
   const rootPath = `${__PATH_PREFIX__}/`
@@ -23,5 +24,11 @@ const Layout = ({ location, title, children }) => {
     </div>
   )
 }
+
+Layout.propTypes = {
+  location: PropTypes.object.isRequired,
+  title: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+};
 
 export default Layout

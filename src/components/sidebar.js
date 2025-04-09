@@ -1,25 +1,41 @@
 import React from "react"
 import { Link } from "gatsby"
+import PropTypes from "prop-types"
 import { useSidebar } from "./sidebarContext"
 import "./sidebarStyle.css"
+
+const MenuItem = ({ to, children }) => (
+  <li>
+    <Link to={to}>{children}</Link>
+  </li>
+);
+
+MenuItem.propTypes = {
+  to: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+};
 
 const Sidebar = () => {
   const { isMenuOpen, toggleMenu } = useSidebar();
 
   return (
     <aside className={`sidebar ${isMenuOpen ? 'open' : ''}`}>
-      <button className="close-button" onClick={toggleMenu} aria-label="Close Menu">
-        <span className="close-icon"></span>
+      <button 
+        className="close-button" 
+        onClick={toggleMenu} 
+        aria-label="Close Menu"
+      >
+        <span className="close-icon" />
       </button>
-      <div className="sidebar-content">
+      <nav className="sidebar-content">
         <h4>Menu</h4>
         <ul>
-          <li><Link to="/spring">Spring Boot</Link></li>
-          <li><Link to="/android">Android</Link></li>
-          <li><Link to="/javascript">JavaScript</Link></li>
+          <MenuItem to="/spring">Spring Boot</MenuItem>
+          <MenuItem to="/android">Android</MenuItem>
+          <MenuItem to="/javascript">JavaScript</MenuItem>
           {/* 필요 시 추가 */}
         </ul>
-      </div>
+      </nav>
     </aside>
   )
 }
