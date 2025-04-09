@@ -3,18 +3,9 @@
  *
  * See: https://www.gatsbyjs.com/docs/reference/config-files/gatsby-ssr/
  */
-import React from "react";
-import { SidebarProvider } from "./src/components/sidebarContext";
-
-
 /**
  * @type {import('gatsby').GatsbySSR['onRenderBody']}
  */
 exports.onRenderBody = ({ setHtmlAttributes }) => {
   setHtmlAttributes({ lang: `en` })
 }
-
-
-export const wrapRootElement = ({ element }) => (
-  <SidebarProvider>{element}</SidebarProvider>
-);
