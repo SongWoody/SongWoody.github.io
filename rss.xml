@@ -1,12 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Gatsby Starter Blog RSS Feed]]></title><description><![CDATA[I share concise notes on what I learn while developing.]]></description><link>https://songwoody.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Wed, 09 Apr 2025 14:17:24 GMT</lastBuildDate><item><title><![CDATA[Markdown 사용법]]></title><description><![CDATA[개발자면 git Rrepository 를 만들다보면 README.md 파일을 많이 접해봤을 겁니다.
-이 파일은 단순한 텍스트가 아니라, 프로젝트의 소개, 사용 방법, 개발 환경 등을 문서화하는 중요한 역할을 합니다. 그런데 이 README.md…]]></description><link>https://songwoody.github.io/hello-world/</link><guid isPermaLink="false">https://songwoody.github.io/hello-world/</guid><pubDate>Wed, 12 Mar 2025 21:27:03 GMT</pubDate><content:encoded>&lt;p&gt;개발자면 git Rrepository 를 만들다보면 README.md 파일을 많이 접해봤을 겁니다.
-이 파일은 단순한 텍스트가 아니라, 프로젝트의 소개, 사용 방법, 개발 환경 등을 문서화하는 중요한 역할을 합니다. 그런데 이 README.md 파일은 단순한 TXT 파일이 아니라 Markdown이라는 문법을 사용해 작성됩니다.&lt;/p&gt;
-&lt;h1&gt;Markdown 이란?&lt;/h1&gt;
-&lt;p&gt;Markdown은 2004년 John Gruber와 Aaron Swartz에 의해 개발된 가벼운 마크업 언어입니다. 간단한 문법을 사용하여 가독성이 높고, HTML로 변환하기 쉬운 문서를 작성할 수 있습니다. 특히 개발자 커뮤니티에서는 README 파일뿐만 아니라, 블로그, 기술 문서, 위키 등 다양한 곳에서 널리 사용되고 있습니다.&lt;/p&gt;
-&lt;h1&gt;Markdown 기본 문법&lt;/h1&gt;
-&lt;p&gt;코드 블록&lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Gatsby Starter Blog RSS Feed]]></title><description><![CDATA[I share concise notes on what I learn while developing.]]></description><link>https://songwoody.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Thu, 17 Apr 2025 13:36:12 GMT</lastBuildDate><item><title><![CDATA[마크다운(Markdown) 작성 문법 정리]]></title><description><![CDATA[개발을 하거나 문서를 정리하다 보면 마주치는 Markdown. Markdown…]]></description><link>https://songwoody.github.io/markdown_description/</link><guid isPermaLink="false">https://songwoody.github.io/markdown_description/</guid><pubDate>Thu, 17 Apr 2025 21:27:03 GMT</pubDate><content:encoded>&lt;ul&gt;
+&lt;li&gt;개발을 하거나 문서를 정리하다 보면 마주치는 Markdown.&lt;/li&gt;
+&lt;li&gt;Markdown 은 단순한 텍스트가 아니라, #, *, - 등 여러 기호를 사용하여 문서를 간단하게 작성하고 읽기 편하게 만들 수 있습니다.&lt;/li&gt;
+&lt;li&gt;처음엔 낯설지만, 알고 보면 굉장히 간단하고 유용한 문법입니다.&lt;/li&gt;
+&lt;li&gt;여러 기호 등에 익숙해 질수 있게 간단한 사용법을 설명하겠습니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;Markdown 기본 문법&lt;/h4&gt;
+&lt;h5&gt;1. 코드 블록&lt;/h5&gt;
+&lt;p&gt;작성:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;```js
+const saltyDuckEgg = &quot;chinese preserved food product&quot;
+```&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;출력:&lt;/p&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;js&quot;&gt;&lt;pre class=&quot;language-js&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; saltyDuckEgg &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;chinese preserved food product&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;표 생성&lt;/p&gt;
+&lt;h5&gt;2. 표 생성&lt;/h5&gt;
+&lt;p&gt;작성:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;| Number | Title                                    | Year |
+| :----- | :--------------------------------------- | ---: |
+| 1      | Harry Potter and the Philosopher’s Stone | 2001 |
+| 2      | Harry Potter and the Chamber of Secrets  | 2002 |
+| 3      | Harry Potter and the Prisoner of Azkaban | 2004 |&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;출력:&lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
@@ -33,190 +46,90 @@
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;| Number | Title                                    | Year |
-| :----- | :--------------------------------------- | ---: |
-| 1      | Harry Potter and the Philosopher’s Stone | 2001 |
-| 2      | Harry Potter and the Chamber of Secrets  | 2002 |
-| 3      | Harry Potter and the Prisoner of Azkaban | 2004 |&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h1&gt;Header 1&lt;/h1&gt;
-&lt;h2&gt;Header 2&lt;/h2&gt;
-&lt;h3&gt;Header 3&lt;/h3&gt;
-&lt;h4&gt;Header 4&lt;/h4&gt;
-&lt;h5&gt;Header 5&lt;/h5&gt;
-&lt;h6&gt;Header 6&lt;/h6&gt;
+&lt;h5&gt;3. 헤더 사용법&lt;/h5&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;# Header 1
 ## Header 2
 ### Header 3
 #### Header 4
 ##### Header 5
 ###### Header 6&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;Header 1&lt;/h1&gt;
+&lt;h2&gt;Header 2&lt;/h2&gt;
+&lt;h3&gt;Header 3&lt;/h3&gt;
+&lt;h4&gt;Header 4&lt;/h4&gt;
+&lt;h5&gt;Header 5&lt;/h5&gt;
+&lt;h6&gt;Header 6&lt;/h6&gt;
+&lt;h5&gt;3. 글자 기울임&lt;/h5&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;&gt; 기울어진 글자&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;blockquote&gt;
-&lt;p&gt;Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.&lt;/p&gt;
+&lt;p&gt;기울어진 글자&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;&gt; Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;&gt; ## 헤더 기울이기
+&gt; 1. 리스트도 
+&gt; 2. 길울일 수 있습니다.
+&gt;
+&gt; 일반 텍스트
+&gt;
+&gt;     탭 한번&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;blockquote&gt;
-&lt;h2&gt;This is a header.&lt;/h2&gt;
+&lt;h2&gt;헤더 기울이기&lt;/h2&gt;
 &lt;ol&gt;
-&lt;li&gt;This is the first list item.&lt;/li&gt;
-&lt;li&gt;This is the second list item.&lt;/li&gt;
+&lt;li&gt;리스트도&lt;/li&gt;
+&lt;li&gt;길울일 수 있습니다.&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;Here&apos;s some example code:&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Markdown.generate();&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;일반 텍스트&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;탭 한번&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;/blockquote&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;&gt; ## This is a header.
-&gt; 1. This is the first list item.
-&gt; 2. This is the second list item.
-&gt;
-&gt; Here&apos;s some example code:
-&gt;
-&gt;     Markdown.generate();&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h5&gt;4. 글자 강조&lt;/h5&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;- `양쪽에 백틱을 넣어서 감싸면` 코드 강조를 할 수 있습니다.
+- **양쪽에 별을 넣으면** 굵게 표시할 수 있습니다.
+- _양쪽에 언더바는_ 기울어져서 나옵니다. &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;code goes&lt;/code&gt; here in this line&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;bold&lt;/strong&gt; goes here&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;양쪽에 백틱을 넣어서 감싸서&lt;/code&gt; 강조 할 수 있습니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;양쪽에 별을 넣으면&lt;/strong&gt; 굵게 표시할 수 있습니다.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;양쪽에 언더바는&lt;/em&gt; 기울어져서 나옵니다.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;markdown&quot;&gt;&lt;pre class=&quot;language-markdown&quot;&gt;&lt;code class=&quot;language-markdown&quot;&gt;&lt;span class=&quot;token list punctuation&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token code-snippet code keyword&quot;&gt;`code goes`&lt;/span&gt; here in this line
-&lt;span class=&quot;token list punctuation&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token bold&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;token content&quot;&gt;bold&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;**&lt;/span&gt;&lt;/span&gt; goes here&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h5&gt;5. 번호 매기기&lt;/h5&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;1. 첫 번째
+2. 두 번째
+3. 세 번째&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;ol&gt;
 &lt;li&gt;첫 번째&lt;/li&gt;
 &lt;li&gt;두 번째&lt;/li&gt;
 &lt;li&gt;세 번째&lt;/li&gt;
 &lt;/ol&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;markdown&quot;&gt;&lt;pre class=&quot;language-markdown&quot;&gt;&lt;code class=&quot;language-markdown&quot;&gt;&lt;span class=&quot;token list punctuation&quot;&gt;1.&lt;/span&gt; 첫 번째
-&lt;span class=&quot;token list punctuation&quot;&gt;2.&lt;/span&gt; 두 번째
-&lt;span class=&quot;token list punctuation&quot;&gt;3.&lt;/span&gt; 세 번째&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-&lt;hr&gt;
-&lt;hr&gt;
-&lt;hr&gt;
-&lt;hr&gt;
-&lt;hr&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;* * *
-
-***
-
-*****
-
-- - -
-
----
-
----------------------------------------&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;이것은 &lt;a href=&quot;http://example.com&quot; title=&quot;Example&quot;&gt;링크&lt;/a&gt; 이다.&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;This is [an example](http://example.com &quot;Example&quot;) link.
-
-[This link](http://example.com) has no title attr.
-
-This is [an example] [id] reference-style link.
-
-[id]: http://example.com &quot;Optional Title&quot;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;&lt;em&gt;single asterisks&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;single underscores&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;double asterisks&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;double underscores&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;*single asterisks*
-
-_single underscores_
-
-**double asterisks**
-
-__double underscores__&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;마무리&lt;/p&gt;
-&lt;p&gt;Markdown은 간단하면서도 강력한 문법을 제공하여 문서를 더욱 쉽게 작성할 수 있도록 도와줍니다. GitHub의 README 파일뿐만 아니라, 블로그, 기술 문서, 협업 문서 등 다양한 곳에서 활용할 수 있으니, 자주 사용하면서 익숙해지면 여러 곳에서 유용하게 사용할 수 있습니다. 😀&lt;/p&gt;</content:encoded></item><item><title><![CDATA[New Beginnings]]></title><description><![CDATA[Far far away, behind the word mountains, far from the countries Vokalia and
-Consonantia, there live the blind texts. Separated they live in…]]></description><link>https://songwoody.github.io/new-beginnings/</link><guid isPermaLink="false">https://songwoody.github.io/new-beginnings/</guid><pubDate>Thu, 28 May 2015 22:40:32 GMT</pubDate><content:encoded>&lt;p&gt;Far far away, behind the word mountains, far from the countries Vokalia and
-Consonantia, there live the blind texts. Separated they live in Bookmarksgrove
-right at the coast of the Semantics, a large language ocean. A small river named
-Duden flows by their place and supplies it with the necessary regelialia.&lt;/p&gt;
-&lt;h2&gt;On deer horse aboard tritely yikes and much&lt;/h2&gt;
-&lt;p&gt;The Big Oxmox advised her not to do so, because there were thousands of bad
-Commas, wild Question Marks and devious Semikoli, but the Little Blind Text
-didn’t listen. She packed her seven versalia, put her initial into the belt and
-made herself on the way.&lt;/p&gt;
+&lt;h5&gt;6. 구분선&lt;/h5&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;* * *&lt;/code&gt; 는&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;This however showed weasel&lt;/li&gt;
-&lt;li&gt;Well uncritical so misled
-&lt;ul&gt;
-&lt;li&gt;this is very interesting&lt;/li&gt;
-&lt;/ul&gt;
+&lt;li&gt;
+&lt;hr&gt;
 &lt;/li&gt;
-&lt;li&gt;Goodness much until that fluid owl&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;When she reached the first hills of the &lt;strong&gt;Italic Mountains&lt;/strong&gt;, she had a last
-view back on the skyline of her hometown &lt;em&gt;Bookmarksgrove&lt;/em&gt;, the headline of
-&lt;a href=&quot;http://google.com&quot;&gt;Alphabet Village&lt;/a&gt; and the subline of her own road, the Line
-Lane. Pityful a rhetoric question ran over her cheek, then she continued her
-way. On her way she met a copy.&lt;/p&gt;
-&lt;h3&gt;Overlaid the jeepers uselessly much excluding&lt;/h3&gt;
-&lt;p&gt;But nothing the copy said could convince her and so it didn’t take long until a
-few insidious Copy Writers ambushed her, made her drunk with
-&lt;a href=&quot;http://google.com&quot;&gt;Longe and Parole&lt;/a&gt; and dragged her into their agency, where
-they abused her for their projects again and again. And if she hasn’t been
-rewritten, then they are still using her.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Far far away, behind the word mountains, far from the countries Vokalia and
-Consonantia, there live the blind texts. Separated they live in Bookmarksgrove
-right at the coast of the Semantics, a large language ocean.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;It is a paradisematic country, in which roasted parts of sentences fly into your
-mouth. Even the all-powerful Pointing has no control about the blind texts it is
-an almost unorthographic life One day however a small line of blind text by the
-name of Lorem Ipsum decided to leave for the far World of Grammar.&lt;/p&gt;
-&lt;h3&gt;According a funnily until pre-set or arrogant well cheerful&lt;/h3&gt;
-&lt;p&gt;The Big Oxmox advised her not to do so, because there were thousands of bad
-Commas, wild Question Marks and devious Semikoli, but the Little Blind Text
-didn’t listen. She packed her seven versalia, put her initial into the belt and
-made herself on the way.&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;So baboon this&lt;/li&gt;
-&lt;li&gt;Mounted militant weasel gregariously admonishingly straightly hey&lt;/li&gt;
-&lt;li&gt;Dear foresaw hungry and much some overhung&lt;/li&gt;
-&lt;li&gt;Rash opossum less because less some amid besides yikes jeepers frenetic
-impassive fruitlessly shut&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;When she reached the first hills of the Italic Mountains, she had a last view
-back on the skyline of her hometown Bookmarksgrove, the headline of Alphabet
-Village and the subline of her own road, the Line Lane. Pityful a rhetoric
-question ran over her cheek, then she continued her way. On her way she met a
-copy.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;The copy warned the Little Blind Text, that where it came from it would have
-been rewritten a thousand times and everything that was left from its origin
-would be the word &quot;and&quot; and the Little Blind Text should turn around and
-return to its own, safe country.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;But nothing the copy said could convince her and so it didn’t take long until a
-few insidious Copy Writers ambushed her, made her drunk with Longe and Parole
-and dragged her into their agency, where they abused her for their projects
-again and again. And if she hasn’t been rewritten, then they are still using
-her. Far far away, behind the word mountains, far from the countries Vokalia and
-Consonantia, there live the blind texts.&lt;/p&gt;
-&lt;h4&gt;Silent delightfully including because before one up barring chameleon&lt;/h4&gt;
-&lt;p&gt;Separated they live in Bookmarksgrove right at the coast of the Semantics, a
-large language ocean. A small river named Duden flows by their place and
-supplies it with the necessary regelialia. It is a paradisematic country, in
-which roasted parts of sentences fly into your mouth.&lt;/p&gt;
-&lt;p&gt;Even the all-powerful Pointing has no control about the blind texts it is an
-almost unorthographic life One day however a small line of blind text by the
-name of Lorem Ipsum decided to leave for the far World of Grammar. The Big Oxmox
-advised her not to do so, because there were thousands of bad Commas, wild
-Question Marks and devious Semikoli, but the Little Blind Text didn’t listen.&lt;/p&gt;
-&lt;h5&gt;Wherever far wow thus a squirrel raccoon jeez jaguar this from along&lt;/h5&gt;
-&lt;p&gt;She packed her seven versalia, put her initial into the belt and made herself on
-the way. When she reached the first hills of the Italic Mountains, she had a
-last view back on the skyline of her hometown Bookmarksgrove, the headline of
-Alphabet Village and the subline of her own road, the Line Lane. Pityful a
-rhetoric question ran over her cheek, then she continued her way. On her way she
-met a copy.&lt;/p&gt;
-&lt;h6&gt;Slapped cozy a that lightheartedly and far&lt;/h6&gt;
-&lt;p&gt;The copy warned the Little Blind Text, that where it came from it would have
-been rewritten a thousand times and everything that was left from its origin
-would be the word &quot;and&quot; and the Little Blind Text should turn around and return
-to its own, safe country. But nothing the copy said could convince her and so it
-didn’t take long until a few insidious Copy Writers ambushed her, made her drunk
-with Longe and Parole and dragged her into their agency, where they abused her
-for their projects again and again.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[My Second Post!]]></title><description><![CDATA[Wow! I love blogging so much already. Did you know that "despite its name, salted duck eggs can also be made from
-chicken eggs, though the…]]></description><link>https://songwoody.github.io/my-second-post/</link><guid isPermaLink="false">https://songwoody.github.io/my-second-post/</guid><pubDate>Wed, 06 May 2015 23:46:37 GMT</pubDate><content:encoded>&lt;p&gt;Wow! I love blogging so much already.&lt;/p&gt;
-&lt;p&gt;Did you know that &quot;despite its name, salted duck eggs can also be made from
-chicken eggs, though the taste and texture will be somewhat different, and the
-egg yolk will be less rich.&quot;?
-(&lt;a href=&quot;https://en.wikipedia.org/wiki/Salted_duck_egg&quot;&gt;Wikipedia Link&lt;/a&gt;)&lt;/p&gt;
-&lt;p&gt;Yeah, I didn&apos;t either.&lt;/p&gt;</content:encoded></item></channel></rss>
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;***&lt;/code&gt; 는&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;hr&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;*****&lt;/code&gt; 는&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;hr&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;- - -&lt;/code&gt; 는&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;---&lt;/code&gt; 는&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;---------------------------------------&lt;/code&gt; 는&lt;/p&gt;
+&lt;hr&gt;
+&lt;h5&gt;7. 링크&lt;/h5&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;[링크](http://example.com &quot;Example&quot;)&lt;/code&gt; 는 이렇게 사용합니다.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://example.com&quot; title=&quot;Example&quot;&gt;링크&lt;/a&gt; 는 이렇게 사용합니다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h5&gt;마무리&lt;/h5&gt;
+&lt;ul&gt;
+&lt;li&gt;Markdown은 간단하면서도 강력한 문법을 제공하여 문서를 더욱 쉽게 작성할 수 있도록 도와줍니다.&lt;/li&gt;
+&lt;li&gt;GitHub의 README 파일뿐만 아니라, 블로그, 기술 문서, 협업 문서 등 다양한 곳에서 활용할 수 있으니,&lt;/li&gt;
+&lt;li&gt;자주 사용하면서 익숙해지면 여러 곳에서 유용하게 사용할 수 있습니다. 😀&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item></channel></rss>
