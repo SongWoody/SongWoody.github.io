@@ -9,7 +9,7 @@
  */
 module.exports = {
   siteMetadata: {
-    title: `SongWoody`,
+    title: `NiNyYoon`,
     author: {
       name: `Song YunGi`,
       summary: `Android, iOS Developer.`,
