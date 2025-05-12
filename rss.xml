@@ -1,4 +1,89 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Gatsby Starter Blog RSS Feed]]></title><description><![CDATA[I share concise notes on what I learn while developing.]]></description><link>https://songwoody.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Thu, 17 Apr 2025 13:36:12 GMT</lastBuildDate><item><title><![CDATA[마크다운(Markdown) 작성 문법 정리]]></title><description><![CDATA[개발을 하거나 문서를 정리하다 보면 마주치는 Markdown. Markdown…]]></description><link>https://songwoody.github.io/markdown_description/</link><guid isPermaLink="false">https://songwoody.github.io/markdown_description/</guid><pubDate>Thu, 17 Apr 2025 21:27:03 GMT</pubDate><content:encoded>&lt;ul&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Gatsby Starter Blog RSS Feed]]></title><description><![CDATA[I share concise notes on what I learn while developing.]]></description><link>https://songwoody.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Mon, 12 May 2025 14:32:05 GMT</lastBuildDate><item><title><![CDATA[Poetry 사용법 정리 - python 가상환경 관리]]></title><description><![CDATA[최근 SAM(Segment-Anything-Model)을 활용해 이미지 처리 데스크톱 앱을 만들 일이 생겨, Python 개발 환경을 구성하려던 중, Poetry라는 도구를 알게 되었습니다. 그동안 Conda…]]></description><link>https://songwoody.github.io/poetry_guide/</link><guid isPermaLink="false">https://songwoody.github.io/poetry_guide/</guid><pubDate>Mon, 12 May 2025 22:00:00 GMT</pubDate><content:encoded>&lt;p&gt;최근 SAM(Segment-Anything-Model)을 활용해 이미지 처리 데스크톱 앱을 만들 일이 생겨,&lt;br&gt;
+Python 개발 환경을 구성하려던 중, &lt;strong&gt;Poetry&lt;/strong&gt;라는 도구를 알게 되었습니다.&lt;br&gt;
+그동안 Conda 를 주로 사용해왔고, 간단한 분석용 스크립트나 실험 환경을 구성할 때 꽤 유용하게 느껴졌습니다.&lt;br&gt;
+하지만 이번에는 실제 배포가 가능한 데스크톱 앱을 만들어야 했기 때문에,&lt;br&gt;
+&lt;strong&gt;의존성 관리, 버전 고정, 패키징&lt;/strong&gt;에 강점과 &lt;strong&gt;협업 이점&lt;/strong&gt;까지 있는 Petry 를 사용하게 되어 간단한 사용법을 공유합니다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;기본적인 사용법과 가상환경 생성, Jupyter 커널 생성까지만 다루고 패키징은 따로 다루지 않습니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2&gt;✅ 1. Python 설치 확인&lt;/h2&gt;
+&lt;p&gt;Poetry는 Python 기반으로 동작하므로 Python이 반드시 설치되어 있어야 합니다. 아래 명령어로 설치 여부를 확인하세요.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;python &lt;span class=&quot;token parameter variable&quot;&gt;--version&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;설치되어 있지 않다면 &lt;a href=&quot;https://www.python.org/downloads/&quot;&gt;Python 공식 사이트&lt;/a&gt;에서 설치하세요. &lt;strong&gt;설치 시 &quot;Add Python to PATH&quot; 옵션을 반드시 체크&lt;/strong&gt;해야 합니다.&lt;/p&gt;
+&lt;h2&gt;✅ 2. Poetry 설치&lt;/h2&gt;
+&lt;p&gt;PowerShell에서 아래 명령어를 실행하세요.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;WebRequest &lt;span class=&quot;token parameter variable&quot;&gt;-Uri&lt;/span&gt; https://install.python-poetry.org -UseBasicParsing&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;.Content &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; python -&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;설치 경로는 일반적으로 다음과 같습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;C:&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;Users&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;사용자명&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;AppData&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;Roaming&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;Python&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;Scripts&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;해당 경로를 사용자 환경 변수 또는 시스템 환경 변수에 추가해야 &lt;code class=&quot;language-text&quot;&gt;poetry&lt;/code&gt; 명령어가 정상적으로 인식됩니다.&lt;br&gt;
+설치 확인:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;poetry &lt;span class=&quot;token parameter variable&quot;&gt;--version&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;✅ 3. 프로젝트 생성&lt;/h2&gt;
+&lt;h3&gt;새로운 프로젝트 생성&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;poetry new myproject
+&lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; myproject&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;기존 프로젝트에 Poetry 적용&lt;/h3&gt;
+&lt;p&gt;해당 프로젝트 폴더로 이동 -&gt; 명령어 입력&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;poetry init&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;기본적으로 아래와 같은 프로젝트 구조가 생성됩니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;myproject/
+├── pyproject.toml
+├── src/
+│   └── myproject/
+│        └── __init__.py
+└── tests/
+    └── __init__.py&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;✅ 4. 가상환경 생성 및 진입&lt;/h2&gt;
+&lt;p&gt;Poetry는 자체적으로 &lt;code class=&quot;language-text&quot;&gt;.venv&lt;/code&gt; 폴더를 생성해 가상환경을 관리합니다. &lt;strong&gt;2.0 버전 이상&lt;/strong&gt;에서는 쉘 기능이 플러그인으로 분리되었으므로 아래 명령으로 추가하세요.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;poetry self &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; poetry-plugin-shell&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;가상환경 생성 및 진입:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;poetry &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt;
+poetry shell&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;특정 Python 버전을 사용할 경우:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;poetry &lt;span class=&quot;token function&quot;&gt;env&lt;/span&gt; use python3.12&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Windows에서는 Python 경로를 직접 지정:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;poetry &lt;span class=&quot;token function&quot;&gt;env&lt;/span&gt; use C:&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;Users&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;사용자명&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;AppData&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;Local&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;Programs&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;Python&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;Python312&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;pythonw.exe&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;✅ 5. 패키지 및 라이브러리 추가&lt;/h2&gt;
+&lt;p&gt;패키지 추가:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;poetry &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; numpy&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;버전을 고정해서 설치:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;poetry &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; numpy@1.26.4&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;개발용 패키지 추가:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;poetry &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;--dev&lt;/span&gt; 패키지명&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;추가 시 &lt;code class=&quot;language-text&quot;&gt;pyproject.toml&lt;/code&gt; 파일의 &lt;code class=&quot;language-text&quot;&gt;tool.poetry.dependencies&lt;/code&gt; 섹션에 자동으로 등록됩니다.&lt;/p&gt;
+&lt;h2&gt;✅ 6. 가상환경 종료&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;exit&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;✅ 7. Python 버전 변경 시 lock 파일 재생성&lt;/h2&gt;
+&lt;p&gt;pyproject.toml에서 Python 버전을 수정한 후 poetry install을 실행하면 버전 불일치 오류가 발생할 수 있습니다. 이 경우 다음 명령어로 해결합니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;poetry lock
+poetry &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+&lt;h1&gt;💻 Jupyter Notebook에서 Poetry 가상환경 사용하기&lt;/h1&gt;
+&lt;h2&gt;✅ 1. Jupyter Notebook 설치&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;poetry &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; jupyter ipykernel
+poetry &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;--dev&lt;/span&gt; notebook ipykernel&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Jupyter Lab을 설치할 경우:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;poetry &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;--dev&lt;/span&gt; jupyterlab ipykernel&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;✅ 2. 가상환경을 Jupyter 커널로 추가&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;poetry run python &lt;span class=&quot;token parameter variable&quot;&gt;-m&lt;/span&gt; ipykernel &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;--user&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;--name&lt;/span&gt; MyApp-py312 --display-name &lt;span class=&quot;token string&quot;&gt;&quot;MyApp (Python 3.12)&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;--name : 가상환경 이름&lt;/li&gt;
+&lt;li&gt;--display-name : Jupyter에서 표시될 이름&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;✅ 3. Jupyter Notebook 실행&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;poetry run jupyter notebook&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;웹 브라우저에서 Jupyter Notebook이 열립니다.&lt;/p&gt;
+&lt;h2&gt;✅ 4. Jupyter Notebook 커널 변경&lt;/h2&gt;
+&lt;p&gt;Notebook 내에서 &lt;strong&gt;Kernel &gt; Change kernel&lt;/strong&gt; 메뉴에서 방금 추가한 &quot;MyApp (Python 3.12)&quot;를 선택합니다.&lt;/p&gt;
+&lt;h2&gt;✅ 추가 - Jupyter 커널 삭제&lt;/h2&gt;
+&lt;p&gt;설치된 커널 목록 확인:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;jupyter kernelspec list&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;원하는 커널 삭제:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;jupyter kernelspec uninstall MyApp-py312&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+&lt;h1&gt;🎉 마무리&lt;/h1&gt;
+&lt;p&gt;Poetry의 고급 기능을 잘 활용하면 패키지 충돌 최소화, 가상환경 관리 효율 향상, 협업 시 일관성 유지 등 실무에서 다양한 이점을 얻을 수 있습니다.&lt;/p&gt;
+&lt;p&gt;추가로 poetry config를 통해 글로벌 설정도 변경 가능하니 상황에 맞게 커스터마이징할 수 있습니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[마크다운(Markdown) 작성 문법 정리]]></title><description><![CDATA[개발을 하거나 문서를 정리하다 보면 마주치는 Markdown. Markdown…]]></description><link>https://songwoody.github.io/markdown_description/</link><guid isPermaLink="false">https://songwoody.github.io/markdown_description/</guid><pubDate>Thu, 17 Apr 2025 21:27:03 GMT</pubDate><content:encoded>&lt;ul&gt;
 &lt;li&gt;개발을 하거나 문서를 정리하다 보면 마주치는 Markdown.&lt;/li&gt;
 &lt;li&gt;Markdown 은 단순한 텍스트가 아니라, #, *, - 등 여러 기호를 사용하여 문서를 간단하게 작성하고 읽기 편하게 만들 수 있습니다.&lt;/li&gt;
 &lt;li&gt;처음엔 낯설지만, 알고 보면 굉장히 간단하고 유용한 문법입니다.&lt;/li&gt;
