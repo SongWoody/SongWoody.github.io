@@ -1,10 +1,20 @@
 import React from "react"
 import { Link, useStaticQuery, graphql } from "gatsby"
-import PropTypes from "prop-types"
 import "./TagList.css"
 
+// TypeScript 인터페이스 정의
+interface TagListData {
+  allMarkdownRemark: {
+    nodes: {
+      frontmatter: {
+        tags?: string[]
+      }
+    }[]
+  }
+}
+
 const TagList = () => {
-  const data = useStaticQuery(graphql`
+  const data: TagListData = useStaticQuery(graphql`
     query {
       allMarkdownRemark(sort: { frontmatter: { date: DESC } }) {
         nodes {
@@ -17,13 +27,13 @@ const TagList = () => {
   `)
 
   const posts = data.allMarkdownRemark.nodes
-  const tags = [...new Set(posts.flatMap(post => post.frontmatter.tags || []))].sort()
+  const tags: string[] = [...new Set(posts.flatMap((post) => post.frontmatter.tags || []))].sort()
 
   return (
     <div className="tag-list">
       <h4>Tags</h4>
       <div className="tags">
-        {tags.map((tag, index) => (
+        {tags.map((tag: string, index: number) => (
           <Link key={index} to={`/tags/${tag}`} className="tag">
             #{tag}
           </Link>
@@ -33,18 +43,5 @@ const TagList = () => {
   )
 }
 
-TagList.propTypes = {
-  data: PropTypes.shape({
-    allMarkdownRemark: PropTypes.shape({
-      nodes: PropTypes.arrayOf(
-        PropTypes.shape({
-          frontmatter: PropTypes.shape({
-            tags: PropTypes.arrayOf(PropTypes.string),
-          }),
-        })
-      ),
-    }),
-  }).isRequired,
-}
 
 export default TagList 
