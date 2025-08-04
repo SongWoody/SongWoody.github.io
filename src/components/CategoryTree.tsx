@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Link } from "gatsby"
-import "./categoryTree.css"
+import "./CategoryTree.css"
 
 // TypeScript 인터페이스 정의
 interface Post {

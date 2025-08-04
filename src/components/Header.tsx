@@ -1,10 +1,16 @@
 import React from "react"
-import { Link } from "gatsby";
+import { Link } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
 import MenuButton from "./menuButton"
-import { useSidebar } from "./sidebarContext";
+import { useSidebar } from "./sidebarContext"
 
-const Header = ({ title, rootPath }) => {
+// TypeScript 인터페이스 정의
+interface HeaderProps {
+  title: string
+  rootPath: string
+}
+
+const Header = ({ title, rootPath }: HeaderProps) => {
     const { isMenuOpen, toggleMenu } = useSidebar();
 
     return (
