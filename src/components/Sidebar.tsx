@@ -1,11 +1,30 @@
 import React from "react"
 import { Link, StaticQuery, graphql } from "gatsby"
-import PropTypes from "prop-types"
 import { useSidebar } from "./sidebarContext"
 import CategoryTree from "./CategoryTree"
 import "./sidebarStyle.css"
 
-const TagList = ({ tags }) => (
+// TypeScript 인터페이스 정의
+interface TagListProps {
+  tags: string[]
+}
+
+interface SidebarData {
+  allMarkdownRemark: {
+    nodes: {
+      frontmatter: {
+        tags?: string[]
+        categories?: string[]
+        title: string
+      }
+      fields: {
+        slug: string
+      }
+    }[]
+  }
+}
+
+const TagList = ({ tags }: TagListProps) => (
   <div className="tag-list">
     <h4>Tags</h4>
     <div className="tags">
@@ -18,9 +37,6 @@ const TagList = ({ tags }) => (
   </div>
 );
 
-TagList.propTypes = {
-  tags: PropTypes.arrayOf(PropTypes.string).isRequired,
-};
 
 const Sidebar = () => {
   const { isMenuOpen, toggleMenu } = useSidebar();
@@ -43,9 +59,9 @@ const Sidebar = () => {
           }
         }
       `}
-      render={data => {
+      render={(data: SidebarData) => {
         const posts = data.allMarkdownRemark.nodes;
-        const tags = [...new Set(posts.flatMap(post => post.frontmatter.tags || []))].sort();
+        const tags: string[] = [...new Set(posts.flatMap((post) => post.frontmatter.tags || []))].sort();
 
         return (
           <aside className={`sidebar ${isMenuOpen ? 'open' : ''}`}>

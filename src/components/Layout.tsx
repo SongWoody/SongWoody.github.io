@@ -1,6 +1,6 @@
 import React from "react"
 import Header from "./Header"
-import Sidebar from "./sidebar"
+import Sidebar from "./Sidebar"
 import { SidebarProvider } from "./sidebarContext"
 
 // TypeScript 인터페이스 정의
