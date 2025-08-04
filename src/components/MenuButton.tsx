@@ -1,8 +1,13 @@
 import React from "react"
-import PropTypes from "prop-types"
 import "./menuButtonStytle.css"
 
-const MenuButton = ({ isOpen, toggleMenu }) => {
+// TypeScript 인터페이스 정의
+interface MenuButtonProps {
+  isOpen: boolean
+  toggleMenu: () => void
+}
+
+const MenuButton = ({ isOpen, toggleMenu }: MenuButtonProps) => {
   return (
     <button
       onClick={toggleMenu}
@@ -17,9 +22,5 @@ const MenuButton = ({ isOpen, toggleMenu }) => {
   )
 }
 
-MenuButton.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  toggleMenu: PropTypes.func.isRequired,
-};
 
 export default MenuButton
