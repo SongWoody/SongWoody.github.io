@@ -1,10 +1,18 @@
 import React from "react"
-import PropTypes from "prop-types"
 import Header from "./Header"
 import Sidebar from "./sidebar"
 import { SidebarProvider } from "./sidebarContext"
 
-const Layout = ({ location, title, children }) => {
+// TypeScript 인터페이스 정의
+interface LayoutProps {
+  location: {
+    pathname: string
+  }
+  title: string
+  children: React.ReactNode
+}
+
+const Layout = ({ location, title, children }: LayoutProps) => {
   const rootPath = `${__PATH_PREFIX__}/`
   const isRootPath = location.pathname === rootPath
 
@@ -28,10 +36,5 @@ const Layout = ({ location, title, children }) => {
   )
 }
 
-Layout.propTypes = {
-  location: PropTypes.object.isRequired,
-  title: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
-};
 
 export default Layout
