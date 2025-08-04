@@ -1,9 +1,40 @@
 import React, { useState } from "react"
 import { Link } from "gatsby"
-import PropTypes from "prop-types"
 import "./categoryTree.css"
 
-const CategoryNode = ({ category, posts, level = 0 }) => {
+// TypeScript 인터페이스 정의
+interface Post {
+  fields: {
+    slug: string
+  }
+  frontmatter: {
+    title: string
+    categories?: string[]
+  }
+}
+
+interface Category {
+  name: string
+  children: Record<string, Category>
+  posts: Post[]
+}
+
+interface CategoryNodeProps {
+  category: Category
+  posts: Post[]
+  level?: number
+}
+
+interface CategoryTreeProps {
+  data: {
+    allMarkdownRemark: {
+      nodes: Post[]
+    }
+  }
+}
+
+
+const CategoryNode = ({ category, posts, level = 0 }: CategoryNodeProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const hasChildren = Object.keys(category.children).length > 0
   const hasPosts = posts.length > 0
@@ -21,7 +52,7 @@ const CategoryNode = ({ category, posts, level = 0 }) => {
           )}
         </div>
         <div className="category-content">
-          {Object.values(category.children).map((child) => (
+          {Object.values(category.children).map((child: Category) => (
             <CategoryNode
               key={child.name}
               category={child}
@@ -31,7 +62,7 @@ const CategoryNode = ({ category, posts, level = 0 }) => {
           ))}
           {hasPosts && (
             <div className="posts">
-              {posts.map((post) => (
+              {posts.map((post: Post) => (
                 <Link
                   key={post.fields.slug}
                   to={post.fields.slug}
@@ -52,7 +83,7 @@ const CategoryNode = ({ category, posts, level = 0 }) => {
       <button 
         className="category-header"
         onClick={() => setIsOpen(!isOpen)}
-        onKeyDown={(e) => {
+        onKeyDown={(e: React.KeyboardEvent) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault()
             setIsOpen(!isOpen)
@@ -71,7 +102,7 @@ const CategoryNode = ({ category, posts, level = 0 }) => {
         <div className="category-content">
           {hasChildren && (
             <div className="subcategories">
-              {Object.values(category.children).map((child) => (
+              {Object.values(category.children).map((child: Category) => (
                 <CategoryNode
                   key={child.name}
                   category={child}
@@ -83,7 +114,7 @@ const CategoryNode = ({ category, posts, level = 0 }) => {
           )}
           {hasPosts && (
             <div className="posts">
-              {posts.map((post) => (
+              {posts.map((post: Post) => (
                 <Link
                   key={post.fields.slug}
                   to={post.fields.slug}
@@ -100,25 +131,16 @@ const CategoryNode = ({ category, posts, level = 0 }) => {
   )
 }
 
-CategoryNode.propTypes = {
-  category: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    children: PropTypes.object.isRequired,
-    posts: PropTypes.array.isRequired,
-  }).isRequired,
-  posts: PropTypes.array.isRequired,
-  level: PropTypes.number,
-}
 
-const CategoryTree = ({ data }) => {
+const CategoryTree = ({ data }: CategoryTreeProps) => {
   const posts = data.allMarkdownRemark.nodes
-  const categoryTree = {}
+  const categoryTree: Record<string, Category> = {}
 
   // 카테고리 트리 구조 생성
-  posts.forEach(post => {
+  posts.forEach((post: Post) => {
     if (post.frontmatter.categories) {
       let currentLevel = categoryTree
-      post.frontmatter.categories.forEach((category, index) => {
+      post.frontmatter.categories.forEach((category: string, index: number) => {
         if (!currentLevel[category]) {
           currentLevel[category] = {
             name: category,
@@ -148,21 +170,5 @@ const CategoryTree = ({ data }) => {
   )
 }
 
-CategoryTree.propTypes = {
-  data: PropTypes.shape({
-    allMarkdownRemark: PropTypes.shape({
-      nodes: PropTypes.arrayOf(
-        PropTypes.shape({
-          frontmatter: PropTypes.shape({
-            categories: PropTypes.arrayOf(PropTypes.string),
-          }),
-          fields: PropTypes.shape({
-            slug: PropTypes.string.isRequired,
-          }),
-        })
-      ),
-    }),
-  }).isRequired,
-}
 
 export default CategoryTree 
