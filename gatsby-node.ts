@@ -4,41 +4,49 @@
  * See: https://www.gatsbyjs.com/docs/reference/config-files/gatsby-node/
  */
 
-const path = require(`path`)
-const { createFilePath } = require(`gatsby-source-filesystem`)
+import path from 'path'
+import { GatsbyNode } from 'gatsby'
+import { createFilePath } from 'gatsby-source-filesystem'
 
 // Define the template for blog post
 const blogPost = path.resolve(`./src/templates/blog-post.js`)
 const tagTemplate = path.resolve(`./src/templates/tag.js`)
 const tagsTemplate = path.resolve(`./src/templates/tags.js`)
 
-/**
- * @type {import('gatsby').GatsbyNode['createPages']}
- */
-exports.createPages = async ({ graphql, actions, reporter }) => {
+export const createPages: GatsbyNode['createPages'] = async ({ graphql, actions, reporter }) => {
   const { createPage } = actions
 
   // Get all markdown blog posts sorted by date
-  const result = await graphql(
-    `
-      {
-        allMarkdownRemark(
-          sort: { frontmatter: { date: DESC } }
-          limit: 1000
-        ) {
-          nodes {
-            id
-            fields {
-              slug
-            }
-            frontmatter {
-              tags
-            }
+  const result = await graphql<{
+    allMarkdownRemark: {
+      nodes: Array<{
+        id: string
+        fields: {
+          slug: string
+        }
+        frontmatter: {
+          tags?: string[]
+        }
+      }>
+    }
+  }>(`
+    {
+      allMarkdownRemark(
+        sort: { frontmatter: { date: DESC } }
+        limit: 1000
+      ) {
+        nodes {
+          id
+          fields {
+            slug
+          }
+          frontmatter {
+            tags
           }
         }
       }
-    `
-  )
+    }
+  `)
 
   if (result.errors) {
     reporter.panicOnBuild(
@@ -48,13 +56,13 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     return
   }
 
-  const posts = result.data.allMarkdownRemark.nodes
+  const posts = result.data?.allMarkdownRemark.nodes
 
   // Create blog posts pages
   // But only if there's at least one markdown file found at "content/blog" (defined in gatsby-config.js)
   // `context` is available in the template as a prop and as a variable in GraphQL
 
-  if (posts.length > 0) {
+  if (posts && posts.length > 0) {
     posts.forEach((post, index) => {
       const previousPostId = index === 0 ? null : posts[index - 1].id
       const nextPostId = index === posts.length - 1 ? null : posts[index + 1].id
@@ -72,8 +80,8 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   }
 
   // Create tag pages
-  const tags = new Set()
-  posts.forEach(post => {
+  const tags = new Set<string>()
+  posts?.forEach(post => {
     if (post.frontmatter.tags) {
       post.frontmatter.tags.forEach(tag => tags.add(tag))
     }
@@ -100,10 +108,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   })
 }
 
-/**
- * @type {import('gatsby').GatsbyNode['onCreateNode']}
- */
-exports.onCreateNode = ({ node, actions, getNode }) => {
+export const onCreateNode: GatsbyNode['onCreateNode'] = ({ node, actions, getNode }) => {
   const { createNodeField } = actions
 
   if (node.internal.type === `MarkdownRemark`) {
@@ -117,10 +122,7 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
   }
 }
 
-/**
- * @type {import('gatsby').GatsbyNode['createSchemaCustomization']}
- */
-exports.createSchemaCustomization = ({ actions }) => {
+export const createSchemaCustomization: GatsbyNode['createSchemaCustomization'] = ({ actions }) => {
   const { createTypes } = actions
 
   // Explicitly define the siteMetadata {} object

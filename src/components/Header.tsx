@@ -2,7 +2,7 @@ import React from "react"
 import { Link } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
 import MenuButton from "./MenuButton"
-import { useSidebar } from "./sidebarContext"
+import { useSidebar } from "./SidebarContext"
 
 // TypeScript 인터페이스 정의
 interface HeaderProps {

@@ -1,6 +1,6 @@
 import React from "react"
 import { Link, StaticQuery, graphql } from "gatsby"
-import { useSidebar } from "./sidebarContext"
+import { useSidebar } from "./SidebarContext"
 import CategoryTree from "./CategoryTree"
 import "./sidebarStyle.css"
 

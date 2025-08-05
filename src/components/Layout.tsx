@@ -1,7 +1,7 @@
 import React from "react"
 import Header from "./Header"
 import Sidebar from "./Sidebar"
-import { SidebarProvider } from "./sidebarContext"
+import { SidebarProvider } from "./SidebarContext"
 
 // TypeScript 인터페이스 정의
 interface LayoutProps {
