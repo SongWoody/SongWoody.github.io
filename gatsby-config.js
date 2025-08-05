@@ -16,8 +16,6 @@ module.exports = {
     },
     description: `I share concise notes on what I learn while developing.`,
     siteUrl: `https://songwoody.github.io/`,
-    social: {
-    },
   },
   plugins: [
     `gatsby-plugin-image`,
