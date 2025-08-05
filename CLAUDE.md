@@ -23,14 +23,28 @@ git mv src/components/header.tsx src/components/Header.tsx
 ## 1. 컴포넌트 타입 정의
 
 ### ✅ 권장 방식 (함수형 컴포넌트)
+
+#### 복잡한 Props (3개 이상 또는 확장 가능성이 있는 경우)
 ```typescript
 interface ComponentProps {
   name: string;
   age?: number;
+  onUpdate?: (data: any) => void;
 }
 
-const MyComponent = ({ name, age = 18 }: ComponentProps) => {
+const MyComponent = ({ name, age = 18, onUpdate }: ComponentProps) => {
   return <div>{name} is {age} years old</div>;
+};
+```
+
+#### 간단한 Props (1-2개, 확장 가능성이 낮은 경우)
+```typescript
+const SimpleComponent = ({ children }: { children: React.ReactNode }) => {
+  return <div>{children}</div>;
+};
+
+const ButtonComponent = ({ label, onClick }: { label: string; onClick: () => void }) => {
+  return <button onClick={onClick}>{label}</button>;
 };
 ```
 
