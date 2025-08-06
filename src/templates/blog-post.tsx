@@ -1,14 +1,12 @@
 import * as React from "react"
-import { Link, graphql } from "gatsby"
+import { Link, graphql, PageProps } from "gatsby"
 
 import Bio from "../components/bio"
 import Layout from "../components/Layout"
 import Seo from "../components/Seo"
 
-const BlogPostTemplate = ({
-  data: { previous, next, site, markdownRemark: post },
-  location,
-}) => {
+const BlogPostTemplate = ({ data, location }: PageProps) => {
+  const { previous, next, site, markdownRemark: post } = data as any;
   const siteTitle = site.siteMetadata?.title || `Title`
 
   return (
@@ -70,7 +68,8 @@ const BlogPostTemplate = ({
   )
 }
 
-export const Head = ({ data: { markdownRemark: post } }) => {
+export const Head = ({ data }: PageProps) => {
+  const { markdownRemark: post } = data as any;
   return (
     <Seo
       title={post.frontmatter.title}

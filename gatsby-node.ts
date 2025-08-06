@@ -9,7 +9,7 @@ import { GatsbyNode } from 'gatsby'
 import { createFilePath } from 'gatsby-source-filesystem'
 
 // Define the template for blog post
-const blogPost = path.resolve(`./src/templates/blog-post.js`)
+const blogPost = path.resolve(`./src/templates/blog-post.tsx`)
 const tagTemplate = path.resolve(`./src/templates/tag.js`)
 const tagsTemplate = path.resolve(`./src/templates/tags.js`)
 
