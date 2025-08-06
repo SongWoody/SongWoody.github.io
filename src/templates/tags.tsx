@@ -1,13 +1,19 @@
 import * as React from "react"
-import { Link, graphql } from "gatsby"
+import { Link, graphql, PageProps } from "gatsby"
 
 import Layout from "../components/Layout"
 import Seo from "../components/Seo"
 
-const TagsPage = ({ data, location }) => {
+const TagsPage = ({ data, location }: PageProps<any>) => {
   const siteTitle = data.site.siteMetadata?.title || `Title`
   const posts = data.allMarkdownRemark.nodes
-  const tags = [...new Set(posts.flatMap(post => post.frontmatter.tags || []))].sort()
+  const tags: string[] = [
+    ...new Set(
+      (posts as any[])
+        .flatMap((post: any) => post.frontmatter?.tags || [])
+        .filter((tag): tag is string => Boolean(tag))
+    )
+  ].sort()
 
   return (
     <Layout location={location} title={siteTitle}>
