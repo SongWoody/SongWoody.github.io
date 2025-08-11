@@ -1,4 +1,4 @@
-.menu-button {
+.menuButton {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -9,7 +9,7 @@
   cursor: pointer;
 }
 
-.menu-button .bar {
+.bar {
   width: 16px;
   height: 2px;
   background-color: #333;
@@ -17,14 +17,23 @@
   border-radius: 2px;
 }
 
-.menu-button.open .top {
+.top {
+}
+
+.middle {
+}
+
+.bottom {
+}
+
+.menuButton.open .top {
   transform: translateY(4px) rotate(45deg);
 }
 
-.menu-button.open .middle {
+.menuButton.open .middle {
   opacity: 0;
 }
 
-.menu-button.open .bottom {
+.menuButton.open .bottom {
   transform: translateY(-4px) rotate(-45deg);
 }

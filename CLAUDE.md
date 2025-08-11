@@ -125,42 +125,14 @@ interface MyComponentProps {
 }
 ```
 
-## 5. CSS 스타일링 (현재 상태)
-
-### 현재 사용 중인 방식 (글로벌 CSS)
-```typescript
-// CSS 파일 import (글로벌로 적용됨)
-import "./MenuButton.module.css"
-
-const MenuButton = ({ isOpen }: MenuButtonProps) => (
-  <button className={`menu-button ${isOpen ? "open" : ""}`}>
-    <div className="bar top" />
-    <div className="bar middle" />
-    <div className="bar bottom" />
-  </button>
-);
-```
-
-### 향후 CSS Modules로 복원 예정
-```typescript
-// 향후 복원될 방식
-import styles from './MenuButton.module.css'
-
-const MenuButton = ({ isOpen }: MenuButtonProps) => (
-  <button className={`${styles.menuButton} ${isOpen ? styles.open : ''}`}>
-    <div className={`${styles.bar} ${styles.top}`} />
-  </button>
-);
-```
-
-## 6. 점진적 마이그레이션 규칙
+## 5. 점진적 마이그레이션 규칙
 
 - 기존 JavaScript 파일을 TypeScript로 변환할 때는 `.tsx` 확장자 사용
 - PropTypes를 완전히 제거하고 TypeScript 인터페이스로 교체
 - `strict: false` 설정으로 점진적 변환 진행
 - 모든 컴포넌트 변환 완료 후 `strict: true`로 변경 예정
 
-## 7. Gatsby 특화 설정
+## 6. Gatsby 특화 설정
 
 ### TypeScript 설정
 ```json
@@ -193,7 +165,7 @@ declare module '*.module.css' {
 }
 ```
 
-## 8. 완료된 변환 작업
+## 7. 완료된 변환 작업
 
 ### ✅ TypeScript로 변환 완료된 컴포넌트
 - `Header.tsx` - 헤더 컴포넌트
@@ -208,7 +180,7 @@ declare module '*.module.css' {
 - `TagList.js` - JavaScript (변환 대기)
 - `sidebarContext.js` - JavaScript (변환 대기)
 
-## 9. 주의사항
+## 8. 주의사항
 
 ### CSS Modules 이슈
 - 현재 Gatsby에서 CSS Modules 로딩 문제로 인해 글로벌 CSS 사용 중

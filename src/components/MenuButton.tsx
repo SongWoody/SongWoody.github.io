@@ -1,5 +1,5 @@
 import React from "react"
-import "./menuButtonStytle.css"
+import * as styles from "./MenuButton.module.css"
 
 // TypeScript 인터페이스 정의
 interface MenuButtonProps {
@@ -11,13 +11,13 @@ const MenuButton = ({ isOpen, toggleMenu }: MenuButtonProps) => {
   return (
     <button
       onClick={toggleMenu}
-      className={`menu-button ${isOpen ? "open" : ""}`}
+      className={`${styles.menuButton} ${isOpen ? styles.open : ""}`}
       aria-label="Toggle Menu"
       aria-expanded={isOpen}
     >
-      <div className="bar top" />
-      <div className="bar middle" />
-      <div className="bar bottom" />
+      <div className={`${styles.bar} ${styles.top}`} />
+      <div className={`${styles.bar} ${styles.middle}`} />
+      <div className={`${styles.bar} ${styles.bottom}`} />
     </button>
   )
 }

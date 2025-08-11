@@ -21,7 +21,7 @@
     "forceConsistentCasingInFileNames": true // 파일 이름의 대소문자를 구분하도록 강제
   },
   // 타입스크립트가 검사할 파일들의 위치
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/types/**/*.d.ts"],
   // 타입스크립트가 무시할 파일/폴더
   "exclude": ["node_modules", "public", ".cache"]
 }
