@@ -1,4 +1,337 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Gatsby Starter Blog RSS Feed]]></title><description><![CDATA[I share concise notes on what I learn while developing.]]></description><link>https://songwoody.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Mon, 12 May 2025 14:36:10 GMT</lastBuildDate><item><title><![CDATA[Poetry 사용법 정리 - python 가상환경 관리]]></title><description><![CDATA[최근 SAM(Segment-Anything-Model)을 활용해 이미지 처리 데스크톱 앱을 만들 일이 생겨, Python 개발 환경을 구성하려던 중, Poetry라는 도구를 알게 되었습니다. 그동안 Conda…]]></description><link>https://songwoody.github.io/poetry_guide/</link><guid isPermaLink="false">https://songwoody.github.io/poetry_guide/</guid><pubDate>Mon, 12 May 2025 22:30:00 GMT</pubDate><content:encoded>&lt;p&gt;최근 SAM(Segment-Anything-Model)을 활용해 이미지 처리 데스크톱 앱을 만들 일이 생겨,&lt;br&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Gatsby Starter Blog RSS Feed]]></title><description><![CDATA[I share concise notes on what I learn while developing.]]></description><link>https://songwoody.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Wed, 05 Nov 2025 07:35:54 GMT</lastBuildDate><item><title><![CDATA[ComposeStudy - 02.UI 아키텍쳐, 수명주기 이해하기]]></title><description><![CDATA[Compose 수명주기 이해하기 참고: https://developer.android.com/develop/ui/compose/lifecycle?hl=ko 핵심 내용 컴포저블의 수명 주기 3단계 호출 사이트 (Call Site…]]></description><link>https://songwoody.github.io/compose/02_Compose 수명주기/</link><guid isPermaLink="false">https://songwoody.github.io/compose/02_Compose 수명주기/</guid><pubDate>Fri, 24 Oct 2025 06:12:00 GMT</pubDate><content:encoded>&lt;h1&gt;Compose 수명주기 이해하기&lt;/h1&gt;
+&lt;p&gt;참고: &lt;a href=&quot;https://developer.android.com/develop/ui/compose/lifecycle?hl=ko&quot;&gt;https://developer.android.com/develop/ui/compose/lifecycle?hl=ko&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;핵심 내용&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;컴포저블의 수명 주기 3단계&lt;/li&gt;
+&lt;li&gt;호출 사이트 (Call Site)를 통한 컴포저블 식별&lt;/li&gt;
+&lt;li&gt;컴포저블 인스턴스 식별 및 리컴포지션 최적화 원리&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;1. 컴포저블의 수명 주기 3단계&lt;/h2&gt;
+&lt;p&gt;컴포지션(Composition)은 컴포저블을 처음 실행할 때,&lt;br&gt;
+UI를 설명하는 컴포저블 트리를 생성하는 과정입니다.&lt;br&gt;
+이 생성된 컴포저블을 업데이트 하기 위해서는 상태를 변경 시켜&lt;br&gt;
+리컴포지션(Recomposition)을 호출하는 것이 유일한 방법입니다.&lt;/p&gt;
+&lt;p&gt;리컴포지션은 일반적으로 &lt;code class=&quot;language-text&quot;&gt;State&amp;lt;T&gt;&lt;/code&gt; 객체가 변경되면 트리거 되고&lt;br&gt;
+Compose 는 이러한 객체를 추적하여 상태 변화시 리컴포지션을 호출하여&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;State&amp;lt;T&gt;&lt;/code&gt; 를 읽는 컴포저블을 업데이트힙니다.&lt;/p&gt;
+&lt;p&gt;컴포저블은 보통 Activity, View 등과 다르게 단순하게 세 가지의 수명 주기만을 가집니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;컴포지션 시간(Enter the Compositon): 컴포저블이 처음 호출되어 UI 트리에 배치됩니다.&lt;/li&gt;
+&lt;li&gt;0회 이상 재구성(Recompose zero or more times): 상태 변경에 따라 컴포저블이 0번 또는 그 이상 다시 실행됩니다.&lt;/li&gt;
+&lt;li&gt;컴포지션 종료(Exit the Compotion): 컴포저블이 더 이상 필요하지 않게 되어 UI 트리에 제거됩니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;컴포저블이 수명 주기가 더 복잡한 외부 리소스를 관리하거나 이와 상호작용해야 하는 경우 사이드 이펙트를 사용해야 합니다.&lt;/p&gt;
+&lt;h2&gt;2. 호출 사이트 (Call Site)를 통한 컴포저블 식별&lt;/h2&gt;
+&lt;p&gt;그렇다면 컴포저블의 두 번째 수명 주기 단계인  &lt;strong&gt;&apos;0회 이상 재구성(Recompose)&apos;&lt;/strong&gt; 에서&lt;br&gt;
+Compose가 어떤 인스턴스를 업데이트해야 할지, 혹은 건너뛰어야 할지 어떻게 알수 있을까요?&lt;br&gt;
+이것을 구분하기 위해서 Compose는 각 컴포저블 호출에 &lt;strong&gt;고유한 식별자&lt;/strong&gt; 를 부여합니다.&lt;br&gt;
+이러한 식별자를 호출 사이트(Call site) 라고 합니다.&lt;br&gt;
+호출 사이트는 컴포저블이 호출되는 &lt;strong&gt;소스 코드의 정확한 위치&lt;/strong&gt; 를 의미합니다.
+Compose 컴파일러는 이 위치를 기준으로 컴포지션 내에서 컴포저블의 특정 인스턴스를 식별합니다.&lt;/p&gt;
+&lt;h2&gt;3. 컴포저블 인스턴스 식별 및 리컴포지션 최적화 원리&lt;/h2&gt;
+&lt;p&gt;설명했듯이, Compose는 컴포지션 내 각 컴포저블 인스턴스를 호출 사이트를 통해 고유하게 식별합니다.&lt;br&gt;
+이 식별 메커니즘은 단순히 UI를 생성하는 것을 넘어, 리컴포지션의 효율성을 극대화하는 핵심 원리가 됩니다.&lt;/p&gt;
+&lt;h3&gt;3.1. 인스턴스 유지와 재사용&lt;/h3&gt;
+&lt;p&gt;Compose는 UI 상태가 변경되어 리컴포지션이 발생할 때, 전체 UI를 처음부터 다시 그리지 않습니다. 대신, 변경이 필요한 특정 컴포저블만 선별적으로 재실행합니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;호출 사이트의 역할: 상태가 변경되어 부모 컴포저블이 재실행되더라도, 자식 컴포저블의 호출 사이트가 동일하게 유지된다면, Compose는 이전에 생성된 동일한 인스턴스를 식별하고 재사용합니다.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;인스턴스의 변경: 만약 리컴포지션 시 조건문($if/else)이나 흐름 변경으로 인해 특정 컴포저블의 호출 사이트 자체가 사라지거나 새로운 위치에 호출된다면, Compose는 이전 인스턴스를 &lt;strong&gt;제거(Exit the Composition)&lt;/strong&gt; 하고 새 인스턴스를 생성합니다.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;3.2. 리컴포지션 건너뛰기(Skipping)의 조건&lt;/h3&gt;
+&lt;p&gt;인스턴스를 유지하는 것만으로는 충분하지 않습니다.&lt;br&gt;
+Compose는 성능을 위해 해당 인스턴스 실행 자체를 건너뛰어(Skip) 실행 비용을 0으로 만들려고 시도합니다.&lt;/p&gt;
+&lt;p&gt;Compose가 컴포저블의 재실행을 건너뛰는 조건은 매우 명확합니다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;호출 사이트가 유지되어야 합니다. (인스턴스가 재사용될 수 있어야 함)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;해당 컴포저블이 받는 &lt;strong&gt;모든 입력(매개변수)&lt;/strong&gt; 이 &lt;strong&gt;안정적(Stable)&lt;/strong&gt; 이어야 합니다.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;입력 매개변수들의 값이 이전 호출과 비교했을 때 변경되지 않았어야 합니다. (비교는 주로 equals() 메서드를 사용합니다.)&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt; 📝 참고: 안정적인 유형(Stable Type)이란?  
+ 컴포즈에게 &quot;이 데이터는 한 번 생성되면 내용이 바뀌지 않거나,  
+ 만약 내용이 바뀌면 시스템에 확실히 알려줄 수 있다&quot;고 약속하는 유형입니다.  
+ 원시 타입(Int, String 등), 불변(Immutable) 클래스,  
+ 그리고 MutableState&amp;lt;T&gt; 등이 안정적인 유형으로 간주됩니다.  
+ 안정적이지 않은(Unstable) 타입은 값이 바뀌지 않았더라도  
+ 리컴포지션을 건너뛸 수 없게 만듭니다.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;3.3. Key 컴포저블: 동일 호출 사이트에서의 식별&lt;/h3&gt;
+&lt;p&gt;일반적으로 호출 사이트가 다르면 인스턴스도 다르게 식별되지만,&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;for&lt;/code&gt; 루프나 목록처럼 하나의 호출 사이트 내에서 동일한 컴포저블이 여러 번 반복되어 호출되는 경우가 있습니다.&lt;/p&gt;
+&lt;p&gt;이때는 &lt;strong&gt;호출 순서(Execution Order)&lt;/strong&gt; 가 인스턴스 식별에 사용됩니다.&lt;br&gt;
+하지만 목록에서 항목을 추가/삭제/재정렬하면 호출 순서가 바뀌게 되고,&lt;br&gt;
+이는 불필요한 리컴포지션이나 내부 상태가 꼬이는 버그를 유발할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;아래 코드 예제를 보면&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;val test = remember { mutableStateListOf(&quot;가&quot;,&quot;나&quot;,&quot;다&quot;)}
+Column() {
+    Button(onClick = {
+        Log.d(&quot;Woody&quot;, &quot;Click Me&quot;)
+        test.add(0,&quot;라&quot;)
+        // test.add(4) 일 때는 4에 대한 컴포저블 인스턴스만 생성됨
+    }) {
+        Text(text = &quot;Click Me&quot;)
+    }
+    test.forEach { text -&gt;
+        NumberText(text)
+    }
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Initial composition with text: 가
+Initial composition with text: 나
+Initial composition with text: 다
+Click Me
+Recomposition with text: 라
+Recomposition with text: 가
+Recomposition with text: 나
+Initial composition with text: 다&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Index 0 에 &quot;라&quot; 를 추가했을 때&lt;br&gt;
+4 번째 컴포저블에 &quot;다&quot; 라는 상태를 가진 컴포저블 인스턴스가 다시 생성되는 것을 볼 수 있습니다.
+기존 &quot;가&quot;, &quot;나&quot;, &quot;다&quot; 에 대해 recompose 가 호출되고
+상태가 &quot;라&quot;, &quot;가&quot;, &quot;나&quot; 로 변경 되었습니다.&lt;/p&gt;
+&lt;p&gt;이러한 동작은 개발자는 첫 번째 컴포저블이 생성되기를 기대하지만 기대와 다르게 동작합니다.&lt;br&gt;
+이를 해결하기 위해서는 key 를 이용해서 추가적인 정보를 알려줘야합니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;test.forEach { text -&gt;
+    key(text) {
+        NumberText(text = text)
+    }
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Initial composition with text: 가
+Initial composition with text: 나
+Initial composition with text: 다
+Click Me
+Initial composition with text: 라&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;이렇게 key 를 이용해서 컴포저블 인스턴스에 호츨 사이트 외에 추가적인 식별자(id) 를 주게되면 기대한 바와같이 추가된 &quot;라&quot; 에 대해서만 컴포저블 인스턴스가 생성됩니다.&lt;/p&gt;
+&lt;p&gt;직접 한번 돌려보면서 이해해 보기를 바랍니다.&lt;/p&gt;
+&lt;h2&gt;마치며&lt;/h2&gt;
+&lt;p&gt;위에 제시된 for 루프와 key() 컴포저블의 사용 예시는 &apos;컴포저블 인스턴스 식별&apos; 메커니즘을 명확히 설명하기 위한 목적입니다.&lt;br&gt;
+실제 대규모 리스트 UI를 개발할 때는 성능이 최적화된 &lt;strong&gt;LazyColumn&lt;/strong&gt;이나 &lt;strong&gt;LazyRow&lt;/strong&gt;를 사용해야 합니다.&lt;br&gt;
+Lazy Composable 역시 내부적으로 동일한 key 메커니즘을 활용하여 인스턴스를 효율적으로 관리하므로,&lt;br&gt;
+이 원리를 이해하여 Lazy List의 성능 최적화 방법을 이해하는데 도움이 되기를 바랍니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[ComposeStudy - 01.컴포즈 이해]]></title><description><![CDATA[Compose 이해 참고: https://developer.android.com/develop/ui/compose/mental-model?hl=ko 들어가며 과거 프로젝트에서 Jetpack Compose…]]></description><link>https://songwoody.github.io/compose/01_Compose 이해/</link><guid isPermaLink="false">https://songwoody.github.io/compose/01_Compose 이해/</guid><pubDate>Mon, 20 Oct 2025 21:14:03 GMT</pubDate><content:encoded>&lt;h1&gt;Compose 이해&lt;/h1&gt;
+&lt;p&gt;참고: &lt;a href=&quot;https://developer.android.com/develop/ui/compose/mental-model?hl=ko&quot;&gt;https://developer.android.com/develop/ui/compose/mental-model?hl=ko&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;들어가며&lt;/h3&gt;
+&lt;p&gt;과거 프로젝트에서 Jetpack Compose를 활용한 경험이 있지만,&lt;br&gt;
+현 프로젝트 환경 제약으로 인해 잠시 멀리하게 되었습니다.&lt;br&gt;
+다시금 Compose를 더욱 깊이 있게 이해하고 사용하기 위해,&lt;br&gt;
+이번 기회에 공식 문서 기반으로 핵심 개념을 재정립하는 학습 내용을 공유하고자 합니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Compose는&lt;/strong&gt; 선언형 프로그래밍 패러다임을 안드로이드 UI 개발에 도입한 프레임워크입니다.
+기존 XML 기반의 명령형 UI 방식이 가졌던 상태 관리 및 유지보수의 복잡성을 해소하고자 등장했으며,&lt;br&gt;
+개발자가 &apos;어떻게&apos; 가 아닌 &apos;무엇을&apos; 보여줄지에 집중하게 하여 생산성을 높이는 것이 핵심 목표입니다&lt;/p&gt;
+&lt;h3&gt;선언형 UI(Declarative UI) 란?&lt;/h3&gt;
+&lt;h4&gt;명령형 UI의 이해 (기존 방식)&lt;/h4&gt;
+&lt;p&gt;명령형 UI (Imperative UI) 방식에서는, 앱의 &lt;strong&gt;상태(데이터)&lt;/strong&gt; 가 사용자 상호작용 등의 이유로 변경될 때마다 개발자가 직접 UI를 업데이트해야 했습니다.&lt;/p&gt;
+&lt;p&gt;이는 다음과 같은 메소드 호출을 통해 이루어졌습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;textView.setText(String)&lt;/li&gt;
+&lt;li&gt;container.addChild(View)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;이러한 메소드들은 뷰 자체의 상태를 변경하며, 개발자는 &quot;어떻게(How)&quot; UI 요소를 조작하여 화면을 갱신할지 상세하게 명령해야 했습니다.&lt;/p&gt;
+&lt;h4&gt;상태(State)의 정의 (핵심 키워드)&lt;/h4&gt;
+&lt;p&gt;여기서 말하는 &lt;strong&gt;상태(State)&lt;/strong&gt; 는 선언형 UI를 이해하는 데 있어 가장 중요한 키워드입니다.&lt;br&gt;
+상태란 시간이 지남에 따라 변할 수 있는 값을 의미하며,&lt;br&gt;
+이는 곧 앱의 UI에 표시되어야 하는 데이터를 나타냅니다.&lt;/p&gt;
+&lt;p&gt;예시:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;사용자가 입력한 텍스트&lt;/li&gt;
+&lt;li&gt;버튼의 활성화 여부 (true/false)&lt;/li&gt;
+&lt;li&gt;리스트에 포함된 아이템 목록&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;선언형 UI의 등장과 차이점&lt;/h4&gt;
+&lt;p&gt;기존의 명령형 UI에서는 상태가 변경될 때마다 개발자가 직접 UI 업데이트 코드를 작성해야 하는 부담이 있었습니다.&lt;br&gt;
+그러나 선언형 UI에서는 개발자가 직접 뷰를 조작하지 않습니다.&lt;br&gt;
+대신, 특정 상태(데이터)가 주어졌을 때 화면이 &quot;어떤 모습&quot;이어야 하는지를 선언합니다.&lt;br&gt;
+선언형 UI 환경(예: Compose, React)에서는 상태가 변경되면 자동으로 UI가 다시 그려지므로,&lt;br&gt;
+개발자는 &quot;어떤&quot; UI를 보여줄지에만 집중할 수 있어 개발의 복잡도가 크게 줄어들고 생산성이 향상됩니다.&lt;/p&gt;
+&lt;h3&gt;간단한 기본 예제&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;&lt;span class=&quot;token annotation builtin&quot;&gt;@Composable&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Greeting&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;name&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Stirng&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;token function&quot;&gt;Test&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Hello &lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token interpolation-punctuation punctuation&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;token expression&quot;&gt;name&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;이 예제는 화면에 name 이라는 매개변수를 받아서 Text 를 UI에 노출시킵니다.&lt;/p&gt;
+&lt;p&gt;주목할 점은&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;@Composable&lt;/code&gt; 어노테이션을 지정합니다. 모든 컴포저블 함수는 이 주석이 있어합니다.&lt;/li&gt;
+&lt;li&gt;매견변수를 받을 수 있다.&lt;/li&gt;
+&lt;li&gt;Text 컴포저블 함수를 호출하여 텍스트를 노출 시킨다.&lt;/li&gt;
+&lt;li&gt;함수는 아무것도 반환하지 않는다.&lt;/li&gt;
+&lt;li&gt;이 함수는 빠르고 &lt;strong&gt;멱등성&lt;/strong&gt;을 가지며 부작용이 없다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;aside&gt;
+💡 
+&lt;p&gt;&lt;strong&gt;멱등성(Idempotence):&lt;/strong&gt; 시스템, 연산 또는 함수가 &lt;strong&gt;여러 번 적용되어도 한 번 적용한 것과 같은 결과&lt;/strong&gt;를 내는 속성(property)을 의미합니다.&lt;/p&gt;
+&lt;/aside&gt;
+&lt;h3&gt;동적 콘텐츠 (&lt;strong&gt;Dynamic content)&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;컴포즈는 XML 대신 코틀린을 사용하므로 코틀린 코드처럼 동적으로 동작할 수 있다.(if, for, when 등을 사용하여 컨텐츠 구성)&lt;/p&gt;
+&lt;h3&gt;재구성 (&lt;strong&gt;Recomposition)&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;컴포저블의 가장 핵심적인 개념으로&lt;br&gt;
+재구성(Recomposition)이란 &lt;strong&gt;데이터(입력)가 변경될 때&lt;/strong&gt; 업데이트된 UI를 생성하기 위해&lt;br&gt;
+컴포저블 함수가 &lt;strong&gt;다시 실행&lt;/strong&gt;되는 프로세스를 말합니다.&lt;/p&gt;
+&lt;p&gt;먼저 명령형 UI 모델에의 UI 업데이트 방식을 살펴보면,
+&lt;strong&gt;명령형 UI 모델&lt;/strong&gt;은 위젯을 변경하기 위해서 &lt;strong&gt;setter를 호출&lt;/strong&gt;합니다.&lt;br&gt;
+하지만 컴포저블에서는 새 데이터를 사용하여 컴포저블 함수를 다시 호출합니다.&lt;br&gt;
+이렇게 되면 함수가 재구성(recomposition)되면서 Compose 프레임워크는 필요한 컴포저블을 다시 그려줍니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;&lt;span class=&quot;token annotation builtin&quot;&gt;@Composable&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;ClickCounter&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;clicks&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Int&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; onClick&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;-&gt;&lt;/span&gt; Unit&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token function&quot;&gt;Button&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;onClick &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; onClick&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token function&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;I&apos;ve been clicked &lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token interpolation-punctuation punctuation&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;token expression&quot;&gt;clicks&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt; times&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;버튼이 클릭 될 때마다 clicks 값이 증가하며 clicks 을 사용하고 잇는 Text 컴포저블이 재구성 됩니다.&lt;/p&gt;
+&lt;p&gt;재구성은 매우 효율적으로 동작합니다.&lt;br&gt;
+새 입력 값에 따라 실제로 변경된 데이터에 의존하는 컴포저블 함수나 람다만 선택적으로 다시 실행하고,&lt;br&gt;
+변경되지 않은 부분은 건너뛰어(Skip) 불필요한 연산을 방지합니다.&lt;/p&gt;
+&lt;p&gt;재구성은 언제든지 &apos;건너뛸 수 있는&apos; 특성이 있으므로 컴포저블 함수의 실행 여부를 예측하기 어렵기 때문에,&lt;br&gt;
+컴포저블 함수 내에서 **부작용(Side Effect)**을 직접적으로 발생시키면 사용자가 예측할 수 없는 동작을 경험할 수 있습니다.&lt;br&gt;
+그렇다면 재구성 중에 피해야 할 **부작용(Side Effect)**이란 정확히 무엇일까요?&lt;br&gt;
+부작용은 컴포저블 함수가 자신의 범위를 벗어나 앱의 나머지 부분, 혹은 외부 환경에까지 영향을 미치는&lt;br&gt;
+모든 변경 사항을 의미합니다.&lt;br&gt;
+(예: &quot;네트워크 호출, 데이터베이스 쓰기, 전역 변수 변경, 외부 상태 업데이트 등이 대표적인 부작용입니다.&quot;)&lt;/p&gt;
+&lt;p&gt;공식 문서에는 아래와 같은 행위를 하면 안 된다고 나와 있는데 번역된 내용으로 보면 이해가 잘 안 되어서 추가 설명해 보겠습니다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;공유 객체의 속성에 쓰기 (영문: Writing to a property of a shared object)&lt;br&gt;
+-&gt; 싱글톤 객체, 전역 변수 등 Compose가 그 변경을 추적하지 못하는 외부 객체의 속성을 직접 변경하지 말라.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;ViewModel&lt;/code&gt;에서 식별 가능한 요소 업데이트 (영문: Updating an observable in ViewModel)&lt;br&gt;
+-&gt; @Composable 함수의 &apos;렌더링 단계&apos;**에서 ViewModel이 노출하는 상태(StateFlow, LiveData, State)를 직접 변경하지 말라.&lt;/li&gt;
+&lt;li&gt;공유 환경설정 업데이트 (영문: Updating shared preferences)&lt;br&gt;
+-&gt; SharedPreferences 쓰기와 같이 비용이 많이 드는 파일 I/O 작업이나, DB 및 Network I/O와 같은 비동기 작업을 @Composable 함수의 렌더링 단계에서 직접 실행하지 말라.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;간단하게 코드로 보면&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;@Composable
+fun BadComposable(viewModel: ViewModel) {
+    // 1. 공유 객체 속성에 직접 쓰기 (UI 불일치 위험)
+    MySingleton.count++
+
+    // 2. ViewModel의 상태를 렌더링 단계에서 직접 업데이트 (예측 불가능한 반복 실행 위험)
+    viewModel.updateRenderCount() 
+
+    // 3. 비용이 큰 I/O 작업(네트워크/DB/SharedPreferences)을 렌더링 단계에서 직접 호출 (성능 저하 위험)
+    // 💡 참고: 이 함수가 동기적으로 실행된다고 가정 (실제로는 비동기 처리가 필요)
+    NetworkClient.sendEventLog() 
+
+    Text(test = &quot;I am bad! ${MySingleton.count}&quot;)
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;그래서 이런 작업이 필요하면 어떻게 하면 될까요?&lt;/p&gt;
+&lt;p&gt;위에서 언급된 세 가지 행위(공유 객체 쓰기, I/O 작업, ViewModel의 업데이트)는&lt;br&gt;
+@Composable 함수의 **&apos;렌더링 단계&apos;**에서 실행될 때만 위험합니다.&lt;/p&gt;
+&lt;p&gt;실제 앱에서는 DB 저장, API 호출 등 부작용이 필수적입니다.&lt;br&gt;
+Compose는 이러한 부작용을 안전하게 처리하기 위해 &lt;strong&gt;전용 API&lt;/strong&gt;를 제공합니다.&lt;/p&gt;
+&lt;p&gt;핵심 해결책:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;사용자 상호작용에 의한 상태 변경은 $\text{Button}$의 onClick 또는 $\text{TextField}$의 &lt;strong&gt;onValueChange&lt;/strong&gt;와 같은 이벤트 핸들러 스코프에서 ViewModel 함수를 호출하여 처리합니다.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;생명주기나 특정 상태 변화에 반응해야 하는 DB 접근, API 호출, Listener 등록/해제와 같은 복잡하고 비동기적인 부작용은&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Side Effect API&lt;/strong&gt;인 LaunchedEffect, DisposableEffect 등을 사용하여 통제된 시점에만 실행해야 합니다.&lt;/p&gt;
+&lt;h3&gt;Compose 를 사용할 때 알아야할 사항 다섯 가지&lt;/h3&gt;
+&lt;p&gt;공식 문서에는 설명된 다섯 가지 사항이 나와있는데
+내용을 보면 위에 설명한 것과 일맥상통한 내용이므로 간단하게 정리해 보겠습니다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;재구성은 최대한 많은 수의 구성 가능한 함수 및 람다를 건너뜁니다.&lt;/li&gt;
+&lt;li&gt;재구성은 낙관적이며 취소될 수 있습니다.&lt;/li&gt;
+&lt;li&gt;구성 가능한 함수는 애니메이션의 모든 프레임에서와 같은 빈도로 매우 자주 실행될 수 있습니다.&lt;/li&gt;
+&lt;li&gt;구성 가능한 함수는 동시에 실행할 수 있습니다.&lt;/li&gt;
+&lt;li&gt;구성 가능한 함수는 순서와 관계없이 실행할 수 있습니다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4&gt;1. 재구성은 최대한 많은 수의 구성 가능한 함수 및 람다를 건너뜁니다.&lt;/h4&gt;
+&lt;p&gt;이는 불필요한 작업 최소화를 의미합니다.&lt;br&gt;
+데이터가 실제로 변경된 컴포저블만 다시 실행하여 성능을 최적화합니다.&lt;br&gt;
+따라서 개발자는 상태 변경에 반응하도록 컴포넌트를 설계하고, 함수에 불필요한 매개변수를 넣지 않도록 주의해야 합니다.&lt;/p&gt;
+&lt;h4&gt;2. 재구성은 낙관적이며 취소될 수 있습니다.&lt;/h4&gt;
+&lt;p&gt;Compose는 변경 사항을 감지하는 즉시 재구성을 시작합니다(낙관적). 하지만 그 과정에서 상태가 다시 변경되거나, 더 중요한 작업이 발생하면 진행 중인 &lt;strong&gt;재구성이 취소&lt;/strong&gt;될 수 있습니다. 따라서 재구성 가능한 함수는 부수 효과(Side Effect, UI 외의 작업)를 가지지 않도록 작성해야 합니다.&lt;/p&gt;
+&lt;h4&gt;3. 구성 가능한 함수는 애니메이션의 모든 프레임에서와 같은 빈도로 매우 자주 실행될 수 있습니다.&lt;/h4&gt;
+&lt;p&gt;이는 컴포저블 함수가 매우 빠르게 실행되어야 함을 강조합니다. 함수 내부에서 시간이 오래 걸리는 작업(예: 데이터베이스 접근, 네트워크 요청)을 직접 수행해서는 안 되며, 이는 &lt;strong&gt;LaunchedEffect&lt;/strong&gt;와 같은 Side Effect API를 통해 처리해야 합니다.&lt;/p&gt;
+&lt;h4&gt;4. 구성 가능한 함수는 동시에 실행할 수 있습니다.&lt;/h4&gt;
+&lt;p&gt;Compose는 성능 향상을 위해 여러 컴포저블을 병렬로(다른 스레드에서) 실행할 수 있습니다. 이는 컴포저블 함수가 스레드 안전해야 하며, 공유 상태에 접근할 때 주의해야 함을 의미합니다. 경쟁 상태(Race Condition)가 발생합니다.&lt;/p&gt;
+&lt;h4&gt;5. 구성 가능한 함수는 순서와 관계없이 실행할 수 있습니다.&lt;/h4&gt;
+&lt;p&gt;컴포저블은 항상 결과가 같아야 합니다. 특정 순서에 의존하는 로직을 작성하면 안 됩니다. 즉, 컴포저블은 순수 함수와 비슷하게, 입력(상태/매개변수)만으로 출력(UI)이 결정되도록 작성해야 합니다.&lt;/p&gt;
+&lt;h3&gt;마치며&lt;/h3&gt;
+&lt;p&gt;공식 문서를 저만의 언어로 정리하는 과정을 통해,&lt;br&gt;
+Compose의 핵심 철학인 선언형 패러다임과 재구성(Recomposition)의 멱등성을 다시 한번 깊이 있게 이해할 수 있었습니다.&lt;br&gt;
+(처음 읽었을 때와 다르게 Compose 개발 경험이 쌓이고 읽으니 새롭네요.)
+특히, 재구성 중 발생하는 부작용(Side Effect)의 위험성과 이를 LaunchedEffect 등의&lt;br&gt;
+전용 API로 안전하게 관리해야 하는 이유를 명확히 구분할 수 있게 되었습니다.&lt;/p&gt;
+&lt;p&gt;이제 이 기본 지식을 바탕으로, 실제 앱 개발 시 상태 관리(State Management) 패턴(ViewModel, Flow)을&lt;br&gt;
+어떻게 재구성의 효율성과 연결지을 수 있을지에 대해 학습을 진행할 계획입니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[로그인&보안 실전 - 초안]]></title><description><![CDATA[시리즈 구성 로그인 방식별 ID/PW, OAuth, 소셜 로그인, 패스키, 2FA 보안 항목 XSS, CSRF 세션 하이재킹 방지 실습 계획서 — 로그인 & 보안 구현 목표 다양한 로그인 방식(이메일/비밀번호, OAuth…]]></description><link>https://songwoody.github.io/login_system/</link><guid isPermaLink="false">https://songwoody.github.io/login_system/</guid><pubDate>Tue, 12 Aug 2025 21:27:03 GMT</pubDate><content:encoded>&lt;h1&gt;시리즈 구성&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;로그인 방식별
+&lt;ul&gt;
+&lt;li&gt;ID/PW,&lt;/li&gt;
+&lt;li&gt;OAuth,&lt;/li&gt;
+&lt;li&gt;소셜 로그인,&lt;/li&gt;
+&lt;li&gt;패스키,&lt;/li&gt;
+&lt;li&gt;2FA&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;보안 항목
+&lt;ul&gt;
+&lt;li&gt;XSS,&lt;/li&gt;
+&lt;li&gt;CSRF&lt;/li&gt;
+&lt;li&gt;세션 하이재킹 방지&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;실습 계획서 — 로그인 &amp;#x26; 보안 구현&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;목표&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;다양한 로그인 방식(이메일/비밀번호, OAuth, 소셜 로그인, 패스키 등) 구현&lt;/p&gt;
+&lt;p&gt;각 방식별 주요 보안 위협과 대응책 적용&lt;/p&gt;
+&lt;p&gt;실제 동작하는 데모 프로젝트 완성 후, 이를 바탕으로 블로그 포스트 작성&lt;/p&gt;
+&lt;ol start=&quot;2&quot;&gt;
+&lt;li&gt;환경 설정&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;개발 언어/플랫폼:&lt;/p&gt;
+&lt;p&gt;Web: Node.js(Express) + Vanilla JS&lt;/p&gt;
+&lt;p&gt;Android: Kotlin (Jetpack Compose or XML)&lt;/p&gt;
+&lt;p&gt;iOS: SwiftUI or UIKit&lt;/p&gt;
+&lt;p&gt;DB: MySQL / PostgreSQL (Docker로 구동)&lt;/p&gt;
+&lt;p&gt;보안 도구: HTTPS(Localhost SSL), Postman, Wireshark(패킷 검증)&lt;/p&gt;
+&lt;ol start=&quot;3&quot;&gt;
+&lt;li&gt;실습 시나리오&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;1단계 – 기본 이메일/비밀번호 로그인
+회원가입 API 구현&lt;/p&gt;
+&lt;p&gt;비밀번호 해싱(BCrypt) 적용&lt;/p&gt;
+&lt;p&gt;세션 기반 로그인 구현&lt;/p&gt;
+&lt;p&gt;세션 하이재킹 방지(Cookie HttpOnly, Secure 속성)&lt;/p&gt;
+&lt;p&gt;2단계 – JWT 로그인
+Access Token / Refresh Token 발급&lt;/p&gt;
+&lt;p&gt;토큰 만료 &amp;#x26; 재발급 로직&lt;/p&gt;
+&lt;p&gt;토큰 탈취 방지 전략(짧은 TTL + Sliding Session)&lt;/p&gt;
+&lt;p&gt;3단계 – OAuth2 소셜 로그인
+GitHub 또는 Google OAuth 연동&lt;/p&gt;
+&lt;p&gt;Callback 처리 및 토큰 저장&lt;/p&gt;
+&lt;p&gt;기존 사용자와 신규 사용자 구분 로직&lt;/p&gt;
+&lt;p&gt;4단계 – 패스키(Passkey) / WebAuthn
+WebAuthn API로 패스키 로그인 구현&lt;/p&gt;
+&lt;p&gt;로컬 장치 인증 연동(FIDO2)&lt;/p&gt;
+&lt;p&gt;5단계 – 2단계 인증(2FA)
+이메일 OTP / Google Authenticator 연동&lt;/p&gt;
+&lt;p&gt;백업 코드 발급 기능&lt;/p&gt;
+&lt;ol start=&quot;4&quot;&gt;
+&lt;li&gt;보안 실습 체크리스트&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;HTTPS 적용 및 인증서 테스트&lt;/p&gt;
+&lt;p&gt;CSRF 방지 (CSRF Token 발급 및 검증)&lt;/p&gt;
+&lt;p&gt;XSS 방지 (출력 시 HTML 이스케이프)&lt;/p&gt;
+&lt;p&gt;브루트포스 방지(로그인 시도 제한)&lt;/p&gt;
+&lt;p&gt;비밀번호 최소 길이 및 복잡성 정책 적용&lt;/p&gt;
+&lt;ol start=&quot;5&quot;&gt;
+&lt;li&gt;결과물&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;각 로그인 방식별 독립된 예제 프로젝트&lt;/p&gt;
+&lt;p&gt;기능 + 보안 적용 내용 정리 문서&lt;/p&gt;
+&lt;p&gt;테스트 시나리오 및 검증 결과 캡처&lt;/p&gt;
+&lt;p&gt;블로그 포스트 작성 초안(Initial Draft)&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Poetry 사용법 정리 - python 가상환경 관리]]></title><description><![CDATA[최근 SAM(Segment-Anything-Model)을 활용해 이미지 처리 데스크톱 앱을 만들 일이 생겨, Python 개발 환경을 구성하려던 중, Poetry라는 도구를 알게 되었습니다. 그동안 Conda…]]></description><link>https://songwoody.github.io/poetry_guide/</link><guid isPermaLink="false">https://songwoody.github.io/poetry_guide/</guid><pubDate>Mon, 12 May 2025 22:30:00 GMT</pubDate><content:encoded>&lt;p&gt;최근 SAM(Segment-Anything-Model)을 활용해 이미지 처리 데스크톱 앱을 만들 일이 생겨,&lt;br&gt;
 Python 개발 환경을 구성하려던 중, &lt;strong&gt;Poetry&lt;/strong&gt;라는 도구를 알게 되었습니다.&lt;br&gt;
 그동안 Conda 를 주로 사용해왔고, 간단한 분석용 스크립트나 실험 환경을 구성할 때 꽤 유용하게 느껴졌습니다.&lt;br&gt;
 하지만 이번에는 실제 배포가 가능한 데스크톱 앱을 만들어야 했기 때문에,&lt;br&gt;
@@ -83,12 +416,10 @@ poetry &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; &lt;span cl
 &lt;hr&gt;
 &lt;h1&gt;🎉 마무리&lt;/h1&gt;
 &lt;p&gt;Poetry의 고급 기능을 잘 활용하면 패키지 충돌 최소화, 가상환경 관리 효율 향상, 협업 시 일관성 유지 등 실무에서 다양한 이점을 얻을 수 있습니다.&lt;/p&gt;
-&lt;p&gt;추가로 poetry config를 통해 글로벌 설정도 변경 가능하니 상황에 맞게 커스터마이징할 수 있습니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[마크다운(Markdown) 작성 문법 정리]]></title><description><![CDATA[개발을 하거나 문서를 정리하다 보면 마주치는 Markdown. Markdown…]]></description><link>https://songwoody.github.io/markdown_description/</link><guid isPermaLink="false">https://songwoody.github.io/markdown_description/</guid><pubDate>Thu, 17 Apr 2025 21:27:03 GMT</pubDate><content:encoded>&lt;ul&gt;
-&lt;li&gt;개발을 하거나 문서를 정리하다 보면 마주치는 Markdown.&lt;/li&gt;
-&lt;li&gt;Markdown 은 단순한 텍스트가 아니라, #, *, - 등 여러 기호를 사용하여 문서를 간단하게 작성하고 읽기 편하게 만들 수 있습니다.&lt;/li&gt;
-&lt;li&gt;처음엔 낯설지만, 알고 보면 굉장히 간단하고 유용한 문법입니다.&lt;/li&gt;
-&lt;li&gt;여러 기호 등에 익숙해 질수 있게 간단한 사용법을 설명하겠습니다.&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;추가로 poetry config를 통해 글로벌 설정도 변경 가능하니 상황에 맞게 커스터마이징할 수 있습니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[마크다운(Markdown) 작성 문법 정리]]></title><description><![CDATA[개발을 하거나 문서를 정리하다 보면 Markdown 형식의 문서를 자주 마주치게 됩니다. . Markdown…]]></description><link>https://songwoody.github.io/markdown_description/</link><guid isPermaLink="false">https://songwoody.github.io/markdown_description/</guid><pubDate>Thu, 17 Apr 2025 21:27:03 GMT</pubDate><content:encoded>&lt;p&gt;개발을 하거나 문서를 정리하다 보면 Markdown 형식의 문서를 자주 마주치게 됩니다. .&lt;br&gt;
+Markdown 은 단순한 텍스트가 아니라, #, *, - 등 여러 기호를 사용하여 문서를 간단하게 작성하고 읽기 편하게 만들 수 있습니다.&lt;br&gt;
+처음엔 낯설지만, 알고 보면 굉장히 간단하고 유용한 문법입니다.&lt;br&gt;
+여러 기호 등에 익숙해 질수 있게 간단한 사용법을 설명하겠습니다.&lt;/p&gt;
 &lt;h4&gt;Markdown 기본 문법&lt;/h4&gt;
 &lt;h5&gt;1. 코드 블록&lt;/h5&gt;
 &lt;p&gt;작성:&lt;/p&gt;
