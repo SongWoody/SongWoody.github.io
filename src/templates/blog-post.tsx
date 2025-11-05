@@ -4,6 +4,7 @@ import { Link, graphql, PageProps } from "gatsby"
 import Bio from "../components/bio"
 import Layout from "../components/Layout"
 import Seo from "../components/Seo"
+import "../components/TagList.css"
 
 const BlogPostTemplate = ({ data, location }: PageProps) => {
   const { previous, next, site, markdownRemark: post } = data as any;
