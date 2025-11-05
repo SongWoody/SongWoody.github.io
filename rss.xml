@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Gatsby Starter Blog RSS Feed]]></title><description><![CDATA[I share concise notes on what I learn while developing.]]></description><link>https://songwoody.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Wed, 05 Nov 2025 07:35:54 GMT</lastBuildDate><item><title><![CDATA[ComposeStudy - 02.UI 아키텍쳐, 수명주기 이해하기]]></title><description><![CDATA[Compose 수명주기 이해하기 참고: https://developer.android.com/develop/ui/compose/lifecycle?hl=ko 핵심 내용 컴포저블의 수명 주기 3단계 호출 사이트 (Call Site…]]></description><link>https://songwoody.github.io/compose/02_Compose 수명주기/</link><guid isPermaLink="false">https://songwoody.github.io/compose/02_Compose 수명주기/</guid><pubDate>Fri, 24 Oct 2025 06:12:00 GMT</pubDate><content:encoded>&lt;h1&gt;Compose 수명주기 이해하기&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Gatsby Starter Blog RSS Feed]]></title><description><![CDATA[I share concise notes on what I learn while developing.]]></description><link>https://songwoody.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Wed, 05 Nov 2025 08:16:32 GMT</lastBuildDate><item><title><![CDATA[ComposeStudy - 02.UI 아키텍쳐, 수명주기 이해하기]]></title><description><![CDATA[Compose 수명주기 이해하기 참고: https://developer.android.com/develop/ui/compose/lifecycle?hl=ko 핵심 내용 컴포저블의 수명 주기 3단계 호출 사이트 (Call Site…]]></description><link>https://songwoody.github.io/compose/02_Compose 수명주기/</link><guid isPermaLink="false">https://songwoody.github.io/compose/02_Compose 수명주기/</guid><pubDate>Fri, 24 Oct 2025 06:12:00 GMT</pubDate><content:encoded>&lt;h1&gt;Compose 수명주기 이해하기&lt;/h1&gt;
 &lt;p&gt;참고: &lt;a href=&quot;https://developer.android.com/develop/ui/compose/lifecycle?hl=ko&quot;&gt;https://developer.android.com/develop/ui/compose/lifecycle?hl=ko&lt;/a&gt;&lt;/p&gt;
 &lt;h2&gt;핵심 내용&lt;/h2&gt;
 &lt;ol&gt;
@@ -70,19 +70,19 @@ Compose는 성능을 위해 해당 인스턴스 실행 자체를 건너뛰어(Sk
 하지만 목록에서 항목을 추가/삭제/재정렬하면 호출 순서가 바뀌게 되고,&lt;br&gt;
 이는 불필요한 리컴포지션이나 내부 상태가 꼬이는 버그를 유발할 수 있습니다.&lt;/p&gt;
 &lt;p&gt;아래 코드 예제를 보면&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;val test = remember { mutableStateListOf(&quot;가&quot;,&quot;나&quot;,&quot;다&quot;)}
-Column() {
-    Button(onClick = {
-        Log.d(&quot;Woody&quot;, &quot;Click Me&quot;)
-        test.add(0,&quot;라&quot;)
-        // test.add(4) 일 때는 4에 대한 컴포저블 인스턴스만 생성됨
-    }) {
-        Text(text = &quot;Click Me&quot;)
-    }
-    test.forEach { text -&gt;
-        NumberText(text)
-    }
-}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; test &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; remember &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;mutableStateListOf&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;가&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;나&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;다&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;Column&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token function&quot;&gt;Button&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;onClick &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        Log&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Woody&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Click Me&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        test&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;라&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;// test.add(4) 일 때는 4에 대한 컴포저블 인스턴스만 생성됨&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token function&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;text &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Click Me&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+    test&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;forEach&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; text &lt;span class=&quot;token operator&quot;&gt;-&gt;&lt;/span&gt;
+        &lt;span class=&quot;token function&quot;&gt;NumberText&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;text&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Initial composition with text: 가
 Initial composition with text: 나
 Initial composition with text: 다
@@ -97,11 +97,11 @@ Initial composition with text: 다&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 상태가 &quot;라&quot;, &quot;가&quot;, &quot;나&quot; 로 변경 되었습니다.&lt;/p&gt;
 &lt;p&gt;이러한 동작은 개발자는 첫 번째 컴포저블이 생성되기를 기대하지만 기대와 다르게 동작합니다.&lt;br&gt;
 이를 해결하기 위해서는 key 를 이용해서 추가적인 정보를 알려줘야합니다.&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;test.forEach { text -&gt;
-    key(text) {
-        NumberText(text = text)
-    }
-}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;test&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;forEach&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; text &lt;span class=&quot;token operator&quot;&gt;-&gt;&lt;/span&gt;
+    &lt;span class=&quot;token function&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;text&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token function&quot;&gt;NumberText&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;text &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; text&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Initial composition with text: 가
 Initial composition with text: 나
 Initial composition with text: 다
