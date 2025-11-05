@@ -16,6 +16,7 @@ const tagsTemplate = path.resolve(`./src/templates/tags.tsx`)
 export const createPages: GatsbyNode['createPages'] = async ({ graphql, actions, reporter }) => {
   const { createPage } = actions
 
+  const draftFilter = { frontmatter: { draft: { ne: true } } }
   // Get all markdown blog posts sorted by date
   const result = await graphql<{
     allMarkdownRemark: {
@@ -29,24 +30,28 @@ export const createPages: GatsbyNode['createPages'] = async ({ graphql, actions,
         }
       }>
     }
-  }>(`
-    {
-      allMarkdownRemark(
-        sort: { frontmatter: { date: DESC } }
-        limit: 1000
-      ) {
-        nodes {
-          id
-          fields {
-            slug
-          }
-          frontmatter {
-            tags
+  }>(
+    `
+      query GetBlogPosts($draftFilter: MarkdownRemarkFilterInput) {
+        allMarkdownRemark(
+          sort: { frontmatter: { date: DESC } }
+          limit: 1000
+          filter: $draftFilter
+        ) {
+          nodes {
+            id
+            fields {
+              slug
+            }
+            frontmatter {
+              tags
+            }
           }
         }
       }
-    }
-  `)
+    `,
+    { draftFilter }
+  )
 
   if (result.errors) {
     reporter.panicOnBuild(
@@ -157,6 +162,7 @@ export const createSchemaCustomization: GatsbyNode['createSchemaCustomization'] 
       description: String
       date: Date @dateformat
       tags: [String]
+      draft: Boolean
     }
 
     type Fields {
