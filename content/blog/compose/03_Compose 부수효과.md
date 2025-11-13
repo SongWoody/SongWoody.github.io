@@ -270,7 +270,53 @@ fun CorrectStateContent(count: Int, onClick: () -> Unit) {
 }
 ```
 
-예제를 든건 매개변수에 값을 전달받을 때이지만,  
-값 뿐만아니라 전달 받은 매개변수가 **콜백** 일 경우에도 해당 됩니다.  
+예시에서는 매개변수로 **상태 값(data)** 을 전달받는 경우를 다뤘지만, 이는 콜백 함수를 매개변수로 전달받을 때도 동일하게 적용됩니다. 
 **콜백**을 5초 후에 실행해야 한다고 하면  
 `rememberUpdatedState` 를 사용하지 않으면 5초 사이에 리컴포지션이 호출되어 콜백이 변경 되더라도 **최신 콜백이 아닌 이전에 캡쳐된 콜백이 호출되는 문제** 를 겪을 수 있습니다.  
+
+
+## DisposableEffect
+
+`DisposableEffect` 은 Composable이 Composition에 진입하거나 (초기화) 키가 변경될 때 호출됩니다.  
+DisposableEffect(key1, key2, ...) 형태로 사용하며, 이는 내부적으로 **DisposableEffectScope**를 확장하는 람다 함수를 인수로 받습니다. (DisposableEffectScope는 **코루틴 스코프** 가 아님)  
+`DisposableEffectScope` 는 onDispose { ... } 블록 구현을 강제합니다. 이 블록은 Composable이 Composition에서 제거될 때 (화면 전환, 컴포넌트 폐기 등) 또는 key 값이 변경되어 Effect가 재실행될 때 호출되어 리소스를 정리합니다.
+
+공식 문서 예제가 가장 이해가 좋은 예인것 같아서 주석만 수정해서 확인해 보면,
+
+```kotlin
+@Composable
+fun HomeScreen(
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
+    onStart: ()->Unit, // '시작됨(started)' 분석 이벤트를 전송
+    onStop: ()->Unit //'종료됨(stopped)' 분석 이벤트를 전송
+) {
+    // 새로운 람다가 제공될 때 현재 람다를 안전하게 업데이트합니다.
+    val currentOnStart = rememberUpdatedState(onStart)
+    val currentOnStop = rememberUpdatedState(onStop)
+
+    // `lifecycleOwner`가 변경되면, 이 effect를 폐기하고 재설정합니다
+    DisposableEffect(lifecycleOwner) {
+        // 분석 이벤트 전송을 위해 저장된 콜백을 트리거하는 옵저버를 생성합니다.
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_START) {
+                currentOnStart.value()
+            } else if (event == Lifecycle.Event.ON_STOP) {
+                currentOnStop.value()
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(observer = observer)
+
+        // 이 effect를 호출한 컴포저블이 사라지게 되면 옵저버를 제거합니다.
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+}
+```
+
+DisposableEffect(lifecycleOwner)를 사용하면, 해당 HomeScreen Composable이 화면에 나타나고 사라지는 시점을 Activity의 생명주기에 정확히 맞추어 정리(dispose) 및 초기화할 수 있습니다.  
+예를 들어, HomeScreen이 NavHost를 통해 네비게이션으로 진입하고 나갈 때, 이 이벤트 추적이 정확히 시작되고 중지되어야 합니다.
+
+만약, 모든 화면에서 이벤트 처리를 해야하는데 `DisposableEffect` 가 없다면?  
+화면(Composable)별 이벤트를 처리하기 위해 결국 **Activity의 onStart()** 에 의존하게 되며, 이는 코드를 복잡하게 만듭니다.
