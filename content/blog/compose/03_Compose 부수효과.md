@@ -347,3 +347,139 @@ fun rememberFirebaseAnalytics(user: User): FirebaseAnalytics {
     return analytics
 }
 ```
+
+
+## produceState
+
+`produceState` 는 비동기 소스에서 발생하는 데이터를 Compose 의 `State`로 변환하고 관리하는데 사용됩니다.
+특징으로는
+- 초기 값 제공: Composition에 진입할 때 즉시 사용할 수 있는 초기값 
+- 코루신 생행: `LaunchedEffect` 처럼 코루틴 스코프를 제공하여 비동기 작업을 처리할 수 있습니다.
+- 값 업데이트: 코루틴 내부에서 `value` 속성을 통해 값을 업데이트하면, 이 상태를 사용하는 컴포저블이 리컴포즈 됩니다.
+- 자동정리: 컴포저블이 Composition 에서 제거되거나 키가 변경되면, 내부 코루틴이 자동으로 취소됩니다.(`LuanchedEffect` 와 유사)
+
+Flow, LiveData, Rxjava, Listener 등을 사용한 외부 구독 기반 생태를 컴포지션으로 변환할 때 주로 사용합니다.
+
+공식문서 예제는 Image 로드 초기값 `Result.Loading`을 주고 로드 성공/실패 시 상태를 업데이트해 줍니다.
+```kotlin
+@Composable
+fun loadNetworkImage(
+    url: String,
+    imageRepository: ImageRepository = ImageRepository()
+): State<Result<Image>> {
+    // Result.Loading을 초기값으로 갖는 State<T>를 생성합니다.
+    // 만약 `url` 또는 `imageRepository`가 변경되면, 실행 중이던 생산자(producer)는 취소되고
+    // 새로운 입력값(url, imageRepository)으로 다시 시작됩니다.
+    return produceState<Result<Image>>(initialValue = Result.Loading, url, imageRepository) {
+        // produceState 내부: LaunchedEffect와 동일하게 코루틴 환경이 제공됩니다.
+        // 코루틴 내에서 정지 함수(suspend calls)를 호출할 수 있습니다.
+        val image = imageRepository.load(url)
+
+        // State 값 업데이트: 에러(Error) 또는 성공(Success) 결과로 State를 갱신합니다.
+        // 💡 이 'value =' 업데이트는 이 State를 읽고 있는 모든 Composable에서
+        //    자동으로 Recomposition을 트리거합니다.
+        value = if (image == null) {
+            Result.Error
+        } else {
+            Result.Success(image)
+        }
+    }
+}
+```
+
+추가로 위치값을 계속해서 가져와야될 때 사용할 수도 있습니다.
+
+**가상 위치 매니저 (외부 시스템)**
+
+```kotlin
+// 외부 시스템: 콜백을 통해 위치를 업데이트하는 가상의 매니저
+data class Location(val latitude: Double, val longitude: Double)
+
+interface LocationListener {
+    fun onLocationUpdate(location: Location)
+}
+
+class LocationManager {
+    private var listener: LocationListener? = null
+
+    fun registerListener(l: LocationListener) {
+        listener = l
+        // 💡 최초 위치를 즉시 제공한다고 가정
+        l.onLocationUpdate(Location(37.5665, 126.9780)) // 서울 시청
+    }
+
+    fun unregisterListener() {
+        listener = null
+    }
+
+    // 외부에서 임의로 위치를 변경시키는 함수 (실제로는 GPS 갱신으로 발생)
+    fun simulateLocationChange(newLocation: Location) {
+        listener?.onLocationUpdate(newLocation)
+    }
+}
+```
+
+**produceState를 사용한 위치 구독 함수**
+
+```kotlin
+@Composable
+fun observeCurrentLocation(manager: LocationManager, initialLocation: Location): State<Location> {
+    // [1] produceState 시작: 초기 값(initialLocation)을 설정하고 코루틴 스코프 제공
+    return produceState(initialValue = initialLocation, key1 = manager) {
+        
+        // [2] 콜백 리스너 정의: LocationManager가 위치를 업데이트하면 produceState의 'value'를 갱신
+        val listener = object : LocationListener {
+            override fun onLocationUpdate(location: Location) {
+                // 💡 이 코드를 통해 Compose State 값이 업데이트되고 Recomposition이 발생합니다.
+                value = location 
+            }
+        }
+
+        // [3] 리스너 등록 (Effect 시작)
+        manager.registerListener(listener)
+
+        // [4] onDispose 블록: Composable이 제거되거나 'manager' 키가 변경될 때 정리 작업 실행
+        awaitDispose {
+            manager.unregisterListener() // 리스너 해제
+        }
+    }
+}
+```
+
+**Composable에서 활용**
+
+```kotlin
+@Composable
+fun LocationDisplayScreen() {
+    val locationManager = remember { LocationManager() }
+    
+    // 초기 위치를 '0.0, 0.0'으로 설정하고, observeCurrentLocation을 통해 실제 위치를 구독
+    val locationState = observeCurrentLocation(
+        manager = locationManager,
+        initialLocation = Location(0.0, 0.0) 
+    )
+    
+    val location = locationState.value // State의 현재 값 참조
+    
+    // UI 로직 (State 값이 변경될 때마다 자동 업데이트됨)
+    Column(Modifier.padding(16.dp)) {
+        Text("현재 위치 정보", style = MaterialTheme.typography.h6)
+        Text("위도 (Latitude): ${location.latitude}")
+        Text("경도 (Longitude): ${location.longitude}")
+
+        Spacer(Modifier.height(16.dp))
+
+        // 위치 변경 시뮬레이션 버튼
+        Button(onClick = {
+            val newLat = location.latitude + 0.001
+            val newLon = location.longitude + 0.001
+            // 💡 외부 매니저의 상태를 변경하여, 콜백을 통해 Compose 상태가 갱신되도록 유도
+            locationManager.simulateLocationChange(Location(newLat, newLon))
+        }) {
+            Text("위치 시뮬레이션 갱신")
+        }
+    }
+}
+```
+
+`produceState` 는 실무에서 활용 범위가 넓으므로 유용하게 사용할 수 있습니다.
