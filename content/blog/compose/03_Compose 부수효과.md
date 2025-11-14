@@ -320,3 +320,30 @@ DisposableEffect(lifecycleOwner)를 사용하면, 해당 HomeScreen Composable�
 
 만약, 모든 화면에서 이벤트 처리를 해야하는데 `DisposableEffect` 가 없다면?  
 화면(Composable)별 이벤트를 처리하기 위해 결국 **Activity의 onStart()** 에 의존하게 되며, 이는 코드를 복잡하게 만듭니다.
+
+
+## SideEffect
+
+`SideEffect`는 컴포저블이 컴포지션/리컴포지션이 발생할 때 마다 호출됩니다.  
+Compose의 상태를 외부와 공유할 때 사용됩니다. 만약, 특정 화면에서 사용자가 계정 전환을 해서 userType 이라는 FirebaseAnalytics 객체의 속성값이 변경되어야 한다고 가정해보겠습니다. FirebaseAnalytics 객체는 생성된 상태에서 리컴포즈 시 userType 속성만 변경해야합니다.  
+이럴 때 사용하는 것이 `SideEffect` 입니다.
+
+코드 예시를 보면
+
+```kotlin
+@Composable
+fun rememberFirebaseAnalytics(user: User): FirebaseAnalytics {
+    // remember 로 FirebaseAnalytics 는 한번만 생성
+    val analytics: FirebaseAnalytics = remember {
+        FirebaseAnalytics()
+    }
+
+    // user 변경에 의해 컴포지션이 발생할 때마다,
+    // 현재 User의 userType으로 FirebaseAnalytics를 업데이트 합니다. 
+    // 이로써 향후 모든 분석 이벤트에 해당 메타데이터가 첨부되도록 보장합니다.
+    SideEffect {
+        analytics.setUserProperty("userType", user.userType)
+    }
+    return analytics
+}
+```
