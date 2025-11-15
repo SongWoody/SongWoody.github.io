@@ -483,3 +483,62 @@ fun LocationDisplayScreen() {
 ```
 
 `produceState` 는 실무에서 활용 범위가 넓으므로 유용하게 사용할 수 있습니다.
+
+## derivedStateOf
+
+`derivedStateOf 는 상태가 너무 자주 바뀌어서 리컴포지션이 자주 불리는 문제가 있을 경우 사용됩니다.  
+스크롤 위치와 같은 상태는 자주 변경되는 항목이지만 내가 필요로 하는건 특정 임계치 이상일 때에만 UI를 변경 시켜줘야하는 경우가 있을 때 일단적인 State 는 너무 자주 바뀌어서 리컴포지션이 여러번 호출되어 오버헤드가 발생하니, 이럴 때에는 derivedStateOf 를 사용해서 특정 임계치 일때만 방응 하도록 할 수 있습니다.(Flow를 사용해봤다면 `distinctUntilChanged()` 와 유사하다고 생각하시면 됩니다.)  
+단, `derivedStateOf` 는 공식 문서에서도 강조하길 비용이 많이드는 작업이므로 꼭 불필요한 리컴포지션 방지를 위해서만 사용해야지, A상태와 B상태를 합쳐서 새로운 상태를 만들때와 같은 의도와 다른 사용은 피해야합니다.(안티 패턴)
+
+### 올바른 사용 예시
+
+```kotlin
+@Composable
+fun MessageList(messages: List<Message>) { // MessageList 함수는 메시지 목록을 매개변수로 받습니다.
+    Box {
+        val listState = rememberLazyListState() // LazyColumn의 스크롤 상태를 기억합니다.
+        LazyColumn(state = listState) {
+            // ... 메시지 아이템들 ...
+        }
+        
+        // 첫 번째 보이는 항목이 첫 번째 항목(index 0)을 지났을 때 버튼을 표시합니다.
+        // 불필요한 리컴포지션을 최소화하기 위해, 
+        // remembered derived state 를 사용합니다.
+        val showButton by remember { 
+            // derivedStateOf를 사용하여 불필요한 리컴포지션을 최소화합니다.
+            derivedStateOf { 
+                listState.firstVisibleItemIndex > 0 // 첫 번째 보이는 항목의 인덱스가 0보다 클 때 (즉, 목록이 스크롤되어 상단이 안 보일 때)
+            }
+        }
+        
+        AnimatedVisibility(visible = showButton) {
+            ScrollToTopButton() // "맨 위로 스크롤" 버튼 표시
+        }
+    }
+}
+```
+
+derivedStateOf는 내부 상태(listState.firstVisibleItemIndex > 0)의 결과가 실제로 변경될 때만 showButton이라는 State 객체를 업데이트하도록 보장합니다. (true->false, flase->true 일 때 리컴포지션)
+
+### 잘못된 사용
+
+두 개의 Compose 상태를 결합해서 사용하는 잘못된 경우
+
+```kotlin
+// ⚠️ 사용하지 금지. derivedStateOf의 잘못된 사용 예시입니다.
+var firstName by remember { mutableStateOf("") } 
+var lastName by remember { mutableStateOf("") } 
+
+// ❌ 나쁜 사용: derivedStateOf를 사용하여 불필요하게 fullName을 계산합니다.
+// (firstName이나 lastName이 변경될 때마다 fullNameBad의 'State 객체'가 업데이트되고 리컴포즈를 유발합니다.)
+val fullNameBad by remember { derivedStateOf { "$firstName $lastName" } } 
+
+// ✅ 올바른 사용: 이 방법이 가장 단순하고 효율적입니다.
+// (firstName이나 lastName이 변경되면 이 Composable이 리컴포즈될 때 fullNameCorrect가 자동으로 최신 값을 계산합니다.)
+val fullNameCorrect = "$firstName $lastName"
+```
+
+fullNameBad의 문제점:
+1. firstName이나 lastName 중 하나가 변경되면, 컴포저블 함수 전체가 리컴포즈됩니다.
+2. 이 리컴포지션 과정에서 fullNameBad의 **내부 블록("$firstName $lastName")**이 어차피 다시 실행되어 새로운 전체 이름이 계산됩니다.
+3. derivedStateOf는 이렇게 이미 리컴포지션되는 상황에서, 계산된 결과를 또 다른 State 객체로 한 번 더 감싸서 관리하므로, **불필요한 오버헤드** 만 추가하게 됩니다.
