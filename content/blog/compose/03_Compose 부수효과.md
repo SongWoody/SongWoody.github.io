@@ -486,7 +486,7 @@ fun LocationDisplayScreen() {
 
 ## derivedStateOf
 
-`derivedStateOf 는 상태가 너무 자주 바뀌어서 리컴포지션이 자주 불리는 문제가 있을 경우 사용됩니다.  
+`derivedStateOf` 는 상태가 너무 자주 바뀌어서 리컴포지션이 자주 불리는 문제가 있을 경우 사용됩니다.  
 스크롤 위치와 같은 상태는 자주 변경되는 항목이지만 내가 필요로 하는건 특정 임계치 이상일 때에만 UI를 변경 시켜줘야하는 경우가 있을 때 일단적인 State 는 너무 자주 바뀌어서 리컴포지션이 여러번 호출되어 오버헤드가 발생하니, 이럴 때에는 derivedStateOf 를 사용해서 특정 임계치 일때만 방응 하도록 할 수 있습니다.(Flow를 사용해봤다면 `distinctUntilChanged()` 와 유사하다고 생각하시면 됩니다.)  
 단, `derivedStateOf` 는 공식 문서에서도 강조하길 비용이 많이드는 작업이므로 꼭 불필요한 리컴포지션 방지를 위해서만 사용해야지, A상태와 B상태를 합쳐서 새로운 상태를 만들때와 같은 의도와 다른 사용은 피해야합니다.(안티 패턴)
 
@@ -543,8 +543,33 @@ fullNameBad의 문제점:
 2. 이 리컴포지션 과정에서 fullNameBad의 **내부 블록("$firstName $lastName")**이 어차피 다시 실행되어 새로운 전체 이름이 계산됩니다.
 3. derivedStateOf는 이렇게 이미 리컴포지션되는 상황에서, 계산된 결과를 또 다른 State 객체로 한 번 더 감싸서 관리하므로, **불필요한 오버헤드** 만 추가하게 됩니다.
 
+# snapshotFlow
 
-#SideEffects 사용시 주의 사항
+`snapshotFlow` 는 Compose State 를 Flow 로 바꿔줍니다.(Compose State → Flow)  
+Flow 의 강력한 연산자(예: debounce, filter, map)를 사용하여 코루틴 환경에서 처리하기 위해 사용합니다.
+collect 연산자를 사용하여 로그를 전달하는 등 작업을 처리할 때 주로 사용합니다.  
+단, collect 에서 상태를 변경하는 행위는 안티 패턴으로 **양방향 상태 순환(Circular State Dependency)** 를 유발해 버그(무한 리컴포지션, 성능 저하)를 발생 시킬 수 있습니다.
+
+```kotlin
+val listState = rememberLazyListState()
+
+LazyColumn(state = listState) {
+    // ...
+}
+
+LaunchedEffect(listState) {
+    snapshotFlow { listState.firstVisibleItemIndex }
+        .map { index -> index > 0 }
+        .distinctUntilChanged()
+        .filter { it == true }
+        .collect {
+            // 이벤트 전송
+            MyAnalyticsService.sendScrolledPastFirstItemEvent()
+        }
+}
+```
+
+# SideEffects API 사용시 주의 사항
 
 LaunchedEffect, produceStateof, DisposableEffect 와 같은 SdieEffects는 키를 가지고 효과를 재시작할 수 있다.
 
