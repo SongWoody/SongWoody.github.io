@@ -6,19 +6,23 @@ categories: ["안드로이드"]
 tags: ["android", "parcelize", "parcelable"]
 ---
 
-# Parcelize
+# Parcelize: Android 직렬화의 불편함을 해소
 
-`parcelize` 플러그인을 사용하면 Parcelable 의 구현에 필요한 코드(보일러플레이트) 없이 `@Pacelaze` 어노테이션을 추가해 편하게 사용할 수 있습니다.  
-Pacelable 은 런타임에 동작하는 라이브러리가 아니라, **컴파일 시점(Compile Time)** 에 코드를 변환하므로 리플렉션을 사용하는 Serializable 처럼 런타임 오버헤드가 없습니다.  
-단, 이를 가능하게 하려면 직렬화 시켜주는 코드를 개발자가 직접 작성해야 하는 불편함이 따라왔습니다.  
-이를 해결하기 위해 `parcelize` 가 등장하였고, 이 플러그인은 바이트코드로 변환하는 과정에 개입하여 Parcelable 구현에 필요한 코드를 직접 생성해 줍니다.
+Parcelable은 안드로이드에서 객체를 효율적으로 직렬화하는 방법입니다.  
+Serializable이 리플렉션을 사용해 런타임 오버헤드가 발생하는 것과 달리, Parcelable은 **컴파일 시점(Compile Time)** 에 코드를 변환하기 때문에 빠르고 런타임 오버헤드가 없습니다.
 
-이 포스트는 `@Parcelize` 의 간단한 사용방법과, `@TypeParceler` 를 사용하여 개발자가 직접 작성하지 않은 외부 Class 를 직렬화하는 방법을 설명하겠습니다.
+그러나 Parcelable을 사용하려면 개발자가 직렬화를 위한 보일러플레이트(Boilerplate) 코드를 직접 작성해야 하는 불편함이 따랐습니다.  
+
+이를 해결하기 위해 **Parcelize 플러그인**이 등장했습니다.  
+
+Parcelize는 바이트코드로 변환되는 과정에 개입하여 @Parcelize 애너테이션 하나만 추가해도 필요한 모든 Parcelable 코드를 자동으로 생성해 줍니다. 이제 개발자는 수동으로 코드를 작성할 필요가 없습니다.
+
+이 포스트에서는 `@Parcelize`의 기본적인 사용법과, 개발자가 직접 수정할 수 없는 외부 Class를 직렬화하는 @TypeParceler 사용법을 알아보겠습니다.
 
 
 # 프로젝트 설정
 
-```
+```kts
 // gradle(:app)
 plugins { 
     id("kotlin-parcelize")
@@ -26,7 +30,7 @@ plugins {
 ```
 or  
 
-```
+```kts
 // version catalog
 
 // libs.versions.toml
@@ -45,45 +49,48 @@ plugins {
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-class User(val firstName: String, val lastName: String, val age: Int): Parcelable
+class User(
+    val firstName: String, 
+    val lastName: String, 
+    val age: Int
+): Parcelable
 ```
 
 # 지원 타입
 
-- Primitive Types (and their boxed versions)
+- **Primitive Types** (and their boxed versions)
     - Int, Boolean, Long 등 (java.lang.Integer, java.lang.Boolean 등)
-- Objects 과 enums
-- String, CharSequence
-- Exception
-- Size, SizeF, Bundle, IBinder, IInterface, FileDescriptor
-- SparseArray, SparseIntArray, SparseLongArray, SparseBooleanArray
-- 모든 Serializable (Date 포함), Parcelable 구현체
-- 지원 되는 모든 타입에 대한 Collections: 
-    - List (내부적으로 ArrayList 로 처리하여 직렬화), 
-    - Set (내부적으로 LinkedHashSet 으로 처리하여 직렬화), 
-    - Map (내부적으로 LinkedHashMap 으로 처리하여 직렬화)
-- 지원 되는 모든 타입에 대한 Arrays
-- 지원 되는 모든 타입에 대한 Nullable (Int?, List<String>?)
+- **Objects** 과 **enums**
+- **String, CharSequence**
+- **Exception**
+- S**ize, SizeF, Bundle, IBinder, IInterface, FileDescriptor**
+- **SparseArray, SparseIntArray, SparseLongArray, SparseBooleanArray**
+- **모든 Serializable (Date 포함), Parcelable 구현체**
+- **지원 되는 모든 타입에 대한 Collections**: 
+    - **List** (내부적으로 ArrayList 로 처리하여 직렬화), 
+    - **Set** (내부적으로 LinkedHashSet 으로 처리하여 직렬화), 
+    - **Map** (내부적으로 LinkedHashMap 으로 처리하여 직렬화)
+- **지원 되는 모든 타입에 대한 Arrays**
+- **지원 되는 모든 타입에 대한 Nullable** (Int?, List<String>?)
 
 # Custom Parcele
 
 Custom Parcele 은 `Pacelable` 인터페이스를 구현할 수 없는 타입을 Parcelable 객체에 포함시켜야할 때 사용됩니다.
 
-**Custom Parceler 사용 케이스**
-- **외부/표준 라이브러리 타입 직렬화**: 개발자가 수정할 수 없는 클레스(java.util.UUID 등)
+#### Custom Parceler 사용 케이스
+- **외부/표준 라이브러리 타입 직렬화**: 개발자가 수정할 수 없는 클레스(java.util.UUID 등)  
 - **커스텀 로직 사용**: 객체의 내부 상태를 그대로 직렬화하는 대신, 특정 필드만 직렬화하거나, 직렬화 과정에서 데이터를 압축 또는 변환하는 등의 커스텀 로직이 필요할 때
 
-**Parceler 사용법**  
-Custom Parceler는 `kotlinx.parcelize.Parceler<T>` 인터페이스를 구현하여 정의합니다. 여기서 T는 직렬화하려는 타입입니다.  
+#### Parceler 사용법
+**Custom Parceler**는 `kotlinx.parcelize.Parceler<T>` 인터페이스를 구현하여 정의합니다.  
+여기서 T는 직렬화하려는 타입입니다.  
 
-**Parceler 인터페이스 정의**  
+#### Parceler 인터페이스 정의
 - **create(parcel: Parcel)**: T (역직렬화, 읽기): Parcel에서 데이터를 읽어와 객체 T의 인스턴스를 생성하고 반환합니다.  
 - **write(input: T, parcel: Parcel, flags: Int) (직렬화, 쓰기)**: 객체 T의 인스턴스(input)를 Parcel에 기록합니다.
 
-직렬화가 필요한 외부 데이터 예시:
-
 ```kotlin
-// 외부 데이터
+// 외부 데이터 예시
 data class ExternalData(
     val data1: String,
     val data2: String
