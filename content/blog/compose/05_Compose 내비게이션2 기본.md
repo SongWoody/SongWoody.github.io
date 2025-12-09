@@ -1,18 +1,18 @@
 ---
 title: ComposeStudy - 05.내비게이션 기본 
 date: "2025-11-26T20:46:12.1112"
-description: "제트팩 컴포즈의 내비게이션에 대한 기본적인 사용 방법을 설명합니다.."
+description: "Jetpack compose Navigation2 라이브러리에 대해 기본적인 사용법을 간단하게 알아봅니다. 이후 포스트에서 Navigation3 와 비교하여 알아봅니다."
 categories: ["안드로이드", "컴포즈"]
 tags: ["android", "jetpack compose", "navigation", "네비게이션"]
 ---
 
-# Compose Navigation
+# Compose Navigation2
 
 안드로이드 애플리케이션을 개발할 때 **화면 이동(Navigation)** 은 사용자 경험의 핵심 요소입니다.  
 Compose 에서 화면 이동(Navigation)을 구현할 때, 사용자가 직접 화면에 대한 상태(State) 를 정의하고 이 상태 값을 변경하여 화면을 노출 시켜줄 수도 있지만, 이처럼 직접 구현하게 되면 **상태 저장**, **생명주기 관리**, **백 스택 관리** 등 고려해야 할 점이 복잡하게 늘어납니다. (viewModel 을 사용할 경우 `ViewModelStoerOwner` 의 구현 등)    
-그러므로 Compose 에서는 쉽게 사용하기 공식 `navigation-compose` 라이브러리를 사용합니다.  
+그러므로 Compose 에서는 네비게이션을 쉽게 사용하기 위해 공식 `navigation-compose` 라이브러리를 사용합니다.  
 지금 부터 Comopse Navigation 의 기본적인 개념과 간단한 예시를 통해 라이브러리를 이해해 보도록 하겠습니다.  
-> 본 내용은 Navigation2 를 기반으로 작성하였으며, Navigation3 는 추후에 다루도록 하겠습니다.
+> 본 내용은 Navigation2 에 대한 간략한 개념/사용법을 소개하며, Navigation3 는 추후 포스트에서 Navigation2 와 비교하면서 다루도록 하겠습니다.
 
 # Compose Navigation 의 핵심 가치
 
@@ -29,6 +29,8 @@ Compose의 철학을 그대로 따릅니다. 화면 이동을 명령(Imperative)
 Compose 앱은 모든 화면을 단일 Activity 내의 여러 Composable로 구성하는 것이 권장됩니다. Compose Navigation은 이 단일 Activity 내에서 여러 화면 컴포저블 간의 전환을 효율적으로 관리하여, 앱의 복잡성을 줄이고 성능을 개선하는 데 기여합니다.
 
 # Library Settings
+
+Navigation 2 사용
 
 ```kotlin
 dependencies {
@@ -116,7 +118,7 @@ fun AppNavigationTypeSafe() {
 }
 ```
 
->위 코드를 실무에서 쓰기에도 충분하겠지만 조금더 현대적인 네비게이션 구성을 확인하려면 [Now in Android]("https://github.com/android/nowinandroid") 코드를 참고한걸 추천드립니다.  
+>위 코드를 실무에서 쓰기에도 충분하겠지만 조금더 현대적인 네비게이션 구성을 확인하려면 [Now in Android]("https://github.com/android/nowinandroid") 코드를 참고해 보시는길 추천드립니다.  
 
 ### 핵심요소1. NavController (네비게이션 컨트롤러)
 
@@ -214,3 +216,7 @@ NavHost(...) {
 **코드 내 역할**:  
 * NavHost의 블록({}) 내에 등록된 모든 `composable` 목적지들을 포함하여 **"이 앱에서는 HomeRoute와 DetailRoute로 이동할 수 있다"** 는 전체 구조를 NavController에게 제공합니다.  
 * `startDestination = HomeRoute`는 이 그래프의 시작점을 명시합니다.
+
+# 마치며
+ 기본적인 Compose Navigation2 라이브러리의 사용방법을 간단하게 알아봤습니다.  
+ Navigation3가 나온 시점에서 Navigation2 를 자세히 알아보기 보다는 기본적인 구성요소와 사용법만을 알아보고 다음 포스트에서 Navigation3 의 소개와 Navigation2와 비교했을 때의 장점을 알아보도록 하겠습니다.
