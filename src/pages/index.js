@@ -4,7 +4,7 @@ import { Link, graphql } from "gatsby"
 import Bio from "../components/bio"
 import Layout from "../components/Layout"
 import Seo from "../components/Seo"
-import "./index.css"
+
 
 const BlogIndex = ({ data, location }) => {
   const { title: siteTitle } = data.site.siteMetadata
