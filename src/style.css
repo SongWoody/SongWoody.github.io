@@ -43,7 +43,7 @@
   --lineHeight-none: 1.05;
   --lineHeight-tight: 1.4; /* from index.css */
   --lineHeight-normal: 1.7; /* from index.css */
-  --lineHeight-relaxed: 1.7;
+  --lineHeight-relaxed: 1.8;
   /* 1.200 Minor Third Type Scale */
   --fontSize-0: 0.833rem;
   --fontSize-1: 1.125rem;
@@ -180,7 +180,7 @@ p {
   line-height: var(--lineHeight-relaxed);
   --baseline-multiplier: 0.179;
   --x-height-multiplier: 0.35;
-  margin: var(--spacing-0) var(--spacing-0) var(--spacing-8) var(--spacing-0);
+  margin: var(--spacing-0) var(--spacing-0) var(--spacing-4) var(--spacing-0);
   padding: var(--spacing-0);
 }
 
@@ -189,7 +189,7 @@ ol {
   margin-left: var(--spacing-0);
   margin-right: var(--spacing-0);
   padding-left: var(--spacing-8);
-  margin-bottom: var(--spacing-8);
+  margin-bottom: var(--spacing-4);
   list-style-position: outside;
   list-style-image: none;
 }
@@ -201,7 +201,7 @@ ol li {
 }
 
 li > p {
-  margin-bottom: calc(var(--spacing-8) / 2);
+  margin-bottom: calc(var(--spacing-4) / 2);
 }
 
 li *:last-child {
