@@ -6,7 +6,9 @@ categories: ["안드로이드", "컴포즈"]
 tags: ["android", "jetpack compose", "navigation", "네비게이션", "nav3"]
 ---
 
-최근 **Navigation 3** 의 안정화 버전이 출시되었습니다. . 기존 Navigation 2에서 느꼈던 복잡함과 다중 패널 구현의 한계가 크게 개선되었는데요. 직접 사용해 보니 백스택(Backstack)을 개발자가 직접 제어할 수 있게 되어, 훨씬 직관적이고 간결하다는 인상을 받았습니다. 이번 포스팅에서는 Navigation 3의 핵심 개념을 가볍게 정리해 보겠습니다.
+최근 **Navigation 3** 의 안정화 버전이 출시되었습니다. 기존 Navigation 2에서 느꼈던 **복잡함**과 **다중 패널 구현의 한계**가 크게 개선되었는데요. 직접 사용해 보니 백스택(Backstack)을 개발자가 직접 제어할 수 있게 되어, 훨씬 직관적이고 간결하다는 인상을 받았습니다.  
+
+이번 포스팅에서는 Navigation 3의 핵심 개념을 가볍게 정리해 보겠습니다.
 
 # Jetpack Navigation 3, 무엇이 달라졌고 왜 필요한가?
 기존 `Navigation 2`는 `NavGraph`, `NavController`, `Destination` 등의 요소를 통해 **백스택을 간접적으로 관리** 하며 화면 이동을 처리했습니다. 이러한 구조는 본래 전통적인 액티비티(Activity)와 프래그먼트(Fragment) 환경을 지원하기 위해 설계된 것으로 알고 있습니다. 
@@ -130,7 +132,7 @@ class NavBackStack<T : NavKey> : MutableList, StateObject
 - NavKey 인터페이스 구현: 뒤로 스택의 모든 키는 NavKey 인터페이스를 구현해야 합니다. 이는 키를 저장할 수 있음을 라이브러리에 알리는 마커 인터페이스 역할을 합니다.
 - @Serializable 주석이 있음: NavKey를 구현하는 것 외에도 키 클래스와 객체는 @Serializable 주석으로 표시해야 합니다.
 
-백스택 자체를 ViewModel 에 저장하는 대안이 있으나 따로 다루지는 않겠습니다.
+> 백스택 자체를 ViewModel 에 저장하는 대안이 있으나 따로 다루지는 않겠습니다.
 
 # 저장 범위 지정하기
 

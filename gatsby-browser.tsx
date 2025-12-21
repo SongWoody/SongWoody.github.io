@@ -7,7 +7,7 @@ import "./src/normalize.css"
 import "./src/style.css"
 
 // Highlighting for code blocks
-import "prism-themes/themes/prism-lucario.css"
+import "./src/styles/prism-lucario-custom.css"
 
 import React from "react"
 import { GatsbyBrowser } from "gatsby"
