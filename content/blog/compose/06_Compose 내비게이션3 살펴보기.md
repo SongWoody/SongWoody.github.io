@@ -42,7 +42,7 @@ Navigation3 에서는 **Key** 를 담는 방식으로 선언형 UI에 환경에 
 
 ```kotlin
 object ListScreen
-data class DetailScreen(id: String)
+data class DetailScreen(val id: String)
 
 @Composable
 fun MyApp() {
@@ -140,7 +140,7 @@ class NavBackStack<T : NavKey> : MutableList, StateObject
 기본적으로 rememberSaveable은 최상위 LocalSavedStateRegistryOwner(주로 Activity)에 접근하여 데이터를 저장합니다. 이 경우, 특정 컴포저블이 화면에서 제거되어도 Activity가 살아있는 한 데이터가 유지되어 의도치 않은 상태 복구가 발생할 수 있습니다.  
 이를 방지하려면 NavDisplay의 entryDecorators 파라미터에 rememberSaveableStateHolderNavEntryDecorator를 전달해야 합니다. 이를 통해 각 NavBackStackEntry가 개별적인 SavedStateRegistryOwner 역할을 수행하게 되며, 결과적으로 상태 저장 범위를 엔트리(Entry)의 수명 주기에 맞춰 제한할 수 있습니다."
 
-## viewmoel의 수명주기를 entry에 맞추기
+## viewModel의 수명주기를 entry에 맞추기
 rememberSaveable 과 마찬가지로 ViewModel 을 사용한다면 `rememberViewModelStoreNavEntryDecorator` 를  entryDecorators 에 포함해야 합니다.
 이 데코레이터는 각 네비게이션 엔트리(NavBackStackEntry)가 독립적인 ViewModelStore를 소유할 수 있도록 설정합니다. 이를 통해 ViewModel의 생명주기를 특정 화면(Entry)의 수명주기에 종속시킬 수 있으며, 화면이 백스택에서 완전히 제거될 때 관련 ViewModel 및 리소스가 올바르게 해제되도록 보장합니다.
 
