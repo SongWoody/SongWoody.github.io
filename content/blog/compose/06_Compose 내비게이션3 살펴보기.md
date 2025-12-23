@@ -4,6 +4,7 @@ date: "2025-12-16T22:02:55.1112"
 description: "Jetpack Navigation3의 핵심적인 개념과 새로운 멘탈 모델을 살펴봅니다."
 categories: ["안드로이드", "컴포즈"]
 tags: ["android", "jetpack compose", "navigation", "네비게이션", "nav3"]
+featuredImage: "./resource/heroimage_navigation3.svg"
 ---
 
 최근 **Navigation 3** 의 안정화 버전이 출시되었습니다. 기존 Navigation 2에서 느꼈던 **복잡함**과 **다중 패널 구현의 한계**가 크게 개선되었는데요. 직접 사용해 보니 백스택(Backstack)을 개발자가 직접 제어할 수 있게 되어, 훨씬 직관적이고 간결하다는 인상을 받았습니다.  
@@ -116,8 +117,8 @@ fun <T : Any> NavDisplay(
 
 # 화면 상태 저장/관리: NavKey 인터페이스
 
-'구성 변경' 및 '프로세트 종료'에서 액티비티가 다시 그려지게 되면 액티비티가 다시 그려지게 되고 그 과정에서 Composable 도 파괴되어 백 스택이 초기화 됩니다.  
-이러한 상황을 대처하기 위해 Nav3 에서는 **저장 가능한** 백 스택을 제공는 NavKey 인터페이스와 `rememberNavBackStack` 메소드를 활용합니다.
+'구성 변경' 및 '프로세트 종료'에서 액티비티가 다시 그려지게 되면 액티비티가 파괴되고 다시 생성됩니다. 그 과정에서 Composable 또한 파괴되어 백 스택이 초기화 됩니다.  
+이러한 상황을 대처하기 위해 Nav3 에서는 **저장 가능한** 백 스택을 제공는 `NavKey` 인터페이스와 `rememberNavBackStack` 메소드를 활용합니다.
 
 ```kotlin
 @Composable

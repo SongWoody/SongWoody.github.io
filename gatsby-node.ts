@@ -163,6 +163,7 @@ export const createSchemaCustomization: GatsbyNode['createSchemaCustomization'] 
       date: Date @dateformat
       tags: [String]
       draft: Boolean
+      featuredImage: File @fileByRelativePath
     }
 
     type Fields {

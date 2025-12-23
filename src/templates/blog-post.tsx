@@ -6,9 +6,12 @@ import Layout from "../components/Layout"
 import Seo from "../components/Seo"
 import "../components/TagList.css"
 
+import { GatsbyImage, getImage } from "gatsby-plugin-image";
+
 const BlogPostTemplate = ({ data, location }: PageProps) => {
   const { previous, next, site, markdownRemark: post } = data as any;
   const siteTitle = site.siteMetadata?.title || `Title`
+  const featuredImg = getImage(post.frontmatter.featuredImage?.childImageSharp?.gatsbyImageData)
 
   return (
     <Layout location={location} title={siteTitle}>
@@ -17,9 +20,16 @@ const BlogPostTemplate = ({ data, location }: PageProps) => {
         itemScope
         itemType="http://schema.org/Article"
       >
+        {featuredImg && (
+          <GatsbyImage
+            image={featuredImg}
+            alt={post.frontmatter.title}
+            style={{ marginBottom: '1rem' }}
+          />
+        )}
         <header>
           <h1 itemProp="headline">{post.frontmatter.title}</h1>
-          <p>{post.frontmatter.date}</p>
+          <p style={{ fontSize: '1rem' }}>{post.frontmatter.date}</p>
           {post.frontmatter.tags && (
             <div className="tags">
               {post.frontmatter.tags.map((tag, index) => (
@@ -30,7 +40,7 @@ const BlogPostTemplate = ({ data, location }: PageProps) => {
             </div>
           )}
         </header>
-        <section
+        <section style={{ marginTop: '2rem' }}
           dangerouslySetInnerHTML={{ __html: post.html }}
           itemProp="articleBody"
         />
