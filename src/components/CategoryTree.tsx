@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { Link } from "gatsby"
 import "./CategoryTree.css"
+import ComposeLogo from "./ComposeLogo";
 
 // TypeScript 인터페이스 정의
 interface Post {
@@ -32,6 +33,24 @@ interface CategoryTreeProps {
     }
   }
 }
+
+const renderSidebarTitle = (title: string) => {
+  if (!title.includes("::compose::")) {
+    return title;
+  }
+
+  const parts = title.split("::compose::");
+  return (
+    <>
+      {parts.map((part, i) => (
+        <React.Fragment key={i}>
+          {i > 0 && <ComposeLogo />}
+          {part}
+        </React.Fragment>
+      ))}
+    </>
+  );
+};
 
 
 const CategoryNode = ({ category, posts, level = 0 }: CategoryNodeProps) => {
@@ -68,7 +87,7 @@ const CategoryNode = ({ category, posts, level = 0 }: CategoryNodeProps) => {
                   to={post.fields.slug}
                   className="post-link"
                 >
-                  {post.frontmatter.title}
+                  {renderSidebarTitle(post.frontmatter.title)}
                 </Link>
               ))}
             </div>
@@ -120,7 +139,7 @@ const CategoryNode = ({ category, posts, level = 0 }: CategoryNodeProps) => {
                   to={post.fields.slug}
                   className="post-link"
                 >
-                  {post.frontmatter.title}
+                  {renderSidebarTitle(post.frontmatter.title)}
                 </Link>
               ))}
             </div>
