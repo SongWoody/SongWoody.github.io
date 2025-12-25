@@ -1,5 +1,5 @@
 ---
-title: "ComposeStudy - 06. 내비게이션3 살펴보기"
+title: '::compose:: Navigation3 살펴보기'
 date: "2025-12-16T22:02:55.1112"
 description: "Jetpack Navigation3의 핵심적인 개념과 새로운 멘탈 모델을 살펴봅니다."
 categories: ["안드로이드", "컴포즈"]
