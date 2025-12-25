@@ -4,7 +4,7 @@ date: "2025-12-16T22:02:55.1112"
 description: "Jetpack Navigation3의 핵심적인 개념과 새로운 멘탈 모델을 살펴봅니다."
 categories: ["안드로이드", "컴포즈"]
 tags: ["android", "jetpack compose", "navigation", "네비게이션", "nav3"]
-featuredImage: "./resource/heroimage_navigation3.svg"
+featuredImage: "./resources/heroimage_navigation3.svg"
 ---
 
 최근 **Navigation 3** 의 안정화 버전이 출시되었습니다. 기존 Navigation 2에서 느꼈던 **복잡함**과 **다중 패널 구현의 한계**가 크게 개선되었는데요. 직접 사용해 보니 백스택(Backstack)을 개발자가 직접 제어할 수 있게 되어, 훨씬 직관적이고 간결하다는 인상을 받았습니다.  

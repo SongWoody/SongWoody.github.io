@@ -30,7 +30,8 @@ const renderTitle = (title: string) => {
 const BlogPostTemplate = ({ data, location }: PageProps) => {
   const { previous, next, site, markdownRemark: post } = data as any;
   const siteTitle = site.siteMetadata?.title || `Title`
-  const featuredImg = getImage(post.frontmatter.featuredImage?.childImageSharp?.gatsbyImageData)
+  const { featuredImage } = post.frontmatter;
+  const image = featuredImage && getImage(featuredImage);
 
   return (
     <Layout location={location} title={siteTitle}>
@@ -39,12 +40,10 @@ const BlogPostTemplate = ({ data, location }: PageProps) => {
         itemScope
         itemType="http://schema.org/Article"
       >
-        {featuredImg && (
-          <GatsbyImage
-            image={featuredImg}
-            alt={post.frontmatter.title}
-            style={{ marginBottom: '1rem' }}
-          />
+        {featuredImage && (
+            (featuredImage.extension === 'svg' && featuredImage.publicURL) ?
+                <img src={featuredImage.publicURL} alt={post.frontmatter.title} style={{ marginBottom: '1rem', width: '100%', borderRadius: '1.6rem' }}/> :
+                (image && <GatsbyImage image={image} alt={post.frontmatter.title} style={{ marginBottom: '1rem', borderRadius: '1.6rem' }}/>)
         )}
         <header>
           <h1 itemProp="headline">{renderTitle(post.frontmatter.title)}</h1>
@@ -130,6 +129,13 @@ export const pageQuery = graphql`
         date(formatString: "MMMM DD, YYYY")
         description
         tags
+        featuredImage {
+          childImageSharp {
+            gatsbyImageData(layout: FULL_WIDTH)
+          }
+          publicURL
+          extension
+        }
       }
     }
     previous: markdownRemark(id: { eq: $previousPostId }) {
