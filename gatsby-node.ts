@@ -10,7 +10,7 @@ import { createFilePath } from 'gatsby-source-filesystem'
 
 // Define the template for blog post
 const blogPost = path.resolve(`./src/templates/blog-post.tsx`)
-const tagTemplate = path.resolve(`./src/templates/tag.tsx`)
+const tagTemplate = path.resolve(`./src/templates/tag-page.tsx`)
 const tagsTemplate = path.resolve(`./src/templates/tags.tsx`)
 
 export const createPages: GatsbyNode['createPages'] = async ({ graphql, actions, reporter }) => {

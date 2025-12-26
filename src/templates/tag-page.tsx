@@ -8,6 +8,7 @@ import { Link, graphql, PageProps } from "gatsby"
 
 import Layout from "../components/Layout"
 import Seo from "../components/Seo"
+import TitleRenderer from "../components/TitleRenderer";
 
 const TagPage = ({ data, location, pageContext }: PageProps<any, { tag: string }>) => {
   const siteTitle = data.site.siteMetadata?.title || `Title`
@@ -32,7 +33,7 @@ const TagPage = ({ data, location, pageContext }: PageProps<any, { tag: string }
                 <header>
                   <h2>
                     <Link to={post.fields.slug} itemProp="url">
-                      <span itemProp="headline">{title}</span>
+                      <span itemProp="headline"><TitleRenderer title={title}/></span>
                     </Link>
                   </h2>
                   <small>{post.frontmatter.date}</small>

@@ -4,25 +4,7 @@ import { Link, graphql } from "gatsby"
 import Bio from "../components/bio"
 import Layout from "../components/Layout"
 import Seo from "../components/Seo"
-import ComposeLogo from "../components/ComposeLogo";
-
-const renderTitle = (title) => {
-  if (!title.includes("::compose::")) {
-    return title;
-  }
-
-  const parts = title.split("::compose::");
-  return (
-    <>
-      {parts.map((part, i) => (
-        <React.Fragment key={i}>
-          {i > 0 && <ComposeLogo />}
-          {part}
-        </React.Fragment>
-      ))}
-    </>
-  );
-};
+import TitleRenderer from "../components/TitleRenderer";
 
 const BlogIndex = ({ data, location }) => {
   const { title: siteTitle } = data.site.siteMetadata
@@ -51,7 +33,7 @@ const BlogIndex = ({ data, location }) => {
               <article className="post-list-item" itemScope itemType="http://schema.org/Article">
                 <header>
                   <h2>
-                    <span itemProp="headline">{renderTitle(title || slug)}</span>
+                    <span itemProp="headline"><TitleRenderer title={title || slug} /></span>
                   </h2>
                   <small>{date}</small>
                 </header>

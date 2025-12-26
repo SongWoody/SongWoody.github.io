@@ -4,28 +4,10 @@ import { Link, graphql, PageProps } from "gatsby"
 import Bio from "../components/bio"
 import Layout from "../components/Layout"
 import Seo from "../components/Seo"
-import ComposeLogo from "../components/ComposeLogo";
+import TitleRenderer from "../components/TitleRenderer";
 import "../components/TagList.css"
 
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
-
-const renderTitle = (title: string) => {
-  if (!title.includes("::compose::")) {
-    return title;
-  }
-
-  const parts = title.split("::compose::");
-  return (
-    <>
-      {parts.map((part, i) => (
-        <React.Fragment key={i}>
-          {i > 0 && <ComposeLogo />}
-          {part}
-        </React.Fragment>
-      ))}
-    </>
-  );
-};
 
 const BlogPostTemplate = ({ data, location }: PageProps) => {
   const { previous, next, site, markdownRemark: post } = data as any;
@@ -46,7 +28,7 @@ const BlogPostTemplate = ({ data, location }: PageProps) => {
                 (image && <GatsbyImage image={image} alt={post.frontmatter.title} style={{ marginBottom: '1rem', borderRadius: '1.6rem' }}/>)
         )}
         <header>
-          <h1 itemProp="headline">{renderTitle(post.frontmatter.title)}</h1>
+          <h1 itemProp="headline"><TitleRenderer title={post.frontmatter.title} /></h1>
           <p style={{ fontSize: '1rem' }}>{post.frontmatter.date}</p>
           {post.frontmatter.tags && (
             <div className="tags">
@@ -80,14 +62,14 @@ const BlogPostTemplate = ({ data, location }: PageProps) => {
           <li>
             {previous && (
               <Link to={previous.fields.slug} rel="prev">
-                ← {previous.frontmatter.title}
+                ← <TitleRenderer title={previous.frontmatter.title} />
               </Link>
             )}
           </li>
           <li>
             {next && (
               <Link to={next.fields.slug} rel="next">
-                {next.frontmatter.title} →
+                <TitleRenderer title={next.frontmatter.title} /> →
               </Link>
             )}
           </li>
