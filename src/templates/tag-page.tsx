@@ -8,7 +8,7 @@ import { Link, graphql, PageProps } from "gatsby"
 
 import Layout from "../components/Layout"
 import Seo from "../components/Seo"
-import TitleRenderer from "../components/TitleRenderer";
+import PostListItem from "../components/PostListItem";
 
 const TagPage = ({ data, location, pageContext }: PageProps<any, { tag: string }>) => {
   const siteTitle = data.site.siteMetadata?.title || `Title`
@@ -20,36 +20,9 @@ const TagPage = ({ data, location, pageContext }: PageProps<any, { tag: string }
       <Seo title={`Posts tagged with #${tag}`} />
       <h1>Posts tagged with #{tag}</h1>
       <ol style={{ listStyle: `none` }}>
-        {posts.map(post => {
-          const title = post.frontmatter.title || post.fields.slug
-
-          return (
-            <li key={post.fields.slug}>
-              <article
-                className="post-list-item"
-                itemScope
-                itemType="http://schema.org/Article"
-              >
-                <header>
-                  <h2>
-                    <Link to={post.fields.slug} itemProp="url">
-                      <span itemProp="headline"><TitleRenderer title={title}/></span>
-                    </Link>
-                  </h2>
-                  <small>{post.frontmatter.date}</small>
-                </header>
-                <section>
-                  <p
-                    dangerouslySetInnerHTML={{
-                      __html: post.frontmatter.description || post.excerpt,
-                    }}
-                    itemProp="description"
-                  />
-                </section>
-              </article>
-            </li>
-          )
-        })}
+        {posts.map(post => (
+          <PostListItem key={post.fields.slug} post={post} />
+        ))}
       </ol>
       <Link to="/tags">← All tags</Link>
     </Layout>

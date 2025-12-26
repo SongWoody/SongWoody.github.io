@@ -1,10 +1,10 @@
 import * as React from "react"
-import { Link, graphql } from "gatsby"
+import { graphql } from "gatsby"
 
 import Bio from "../components/bio"
 import Layout from "../components/Layout"
 import Seo from "../components/Seo"
-import TitleRenderer from "../components/TitleRenderer";
+import PostListItem from "../components/PostListItem";
 
 const BlogIndex = ({ data, location }) => {
   const { title: siteTitle } = data.site.siteMetadata
@@ -27,25 +27,8 @@ const BlogIndex = ({ data, location }) => {
         <Bio />
       </div>
       <ol style={{ listStyle: "none", padding: 0 }}>
-        {posts.map(({ fields: { slug }, frontmatter: { title, date, description }, excerpt }) => (
-          <li key={slug}>
-            <Link to={slug} className="post-list-item-link">
-              <article className="post-list-item" itemScope itemType="http://schema.org/Article">
-                <header>
-                  <h2>
-                    <span itemProp="headline"><TitleRenderer title={title || slug} /></span>
-                  </h2>
-                  <small>{date}</small>
-                </header>
-                <section>
-                  <p
-                    dangerouslySetInnerHTML={{ __html: description || excerpt }}
-                    itemProp="description"
-                  />
-                </section>
-              </article>
-            </Link>
-          </li>
+        {posts.map(post => (
+          <PostListItem key={post.fields.slug} post={post} />
         ))}
       </ol>
     </Layout>
