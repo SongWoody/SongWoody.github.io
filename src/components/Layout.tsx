@@ -25,12 +25,7 @@ const Layout = ({ location, title, children }: LayoutProps) => {
           <div className="inner-container">
             <main className="content">{children}</main>
             <footer>
-              <SocialLink
-                href="https://github.com/SongWoody"
-                imgSrc="/github-mark.svg"
-                alt="GitHub 프로필"
-                style={{ width: "20px", height: "20px" }}
-              />
+             
             </footer>
           </div>
           <Sidebar />

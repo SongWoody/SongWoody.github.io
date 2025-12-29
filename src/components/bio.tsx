@@ -8,6 +8,7 @@
 import * as React from "react"
 import { useStaticQuery, graphql } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
+import SocialLink from "./SocialLink"
 
 const Bio = () => {
   const data = useStaticQuery(graphql`
@@ -27,7 +28,7 @@ const Bio = () => {
   const author = data.site.siteMetadata?.author
 
   return (
-    <div className="bio" style={{ margin: 0 }}>
+    <div className="bio">
       <StaticImage
         className="bio-avatar"
         layout="fixed"
@@ -38,11 +39,19 @@ const Bio = () => {
         quality={95}
         alt="Logo picture"
       />
-      {author?.name && (
-        <p>
-          Written by <strong>{author.name}</strong> {author?.summary || null}
-        </p>
-      )}
+      <div className="bio-main">
+        {author?.name && (
+          <p>
+            Written by <strong>{author.name}</strong> {author?.summary || null}
+          </p>
+        )}
+      </div>
+      <SocialLink
+          href="https://github.com/SongWoody"
+          imgSrc="/github-mark.svg"
+          alt="GitHub 프로필"
+          style={{ width: "20px", height: "20px" }}
+       />
     </div>
   )
 }
