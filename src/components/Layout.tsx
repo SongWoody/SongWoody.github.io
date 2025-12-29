@@ -2,6 +2,7 @@ import React from "react"
 import Header from "./Header"
 import Sidebar from "./Sidebar"
 import { SidebarProvider } from "./SidebarContext"
+import SocialLink from "./SocialLink"
 
 // TypeScript 인터페이스 정의
 interface LayoutProps {
@@ -24,9 +25,12 @@ const Layout = ({ location, title, children }: LayoutProps) => {
           <div className="inner-container">
             <main className="content">{children}</main>
             <footer>
-              <a href="https://github.com/SongWoody" target="_blank" rel="noopener noreferrer">
-                GitHub
-              </a>
+              <SocialLink
+                href="https://github.com/SongWoody"
+                imgSrc="/github-mark.svg"
+                alt="GitHub 프로필"
+                style={{ width: "20px", height: "20px" }}
+              />
             </footer>
           </div>
           <Sidebar />
@@ -35,6 +39,5 @@ const Layout = ({ location, title, children }: LayoutProps) => {
     </SidebarProvider>
   )
 }
-
 
 export default Layout
