@@ -1,4 +1,716 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Gatsby Starter Blog RSS Feed]]></title><description><![CDATA[I share concise notes on what I learn while developing.]]></description><link>https://songwoody.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Sun, 16 Nov 2025 13:58:32 GMT</lastBuildDate><item><title><![CDATA[ComposeStudy - 03.컴포즈 Side-effect(부수효과) 개념]]></title><description><![CDATA[Side-effect 소개 Side-effect 는 Composable 함수가 자신의 주요 임무(UI…]]></description><link>https://songwoody.github.io/compose/03_Compose 부수효과/</link><guid isPermaLink="false">https://songwoody.github.io/compose/03_Compose 부수효과/</guid><pubDate>Wed, 12 Nov 2025 22:55:00 GMT</pubDate><content:encoded>&lt;h1&gt;Side-effect 소개&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Gatsby Starter Blog RSS Feed]]></title><description><![CDATA[I share concise notes on what I learn while developing.]]></description><link>https://songwoody.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Tue, 30 Dec 2025 08:03:56 GMT</lastBuildDate><item><title><![CDATA[::compose:: Navigation3 핵심개념 살펴보기]]></title><description><![CDATA[최근 Navigation 3 의 안정화 버전이 출시되었습니다. 기존 Navigation 2에서 느꼈던 복잡함과 다중 패널 구현의 한계가 크게 개선되었는데요. 직접 사용해 보니 백스택(Backstack…]]></description><link>https://songwoody.github.io/compose/06_Compose Jetpack Compose Navigation3 살펴보기/</link><guid isPermaLink="false">https://songwoody.github.io/compose/06_Compose Jetpack Compose Navigation3 살펴보기/</guid><pubDate>Tue, 16 Dec 2025 13:02:55 GMT</pubDate><content:encoded>&lt;p&gt;최근 &lt;strong&gt;Navigation 3&lt;/strong&gt; 의 안정화 버전이 출시되었습니다. 기존 Navigation 2에서 느꼈던 &lt;strong&gt;복잡함&lt;/strong&gt;과 &lt;strong&gt;다중 패널 구현의 한계&lt;/strong&gt;가 크게 개선되었는데요. 직접 사용해 보니 백스택(Backstack)을 개발자가 직접 제어할 수 있게 되어, 훨씬 직관적이고 간결하다는 인상을 받았습니다.&lt;/p&gt;
+&lt;p&gt;이번 포스팅에서는 Navigation 3의 핵심 개념을 가볍게 정리해 보겠습니다.&lt;/p&gt;
+&lt;h1&gt;Jetpack Navigation 3, 무엇이 달라졌고 왜 필요한가?&lt;/h1&gt;
+&lt;p&gt;기존 &lt;code class=&quot;language-text&quot;&gt;Navigation 2&lt;/code&gt;는 &lt;code class=&quot;language-text&quot;&gt;NavGraph&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;NavController&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;Destination&lt;/code&gt; 등의 요소를 통해 &lt;strong&gt;백스택을 간접적으로 관리&lt;/strong&gt; 하며 화면 이동을 처리했습니다. 이러한 구조는 본래 전통적인 액티비티(Activity)와 프래그먼트(Fragment) 환경을 지원하기 위해 설계된 것으로 알고 있습니다.&lt;/p&gt;
+&lt;p&gt;하지만 이 과정에서 안드로이드 프레임워크와의 결합도가 높아졌고, 현대적인 선언형 UI(Compose) 환경에서는 구현 복잡도가 불필요하게 증가하는 원인이 되었습니다. Navigation 3는 바로 이러한 한계를 극복하고, 컴포즈 환경에 맞게 더 선언적이고 유연한 구조를 제공하기 위해 등장했습니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;핵심 개선 사항&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;명확한 백스택(Back Stack) 제어 및 투명성&lt;/strong&gt;: Nav2는 &lt;code class=&quot;language-text&quot;&gt;navigate()&lt;/code&gt;나 &lt;code class=&quot;language-text&quot;&gt;popBackStack()&lt;/code&gt; 같은 &lt;strong&gt;명령&lt;/strong&gt; 을 내려 화면을 컨트롤 하였습니다. Nav3 에서는 백스택을 상태(State)로 취급하여 개발자가 내부를 투명하게 들여다보고 조작할 수 있게 합니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;유연한 다중 패널 및 폴더블 디바이스 대응&lt;/strong&gt;: Nav2는 기본적으로 &apos;하나의 화면&apos;을 다른 &apos;하나의 화면&apos;으로 교체하는 방식에 최적화되어 있습니다. 태블릿이나 폴더블처럼 여러 화면을 동시에 보여주거나, 특정 영역만 동적으로 교체해야 하는 복잡한 UI를 구현하기에는 유연성이 부족했습니다. Nav3 에서는 &lt;code class=&quot;language-text&quot;&gt;SceneStragegy&lt;/code&gt;를 통해 다중 패널 환경의 화면 처리를 훨씬 유연하게 다룰 수 있도록 돕습니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;정리하자면, Navigation 3는 불투명했던 구조에서 벗어나 개발자가 백스택의 상태를 명확하게 읽고 제어할 수 있는 &lt;strong&gt;투명하고, 유연하며, 확장 가능한 새로운 아키텍처&lt;/strong&gt;를 제공합니다.&lt;/p&gt;
+&lt;p&gt;이어서 Navigation 3의 핵심적인 구성 요소에 대해 자세히 살펴보겠습니다&lt;/p&gt;
+&lt;h1&gt;Nav3의 핵심 변경 사항: 백 스택&lt;/h1&gt;
+&lt;p&gt;Nav3 이해하기 위한 첫 번째 &lt;strong&gt;&apos;백 스택&apos;&lt;/strong&gt; 에 대해서 알아보겠습니다.&lt;/p&gt;
+&lt;h2&gt;&apos;백 스택(Back Stack)&apos; 이란?&lt;/h2&gt;
+&lt;p&gt;백 스택은 사용자가 앱 내에서 이동한 화면들을 보관하는 보관소입니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;화면 이동: 새로운 화면으로 이동하면 스택의 가장 위에 정보가 쌓입니다.&lt;/li&gt;
+&lt;li&gt;뒤로 가기: 뒤로 가기 버튼이나 제스처를 사용하면 최상단의 화면을 제거(Pop)하고 바로 아래에 있던 이전 화면을 보여줍니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/a02e974d95bd5c17f63b1630c74dbd30/0c3d0/back-stack.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 24.050632911392405%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAFCAYAAABFA8wzAAAACXBIWXMAAAsTAAALEwEAmpwYAAABDUlEQVR42lWQW0+DQBCF+f9/p6Z9NfrWxtgmKhRsxVKuheWygFCBz2WNRifZnIdvz8ycMcIwIEkSgiBASomu6VtEluO/B1zClMS/kGWCn5qmiTRNOZ/PxHGM7/u0bYth2w6Hw5FZoyjSH/u+102jImBbrtmKNbtyQ1LGMELXd3rqvMR+b//6i6LAsKxnHMdS4AXXfdOTLMvi5J4w3Sce23s2+S0P9R1udMT3Zm7ieZ5W2za13zSfECLDaNollVzQfizIhMn1OjKOg9YotOjaFbJc0jVLFfHIMMxxBxXvU51qp32VvKFuVpQqgZEXatXylbywqaoLf48opVDMVs/RWtf5P15VifbNfO7TNJIvJKV1gTrKeKAAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;back-stack&quot;
+        title=&quot;&quot;
+        src=&quot;/static/a02e974d95bd5c17f63b1630c74dbd30/f058b/back-stack.png&quot;
+        srcset=&quot;/static/a02e974d95bd5c17f63b1630c74dbd30/c26ae/back-stack.png 158w,
+/static/a02e974d95bd5c17f63b1630c74dbd30/6bdcf/back-stack.png 315w,
+/static/a02e974d95bd5c17f63b1630c74dbd30/f058b/back-stack.png 630w,
+/static/a02e974d95bd5c17f63b1630c74dbd30/40601/back-stack.png 945w,
+/static/a02e974d95bd5c17f63b1630c74dbd30/78612/back-stack.png 1260w,
+/static/a02e974d95bd5c17f63b1630c74dbd30/0c3d0/back-stack.png 1414w&quot;
+        sizes=&quot;(max-width: 630px) 100vw, 630px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;백 스택에는 실제 컨텐츠를 담을 수도 있고 콘텐츠에 필요한 정보만 담을 수도 있으며, 화면 이동에 필요한 Key만 담을 수도 있으나, &lt;strong&gt;Navigation3 에서는 Key&lt;/strong&gt; 만을 담는 방식으로 선언형 UI에 환경에 더 잘 맞게 설계되었습니다.&lt;/p&gt;
+&lt;p&gt;아래 코드는 기본적인 백 스택 구현 코드입니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;object&lt;/span&gt; ListScreen
+&lt;span class=&quot;token keyword&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;DetailScreen&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; id&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; String&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token annotation builtin&quot;&gt;@Composable&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;MyApp&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// back stack 생성&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; backstack &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; remember &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; mutableStateListOf&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;Any&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;ScreenA&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;// NavDisplay를 사용한 백스택으로 화면 그리기&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// ..생략.. &lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;// 화면 이동(Push)&lt;/span&gt;
+    backStack&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ScreenB&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;myId&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;// 뒤로 가기(Pop)&lt;/span&gt;
+    backStack&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;removeLastOrNull&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;Nav3 에서 콘텐츠를 관리하는 법: NavEntry&lt;/h1&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;NavEntry&lt;/code&gt;는 &lt;strong&gt;키&lt;/strong&gt;와 해당 Key가 나타내는 &lt;strong&gt;콘텐츠&lt;/strong&gt;를 &lt;strong&gt;유지&lt;/strong&gt;하고 &lt;strong&gt;저장&lt;/strong&gt;하는 합니다..&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;T &lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Any&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;NavEntry&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+    key&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; T&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    contentKey&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Any&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    metadata&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Map&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;String&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; Any&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    content&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token annotation builtin&quot;&gt;@Composable&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;T&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;-&gt;&lt;/span&gt; Unit
+&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;key&lt;/code&gt; 와 &lt;code class=&quot;language-text&quot;&gt;content&lt;/code&gt; 는 필수입니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;key&lt;/code&gt;: Back Stack에서 사용하는 Key와 동일하며, 특정 엔트리를 식별하는 고유 값입니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;contentKey&lt;/code&gt;: 콘텐츠의 고유 식별자입니다. 주로 화면 전환(Transition) 애니메이션을 적용하거나, 동일한 Key 내에서 UI 구성을 구분 및 캐싱하는 기준점으로 사용됩니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;metadata&lt;/code&gt;: 화면과 관련된 부가 정보(예: 페이지 타이틀, 특정 UI 요소 노출 여부 등)를 담는 Map입니다. 네비게이션 로직 외부에서 화면의 상태를 참조할 때 유용합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;content&lt;/code&gt;: 실제로 화면에 그려질 @Composable UI 블록입니다. 매개변수로 전달받은 key(T)를 활용하여 화면을 구성합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;NavEntry&lt;/code&gt; 를 만드는 방식을 두 가지가 있습니다.&lt;br&gt;
+하나는 직접 &lt;code class=&quot;language-text&quot;&gt;when&lt;/code&gt; 문을 사용하여 key에 따라 분기처리하는 방법과 &lt;code class=&quot;language-text&quot;&gt;entryProvider&lt;/code&gt; DSL 을 사용하는 방법입니다.&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;entryProvider&lt;/code&gt; DSL 를 사용하는 방법만 간단하게 살펴봅시다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;entryProvider &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; entryProvider &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    entry&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;ListScreen&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;List Screen&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+    entry&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;DetailScreen&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+        metadata &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;mapOf&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;extraDataKey&quot;&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;extraDataValue&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; key &lt;span class=&quot;token operator&quot;&gt;-&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Target ID: &lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token interpolation-punctuation punctuation&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;token expression&quot;&gt;key&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;id&lt;/span&gt;&lt;span class=&quot;token interpolation-punctuation punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt; &quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;화면을 보여주는 창: NavDisplay&lt;/h1&gt;
+&lt;p&gt;마지막으로 &lt;code class=&quot;language-text&quot;&gt;NavDisplay&lt;/code&gt; 에 대해서 살펴보겠습니다.&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;NavEntry&lt;/code&gt;가 &apos;무엇을 보여줄 것인가&apos;에 대한 상태 데이터라면, &lt;strong&gt;&lt;code class=&quot;language-text&quot;&gt;NavDisplay&lt;/code&gt;는 그 상태를 &apos;어떻게 화면에 그릴 것인가&apos;를 결정&lt;/strong&gt;하는 역할입니다.&lt;br&gt;
+백 스택의 상태를 관찰하고, 현재 최상단에 있는 NavEntry를 실제 UI로 렌더링하는 역할을 합니다.&lt;/p&gt;
+&lt;p&gt;아래는 &lt;strong&gt;백 스택&lt;/strong&gt;, &lt;strong&gt;NavEntry&lt;/strong&gt;, &lt;strong&gt;NavDisplay&lt;/strong&gt; 관계를 잘 보여주는 공식문서의 data flow 입니다.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/b1189e9dcae707847cc4e1f04f38aeb6/d8817/nav3-data-flow.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 81.64556962025317%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAYAAAAWGF8bAAAACXBIWXMAAAsTAAALEwEAmpwYAAACtUlEQVR42oWU6U/bQBDF+/9/hbYcUtUicQWqVuoBgRxNCZScxEAgjhMCCeQCJ45N65DY/nXsgKjUUiw9z+6O/ObN212/4ImneQEHaYNCps9BSkcrOthDOHQhZvwi1rOI6haRrkHCdrh0J9+98DyPR0wWHQf2IrA0d83a2xuW5jt8XR5z0YbFO4eXjRYva3VBg2ntjFf6gPjonvBf6sZjyO/borDH7rdL8ukbsgmDShfS/XM4XaS2M8NZYoafygK96meSQ2dC2O12qdfrtFotOp2uoM1YqikZkyOlRiKep3Cgouy3KAthtqdhHX+lVoijpTfoFL/TVjfZGw4nhJZloSgKqqoGMIw++o1JZrfH8WGdnW+KEFYo7LfRrn3CKv2TGJViipNsjKaa46ocZf+B0H+5rht46Lq+iR6jO79lE6VQJR7Nks+VONhrUupIy3qZ3tGWzCOkoh/QcgmapTBJ237aQ39zztQ7SscGudQlp0c66qFF71assAdUroqcNIqU26qMTzi9rlIauU8TPjKDZVpBxHtcHsmuDcQqRzozJfJH+mlCX6bANAdB9O7P1Hg0on5xjjkwApqLWg1NvG82m88r9Cl8BQ8CH1QMRaF5r9BX6jc7dpxnCG/FsH6fQaOBZ4iagSg1BAMTt9fHbndwdB1T8n7O+3OX/1ImlYlEsBcWqExPo01NUXv9KkB9doar+blgvTI9RWN2Tq7UkhyL/H8U+ldlawsvFMIJrTNOLOHk3tGPz6LHZrD33gTz0eaK5N/D6gpkMv8h9P3Y3oa1NVj/gJcO8avyhUpykePoGy4za9xVP8lfIiT5jxBalROffUbhxgYsL8NKiPGPVc61LIfZJJmdMMVCmlY5KUWl1ZV1aXkRUqlnNsWvGA6Ll1HY3ZKWNuWaCDLh+yhIbE/ymzIulwPC33PBoKCQnP9GAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;back-stack&quot;
+        title=&quot;&quot;
+        src=&quot;/static/b1189e9dcae707847cc4e1f04f38aeb6/f058b/nav3-data-flow.png&quot;
+        srcset=&quot;/static/b1189e9dcae707847cc4e1f04f38aeb6/c26ae/nav3-data-flow.png 158w,
+/static/b1189e9dcae707847cc4e1f04f38aeb6/6bdcf/nav3-data-flow.png 315w,
+/static/b1189e9dcae707847cc4e1f04f38aeb6/f058b/nav3-data-flow.png 630w,
+/static/b1189e9dcae707847cc4e1f04f38aeb6/40601/nav3-data-flow.png 945w,
+/static/b1189e9dcae707847cc4e1f04f38aeb6/d8817/nav3-data-flow.png 1238w&quot;
+        sizes=&quot;(max-width: 630px) 100vw, 630px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;코드로 간단히 살펴보면 아래와 같습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;&lt;span class=&quot;token annotation builtin&quot;&gt;@Composable&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;T &lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Any&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;NavDisplay&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+    backstack&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; List&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;T&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// ... 생략 ... ,&lt;/span&gt;
+    entryProvider&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;T&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;-&gt;&lt;/span&gt; NavEntry&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;T&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;backstack&lt;/code&gt;: 현재 앱에 쌓여 있는 화면 키(Key)들의 리스트입니다. NavDisplay는 이 리스트의 변화를 감지하여 화면을 갱신합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;entryProvider&lt;/code&gt;: 주어진 key(T)를 바탕으로 그에 맞는 NavEntry를 생성하거나 찾아주는 로직입니다. &quot;어떤 키에 어떤 화면을 보여줄지&quot;를 연결하는 다리 역할을 합니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;기타&lt;/strong&gt;: 뒤로가기 처리를 위한 onBack, 전체 화면 이동 애니메이션을 처리하기 위한 transitionSpec 등의 파라미터가 있습니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;이제 핵심 개념인 &lt;strong&gt;백 스택&lt;/strong&gt;, &lt;strong&gt;NavEntry&lt;/strong&gt;, &lt;strong&gt;NavDisplay&lt;/strong&gt; 는 모두 정리되었습니다.&lt;br&gt;
+그러나 이것만으로는 안드로이드에서 &lt;strong&gt;&apos;구성 변경&apos;&lt;/strong&gt; 및 &lt;strong&gt;&apos;프로세트 종료&apos;&lt;/strong&gt; 와 같은 상황에서 백스택을 유지할 수 없습니다.&lt;br&gt;
+다음으로 상태 저장을 위한 필요한 요소들을 살펴봅니다.&lt;/p&gt;
+&lt;h1&gt;화면 상태 저장/관리: NavKey 인터페이스&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;&apos;구성 변경(화면 회전)&apos;&lt;/strong&gt; 및 &lt;strong&gt;&apos;프로세트 종료(메모리 부족에 의한 종료)&apos;&lt;/strong&gt; 에서 앱에 다시 진입하여 액티비티가 다시 그려지게 되면 액티비티가 파괴되고 다시 생성됩니다. 그 과정에서 Composable 또한 파괴되어 백 스택이 초기화 됩니다.&lt;br&gt;
+이러한 상황을 대처하기 위해 Nav3 에서는 &lt;strong&gt;저장 가능한&lt;/strong&gt; 백 스택을 제공하는는 &lt;code class=&quot;language-text&quot;&gt;NavKey&lt;/code&gt; 인터페이스와 &lt;code class=&quot;language-text&quot;&gt;rememberNavBackStack&lt;/code&gt; 를 사용합니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;&lt;span class=&quot;token annotation builtin&quot;&gt;@Composable&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;rememberNavBackStack&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;vararg&lt;/span&gt; elements&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; NavKey&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; NavBackStack&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;NavKey&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;
+
+&lt;span class=&quot;token annotation builtin&quot;&gt;@Serializable&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; NavBackStack&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;T &lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; NavKey&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; MutableList&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;T&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; StateObject&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;rememberNavBackStack&lt;/code&gt; 는 내부적으로 rememberSaveable 을 사용합니다.&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;rememberNavBackStack&lt;/code&gt; 가 올바르게 작동하려면 백 스택의 각 키가 특정 요구사항을 준수해야 합니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;NavKey 인터페이스&lt;/strong&gt;: 백 스택의 모든 키는 NavKey 인터페이스를 구현해야 합니다. 이는 키를 저장할 수 있음을 라이브러리에 알리는 마커 인터페이스 역할을 합니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;@Serializable&lt;/strong&gt;: NavKey를 구현하는 것 외에도 키 클래스와 객체는 @Serializable 주석으로 표시해야 합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;&lt;span class=&quot;token annotation builtin&quot;&gt;@Serializable&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;object&lt;/span&gt; ScreenA &lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; NavKey
+
+&lt;span class=&quot;token annotation builtin&quot;&gt;@Serializable&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;object&lt;/span&gt; ScreenB &lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; NavKey
+
+&lt;span class=&quot;token annotation builtin&quot;&gt;@Composable&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;NavBackStack&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; backStack &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;rememberNavBackStack&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;ScreenA&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;백스택 자체를 ViewModel 에 저장하는 대안이 있으나 따로 다루지는 않겠습니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1&gt;저장 범위 지정하기&lt;/h1&gt;
+&lt;h2&gt;rememberSavable의 수명주기를 entry에 맞추기(필수)&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;rememberSaveableStateHolderNavEntryDecorator&lt;/code&gt;를 사용하여 &lt;strong&gt;상태 저장의 주인(Owner)&lt;/strong&gt; 을 &lt;strong&gt;해당 화면(Entry)&lt;/strong&gt; 으로 지정할 수 있습니다.&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;rememberSaveableStateHolderNavEntryDecorator&lt;/code&gt;를 사용하지 않으면 모든 데이터가 &lt;code class=&quot;language-text&quot;&gt;Activity&lt;/code&gt;에 저장되어 화면을 뒤로 가기로 나갔다 들어와도 옛날 데이터가 남아있을 수 있습니다. 반면, 이를 사용하면 데이터가 &lt;strong&gt;해당 화면(Entry)&lt;/strong&gt; 이 죽을 때 같이 깔끔하게 사라집니다.&lt;/p&gt;
+&lt;p&gt;아래 예시는 &lt;code class=&quot;language-text&quot;&gt;NavDisplay&lt;/code&gt; 에 &lt;code class=&quot;language-text&quot;&gt;entryDecorators&lt;/code&gt; 로 &lt;code class=&quot;language-text&quot;&gt;rememberSaveableStateHolderNavEntryDecorator&lt;/code&gt; 를 사용하지 않았을 경우의 문제입니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;&lt;span class=&quot;token annotation builtin&quot;&gt;@Composable&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;AppNavigation&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; backStack &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;rememberNavBackStack&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;HomeKey&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;token function&quot;&gt;NavDisplay&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+        backStack &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; backStack&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;// entryDecorators = emptyList() // 기본값&lt;/span&gt;
+        entryProvider &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; entryProvider &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+            entry&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;HomeKey&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;token function&quot;&gt;HomeScreen&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;onSearch &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; backStack&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;SearchKey&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+            entry&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;SearchKey&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;token function&quot;&gt;SearchScreen&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token annotation builtin&quot;&gt;@Composable&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;SearchScreen&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// 이 값은 Activity가 살아있는 한 계속 저장됨&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// 화면을 나갔다(Back) 다시 들어와도 이전 입력값이 남아있을 위험이 있음&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt; query &lt;span class=&quot;token keyword&quot;&gt;by&lt;/span&gt; rememberSaveable &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;mutableStateOf&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+    
+    &lt;span class=&quot;token function&quot;&gt;TextField&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;value &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; query&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; onValueChange &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; query &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; it &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;viewModel의 수명주기를 entry에 맞추기&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;rememberSaveable&lt;/code&gt; 과 마찬가지로 &lt;code class=&quot;language-text&quot;&gt;ViewModel&lt;/code&gt; 을 사용한다면 &lt;code class=&quot;language-text&quot;&gt;rememberViewModelStoreNavEntryDecorator&lt;/code&gt; 를  &lt;code class=&quot;language-text&quot;&gt;entryDecorators&lt;/code&gt; 에 포함해야 합니다.
+이 데코레이터는 각 네비게이션 엔트리(NavBackStackEntry)가 &lt;strong&gt;독립적인 ViewModelStore를 소유&lt;/strong&gt;할 수 있도록 설정합니다. 이를 통해 ViewModel의 생명주기를 특정 화면(Entry)의 수명주기에 종속시킬 수 있으며, 화면이 백스택에서 완전히 제거될 때 관련 ViewModel 및 리소스가 올바르게 해제되도록 보장합니다.&lt;/p&gt;
+&lt;h2&gt;설정 예시&lt;/h2&gt;
+&lt;p&gt;아래와 같이 NavDisplay에 데코레이터들을 설정하여 사용할 수 있습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;&lt;span class=&quot;token function&quot;&gt;NavDisplay&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+    entryDecorators &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;listOf&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;// 각 화면 관리 및 상태 저장을 위한 기본 데코레이터 추가&lt;/span&gt;
+        &lt;span class=&quot;token function&quot;&gt;rememberSaveableStateHolderNavEntryDecorator&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;// 개별 엔트리 단위의 ViewModel 생명주기 관리를 위한 데코레이터 추가&lt;/span&gt;
+        &lt;span class=&quot;token function&quot;&gt;rememberViewModelStoreNavEntryDecorator&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    backStack &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; backStack&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    entryProvider &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; entryProvider &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;마치며&lt;/h1&gt;
+&lt;p&gt;지금까지 Android Navigation 3의 핵심 개념과 상태 관리 메커니즘을 가볍게 살펴보았습니다.&lt;/p&gt;
+&lt;p&gt;Navigation 2 를 사용해봤던 터라, Nav3가 더욱더 직관적으로 느껴졌습니다.
+특히 Kotlin Serialization을 활용한 타입 안정성과 멀티플랫폼, 다중 패널(Multi-pane) 환경까지 고려한 설계가 컴포즈에 정말 잘 녹여낸것 같아 인상 깊게 다가왔습니다.
+이번 글에서 미처 다루지 못한 &lt;strong&gt;멀티 모듈 프로젝트에서의 탐색 전략&lt;/strong&gt;, &lt;strong&gt;화면 전환 애니메이션 처리&lt;/strong&gt;, 그리고 &lt;strong&gt;커스텀 데코레이터(Custom Decorator)&lt;/strong&gt; 를 활용한 기능 확장 등은 공식 문서를 참고해 보시길 추천드립니다.&lt;/p&gt;
+&lt;h1&gt;참고 자료&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://developer.android.com/guide/navigation/navigation-3&quot;&gt;Jetpack Navigation 3 공식 문서&lt;/a&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Jetpack DataStore: Android 데이터 저장을 위한 최신 솔루션]]></title><description><![CDATA[왜 DataStore인가? (SharedPreferences의 한계) 오랜 시간 동안 Android에서 간단한 키-값(Key-Value…]]></description><link>https://songwoody.github.io/android_etc/JetPack_DataStore/</link><guid isPermaLink="false">https://songwoody.github.io/android_etc/JetPack_DataStore/</guid><pubDate>Wed, 03 Dec 2025 09:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;왜 DataStore인가? (SharedPreferences의 한계)&lt;/h2&gt;
+&lt;p&gt;오랜 시간 동안 Android에서 간단한 키-값(Key-Value) 형태의 데이터를 저장하는 데에는 &lt;code class=&quot;language-text&quot;&gt;SharedPreferences&lt;/code&gt;가 주로 사용되어 왔습니다. 하지만 &lt;code class=&quot;language-text&quot;&gt;SharedPreferences&lt;/code&gt;는 몇 가지 중대한 한계를 가지고 있습니다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;UI 스레드에서 안전하지 않음&lt;/strong&gt;: &lt;code class=&quot;language-text&quot;&gt;apply()&lt;/code&gt;는 비동기적으로 디스크에 쓰기를 하지만, &lt;code class=&quot;language-text&quot;&gt;commit()&lt;/code&gt;은 UI 스레드를 블로킹할 수 있습니다. &lt;code class=&quot;language-text&quot;&gt;get*()&lt;/code&gt; 메서드 또한 메모리에 로드된 데이터를 읽어오는 것이므로, 초기 로딩 시 디스크 I/O가 발생하여 UI 스레드를 블로킹할 위험이 있습니다. 이는 ANR(Application Not Responding)을 유발할 수 있습니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;동기 API&lt;/strong&gt;: 모든 작업이 동기적으로 이루어지므로 메인 스레드에서 호출 시 성능 저하를 야기합니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;런타임 오류 가능성&lt;/strong&gt;: 저장 및 조회 시 파싱 오류 등의 런타임 오류에 대한 보호 메커니즘이 부족합니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;트랜잭션 미지원&lt;/strong&gt;: 여러 데이터를 한 번에 업데이트할 때, 부분적인 성공/실패가 발생할 수 있습니다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;이러한 문제점들을 해결하기 위해 Google은 Jetpack DataStore를 도입했습니다.&lt;/p&gt;
+&lt;h2&gt;Jetpack DataStore란?&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Preferences DataStore&lt;/strong&gt;:&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Proto DataStore&lt;/strong&gt;:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;Preferences DataStore 사용법&lt;/h2&gt;
+&lt;p&gt;가장 먼저 접하게 될 Preferences DataStore의 기본적인 사용법을 살펴보겠습니다.&lt;/p&gt;
+&lt;h3&gt;1. 의존성 추가&lt;/h3&gt;
+&lt;h3&gt;2. DataStore 생성&lt;/h3&gt;
+&lt;h3&gt;3. 데이터 쓰기 (저장)&lt;/h3&gt;
+&lt;h3&gt;4. 데이터 읽기 (조회)&lt;/h3&gt;
+&lt;h2&gt;Proto DataStore (추후 다룰 예정)&lt;/h2&gt;
+&lt;h2&gt;결론&lt;/h2&gt;</content:encoded></item><item><title><![CDATA[서명키 유출이 부른 비극: 쿠팡 해킹 사건으로 알아보는 JWT]]></title><description><![CDATA[들어가며 tbd: 배경 및 타임라인, 사건 개요: 이번 쿠팡 해킹 사태의 주요 경과(정보 유출 인지 시점, 수사 과정 등)를 간략히 정리.
+tbd: 국회 청문회 등에서 밝혀진 핵심 발언('퇴사한 관리자가 서명키를 가지고 있었다', '인증에 JWT…]]></description><link>https://songwoody.github.io/login_system/JWT/</link><guid isPermaLink="false">https://songwoody.github.io/login_system/JWT/</guid><pubDate>Tue, 02 Dec 2025 13:12:30 GMT</pubDate><content:encoded>&lt;h1&gt;들어가며&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;tbd: 배경 및 타임라인, 사건 개요: 이번 쿠팡 해킹 사태의 주요 경과(정보 유출 인지 시점, 수사 과정 등)를 간략히 정리.
+tbd: 국회 청문회 등에서 밝혀진 핵심 발언(&apos;퇴사한 관리자가 서명키를 가지고 있었다&apos;, &apos;인증에 JWT를 사용하고 있었다&apos;)을 제시하고, 이 발언들이 의미하는 기술적 위험성을 제기
+글의 목표 제시: 이 사건을 통해 **JWT의 서명키(Secret Key)**가 무엇이며, 서명키 유출이 어떻게 대규모 정보 탈취로 이어질 수 있었는지 그 원리를 철저히 파헤쳐봅니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1&gt;JWT란 무엇이며, 왜 서명키가 중요한가?&lt;/h1&gt;
+&lt;h2&gt;JWT의 정의 및 필요성&lt;/h2&gt;
+&lt;p&gt;tbd: JWT가 등장하게 된 배경(Scale-out, Stateless)을 간략히 설명&lt;/p&gt;
+&lt;h2&gt;토큰 기반 인증 vs 세션 기반 인증 (관리 주체 차이)&lt;/h2&gt;
+&lt;p&gt;tbd: 세션: 서버가 상태(State)를 직접 관리(DB, 메모리).&lt;/p&gt;
+&lt;h2&gt;JWT 의 3단 구조&lt;/h2&gt;
+&lt;p&gt;tbd: Header.Payload: 이 부분은 인코딩되었을 뿐, 누구나 쉽게 디코딩하여 내용을 볼 수 있음을 강조
+tbd: Signature: 토큰이 위변조되지 않았음을 보장하는 유일한 장치이며, &lt;strong&gt;서명키&apos;&lt;/strong&gt; 를 통해서만 생성/검증됨을 강조.
+tbd: JWT 토큰: 클라이언트가 토큰을 소지하며, 서버는 상태를 관리하지 않고 토큰의 유효성만 검증하는 차이점을 명확히 설명합니다. (🔑 이 &apos;검증&apos;에 서명키가 쓰임을 예고)&lt;/p&gt;
+&lt;h2&gt;사건의 핵심 원리: 서명(Signature)과 검증 과정&lt;/h2&gt;
+&lt;p&gt;tbd: 서명이 Header, Payload 그리고 **서버만 아는 서명키(Secret Key)**를 특정 해싱 알고리즘(예: HMACSHA256)을 통해 생성되는 과정을 도식화와 함께 설명
+tbd:
+서버가 토큰을 받음.
+Header와 Payload를 추출.
+서버가 보관하고 있는 서명키를 이용해 토큰의 Header, Payload로 **새로운 서명(시그니처)**을 직접 생성.
+새로 만든 서명과 토큰에 담겨있던 서명을 비교하여 일치하면 토큰을 신뢰.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;쿠팡 사태가 가능했던 이유: &apos;퇴사한 관리자가 서버와 동일한 서명키를 가지고 있었기 때문에, 서버가 완벽하게 유효하다고 판단하는 위조 토큰을 만들 수 있었다.&apos;고 결론&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;직접 실습으로 이해하는 JWT 인증 플로우&lt;/h1&gt;
+&lt;p&gt;tbd: 직접 Spring Boot (JWT 라이브러리 활용) 를 만들어서 실습해보기, 클라이언트는 안드로이드로 할지 고민..&lt;/p&gt;
+&lt;h1&gt;마무리: 서명키 관리와 JWT 보안 강화 대책&lt;/h1&gt;
+&lt;p&gt;tbd: JWT의 Payload 암호화보다 서명키 관리가 훨씬 중요함을 다시 한번 강조
+tbd: 핵심 보안 유의점
+서명키 보안: 서명키는 절대 외부에 노출되어서는 안 되며, 정기적인 키 교체(Rotation)가 필수적임. (Ex. 퇴사 시점의 키 무효화)&lt;/p&gt;
+&lt;p&gt;내부자 통제: 핵심 서명키에 접근 가능한 인원을 최소화하고, 접근 기록을 엄격히 관리해야 함.&lt;/p&gt;
+&lt;p&gt;JWT 활용 시 주의점:
+민감 정보는 Payload에 넣지 않기 (Payload는 인코딩일 뿐 암호화가 아님).
+탈취 위험을 줄이기 위해 토큰의 유효 기간(Expiry)을 짧게 설정하고, Refresh Token 활용 방안을 소개.
+Blacklist 기능을 구현하여 유출/악용된 토큰을 강제로 무효화하는 방법 (Stateful하게 관리하는 트레이드오프 언급).&lt;/p&gt;</content:encoded></item><item><title><![CDATA[::compose:: Navigation2 간단하게 살펴보기]]></title><description><![CDATA[Compose Navigation2 안드로이드 애플리케이션을 개발할 때 화면 이동(Navigation) 은 사용자 경험의 핵심 요소입니다. Compose 에서 화면 이동(Navigation)을 구현할 때, 사용자가 직접 화면에 대한 상태(State…]]></description><link>https://songwoody.github.io/compose/05_Compose 내비게이션2 기본/</link><guid isPermaLink="false">https://songwoody.github.io/compose/05_Compose 내비게이션2 기본/</guid><pubDate>Wed, 26 Nov 2025 11:46:12 GMT</pubDate><content:encoded>&lt;h1&gt;Compose Navigation2&lt;/h1&gt;
+&lt;p&gt;안드로이드 애플리케이션을 개발할 때 &lt;strong&gt;화면 이동(Navigation)&lt;/strong&gt; 은 사용자 경험의 핵심 요소입니다.&lt;br&gt;
+Compose 에서 화면 이동(Navigation)을 구현할 때, 사용자가 직접 화면에 대한 상태(State) 를 정의하고 이 상태 값을 변경하여 화면을 노출 시켜줄 수도 있지만, 이처럼 직접 구현하게 되면 &lt;strong&gt;상태 저장&lt;/strong&gt;, &lt;strong&gt;생명주기 관리&lt;/strong&gt;, &lt;strong&gt;백 스택 관리&lt;/strong&gt; 등 고려해야 할 점이 복잡하게 늘어납니다. (viewModel 을 사용할 경우 &lt;code class=&quot;language-text&quot;&gt;ViewModelStoerOwner&lt;/code&gt; 의 구현 등)&lt;br&gt;
+그러므로 Compose 에서는 네비게이션을 쉽게 사용하기 위해 공식 &lt;code class=&quot;language-text&quot;&gt;navigation-compose&lt;/code&gt; 라이브러리를 사용합니다.&lt;br&gt;
+지금 부터 Comopse Navigation 의 기본적인 개념과 간단한 예시를 통해 라이브러리를 이해해 보도록 하겠습니다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;본 내용은 Navigation2 에 대한 간략한 개념/사용법을 소개하며, Navigation3 는 추후 포스트에서 Navigation2 와 비교하면서 다루도록 하겠습니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1&gt;Compose Navigation 의 핵심 가치&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;1. Type-safe (타입 안전성)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;가장 큰 장점 중 하나입니다. 기존에는 화면 간 데이터(인자)를 전달할 때 String이나 Bundle을 사용하여 타입 오류가 발생하기 쉬웠습니다. 하지만 Compose Navigation은 Route 정의 시 인자의 타입을 명시할 수 있게 되어, 잘못된 타입의 데이터를 전달하려는 시도를 컴파일 시점에 잡아낼 수 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2. 상태 주도 (State-driven)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Compose의 철학을 그대로 따릅니다. 화면 이동을 명령(Imperative)하는 것이 아니라, 내비게이션 상태(State)가 변경되면 그에 따라 화면(UI)이 자동으로 갱신됩니다. 이는 내비게이션 로직을 더욱 직관적이고 예측 가능하게 만듭니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3. 단일 활동 아키텍처 (Single-Activity Architecture)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Compose 앱은 모든 화면을 단일 Activity 내의 여러 Composable로 구성하는 것이 권장됩니다. Compose Navigation은 이 단일 Activity 내에서 여러 화면 컴포저블 간의 전환을 효율적으로 관리하여, 앱의 복잡성을 줄이고 성능을 개선하는 데 기여합니다.&lt;/p&gt;
+&lt;h1&gt;Library Settings&lt;/h1&gt;
+&lt;p&gt;Navigation 2 사용&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;dependencies &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; nav_version &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;2.9.6&quot;&lt;/span&gt;&lt;/span&gt;
+
+    &lt;span class=&quot;token function&quot;&gt;implementation&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;androidx.navigation:navigation-compose:&lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token interpolation-punctuation punctuation&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;token expression&quot;&gt;nav_version&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;Compose Navigation 핵심 요소&lt;/h1&gt;
+&lt;p&gt;이해를 위해 먼저 예제 코드를 확인해 보겠습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// HomeScreen 컴포저블&lt;/span&gt;
+&lt;span class=&quot;token annotation builtin&quot;&gt;@Composable&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;HomeScreen&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+    onNavigateToDetail&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;itemId&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Int&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;-&gt;&lt;/span&gt; Unit&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    modifier&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Modifier &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Modifier
+&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token function&quot;&gt;Column&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+        modifier &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; modifier&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;fillMaxSize&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+        horizontalAlignment &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Alignment&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;CenterHorizontally&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+        verticalArrangement &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Arrangement&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Center
+    &lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token function&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;text &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Home Screen&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; style &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; MaterialTheme&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;typography&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;headlineLarge&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token function&quot;&gt;Spacer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;modifier &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Modifier&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;height&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;dp&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token function&quot;&gt;Button&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;onClick &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;token comment&quot;&gt;// 버튼 클릭 이벤트 발생 -&gt; 콜백 함수 호출 (상위 컴포저블에 네비게이션 요청)&lt;/span&gt;
+            &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; itemId &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;456&lt;/span&gt;
+            &lt;span class=&quot;token function&quot;&gt;onNavigateToDetail&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;itemId&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;token function&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Go to Detail (ID: 456)&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;// DetailScreen 컴포저블&lt;/span&gt;
+&lt;span class=&quot;token annotation builtin&quot;&gt;@Composable&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;DetailScreen&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;itemId&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Int&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// ... DetailScreen 내용 ...&lt;/span&gt;
+    &lt;span class=&quot;token function&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;text &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Received Item ID: &lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token interpolation-punctuation punctuation&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;token expression&quot;&gt;itemId&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;
+&lt;span class=&quot;token comment&quot;&gt;// Route: Home 화면 Route (인자가 없으면 빈 클래스)&lt;/span&gt;
+&lt;span class=&quot;token annotation builtin&quot;&gt;@Serializable&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;object&lt;/span&gt; HomeRoute
+
+&lt;span class=&quot;token comment&quot;&gt;// Route: Detail 화면 Route (인자는 클래스의 속성으로 정의)&lt;/span&gt;
+&lt;span class=&quot;token annotation builtin&quot;&gt;@Serializable&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;DetailRoute&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; itemId&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Int&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;// NavHost를 포함하는 메인 컴포저블&lt;/span&gt;
+&lt;span class=&quot;token annotation builtin&quot;&gt;@Composable&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;AppNavigationTypeSafe&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// ⬅️ 핵심 요소 1: NavController 생성 및 상태 저장 (네비게이션 엔진)&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; navController &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;rememberNavController&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    
+    &lt;span class=&quot;token comment&quot;&gt;// ⬅️ 핵심 요소 2: 요소 2: NavHost - 네비게이션 영역 및 목적지(Route) 등록 컨테이너&lt;/span&gt;
+    &lt;span class=&quot;token function&quot;&gt;NavHost&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+        navController &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; navController&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; 
+        startDestination &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; HomeRoute
+    &lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+        &lt;span class=&quot;token comment&quot;&gt;// Home 화면 등록&lt;/span&gt;
+        composable&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;HomeRoute&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;token function&quot;&gt;HomeScreen&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+                &lt;span class=&quot;token comment&quot;&gt;// ⬅️ onNavigateToDetail 콜백 함수 정의&lt;/span&gt;
+                onNavigateToDetail &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; itemId &lt;span class=&quot;token operator&quot;&gt;-&gt;&lt;/span&gt;
+                    &lt;span class=&quot;token comment&quot;&gt;// 콜백이 호출되면, navController를 사용하여 실제 이동 실행&lt;/span&gt;
+                    navController&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;navigate&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;DetailRoute&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;itemId &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; itemId&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;token comment&quot;&gt;// Detail 화면 등록 (DetailRoute 인자를 toRoute&amp;lt;T&gt;()로 타입 안전하게 추출)&lt;/span&gt;
+        composable&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;DetailRoute&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; backStackEntry &lt;span class=&quot;token operator&quot;&gt;-&gt;&lt;/span&gt;
+            &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; route &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; backStackEntry&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;toRoute&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;DetailRoute&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;token function&quot;&gt;DetailScreen&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;itemId &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; route&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;itemId&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;위 코드를 실무에서 쓰기에도 충분하겠지만 조금더 현대적인 네비게이션 구성을 확인하려면 &lt;a href=&quot;%22https://github.com/android/nowinandroid%22&quot;&gt;Now in Android&lt;/a&gt; 코드를 참고해 보시는길 추천드립니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;핵심요소1. NavController (네비게이션 컨트롤러)&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;NavController&lt;/strong&gt; 는 네비게이션을 실제로 제어하고 관리하는 핵심 객체입니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;역할&lt;/strong&gt;: 화면 전환(Navigation), 뒤로 가기(Pop), Back Stack(백 스택) 관리 등 모든 네비게이션 작업을 처리하는 네비게이션 엔진입니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;코드 내 위치&lt;/strong&gt;:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; navController &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;rememberNavController&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;코드 내 역할:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;rememberNavController()를 통해 생성되어 컴포저블의 생명주기 동안 상태를 유지합니다.&lt;/li&gt;
+&lt;li&gt;HomeScreen의 콜백 함수 내에서 실제로 화면을 이동시키는 명령을 수행합니다: &lt;code class=&quot;language-text&quot;&gt;navController.navigate(DetailRoute(itemId = itemId))&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;핵심요소2. Route (경로/목적지 식별자)&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Route&lt;/strong&gt; 는 네비게이션이 도달할 &lt;strong&gt;특정 화면(Destination)&lt;/strong&gt; 을 유일하게 식별하는 경로입니다. 전통적으로는 문자열을 사용했지만, 제공된 코드에서는 제가 선호하는 타입 안전성을 위해 &lt;code class=&quot;language-text&quot;&gt;@Serializable&lt;/code&gt; 클래스를 사용합니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;역할&lt;/strong&gt;: 특정 목적지를 가리키는 &lt;strong&gt;주소&lt;/strong&gt;의 역할을 합니다. 인자가 필요할 경우, 해당 인자를 Route 객체의 속성으로 포함합니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;코드 내 위치&lt;/strong&gt;:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;&lt;span class=&quot;token annotation builtin&quot;&gt;@Serializable&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;object&lt;/span&gt; HomeRoute
+
+&lt;span class=&quot;token annotation builtin&quot;&gt;@Serializable&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;DetailRoute&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; itemId&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Int&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;코드 내 역할&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;HomeRoute&lt;/code&gt;는 인자가 필요 없는 홈 화면의 주소를 나타냅니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;DetailRoute(val itemId: Int)&lt;/code&gt;는 &lt;code class=&quot;language-text&quot;&gt;itemId라는&lt;/code&gt; 인자를 포함하는 상세 화면의 주소를 나타냅니다. 네비게이션 시 이 객체를 전달하고 (&lt;code class=&quot;language-text&quot;&gt;navController.navigate(DetailRoute(...))&lt;/code&gt;), 목적지에서 다시 추출하여 사용합니다&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;핵심요소3. NavHost (네비게이션 호스트)&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;NavHost&lt;/strong&gt; 는 네비게이션이 일어나는 영역을 정의하며, 현재의 &lt;code class=&quot;language-text&quot;&gt;Route&lt;/code&gt;에 해당하는 &lt;strong&gt;실제 UI(Composable)&lt;/strong&gt; 를 표시하는 컨테이너입니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;역할&lt;/strong&gt;: 네비게이션 그래프(&lt;code class=&quot;language-text&quot;&gt;NavGraph&lt;/code&gt;)와 &lt;strong&gt;NavController&lt;/strong&gt; 를 연결하고, 현재 상태에 따라 적절한 &lt;code class=&quot;language-text&quot;&gt;NavDestination&lt;/code&gt;의 컴포저블을 렌더링합니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;코드 내 위치&lt;/strong&gt;:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;&lt;span class=&quot;token function&quot;&gt;NavHost&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+    navController &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; navController&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; 
+    startDestination &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; HomeRoute &lt;span class=&quot;token comment&quot;&gt;// 시작 지점&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// ... 목적지 등록 ...&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;코드 내 역할&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;navController&lt;/code&gt;와 연결되어 네비게이션 이벤트를 받습니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;startDestination&lt;/code&gt;으로 앱이 시작될 때 처음 보여줄 화면을 지정합니다.&lt;/li&gt;
+&lt;li&gt;빌더(&lt;code class=&quot;language-text&quot;&gt;NavGraphBuilder.() -&gt; Unit&lt;/code&gt;)의 &lt;code class=&quot;language-text&quot;&gt;composable&amp;lt;T&gt;&lt;/code&gt; 함수를 통해 목적지들을 등록합니다. (navController.createGraph(...) 통해 그래프 객체를 만들어서 전달주는 방법도 가능합니다.)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;핵심요소4. NavDestination (네비게이션 목적지)&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;NavDestination&lt;/strong&gt; 은 네비게이션을 통해 도달할 수 있는 하나의 독립된 화면 단위를 의미하며, 일반적으로 &lt;strong&gt;특정 Composable&lt;/strong&gt; 을 감싸고 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;역할&lt;/strong&gt;: 네비게이션 그래프 내의 노드(Node)입니다. &lt;code class=&quot;language-text&quot;&gt;composable&amp;lt;T&gt;&lt;/code&gt; 블록 하나가 하나의 NavDestination을 생성합니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;코드 내 위치&lt;/strong&gt;:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;composable&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;HomeRoute&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; 
+    &lt;span class=&quot;token function&quot;&gt;HomeScreen&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;..&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; 
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt; 
+&lt;span class=&quot;token comment&quot;&gt;// 그리고&lt;/span&gt;
+composable&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;DetailRoute&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; 
+    &lt;span class=&quot;token function&quot;&gt;DetailScreen&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;..&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; 
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;코드 내 역할&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;각 &lt;code class=&quot;language-text&quot;&gt;composable&amp;lt;T&gt;&lt;/code&gt; 블록은 &lt;code class=&quot;language-text&quot;&gt;HomeRoute&lt;/code&gt;와 &lt;code class=&quot;language-text&quot;&gt;DetailRoute&lt;/code&gt;라는 Route에 매핑되는 &lt;strong&gt;개별적인 목적지&lt;/strong&gt; 를 정의합니다.&lt;/li&gt;
+&lt;li&gt;이 목적지 내부에 &lt;code class=&quot;language-text&quot;&gt;HomeScreen&lt;/code&gt;과 &lt;code class=&quot;language-text&quot;&gt;DetailScreen&lt;/code&gt; 컴포저블이 위치합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;핵심요소5. NavGraph (네비게이션 그래프)&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;NavGraph&lt;/strong&gt; 는 앱 내의 모든 NavDestination&lt;strong&gt;들을 모아 연결해&lt;/strong&gt; 놓은 집합체로, &lt;strong&gt;네비게이션의 구조&lt;/strong&gt;를 정의합니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;역할&lt;/strong&gt;:&lt;br&gt;
+앱의 모든 화면(Destination)과 그 화면들 간의 이동 가능한 경로(Action)를 정의하는 &lt;strong&gt;지도 또는 청사진&lt;/strong&gt; 입니다. &lt;code class=&quot;language-text&quot;&gt;NavHost&lt;/code&gt; 내의 블록 자체가 하나의 그래프를 구성합니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;코드 내 위치&lt;/strong&gt;:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;&lt;span class=&quot;token function&quot;&gt;NavHost&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;..&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// 이 블록 전체가 NavGraph를 정의합니다.&lt;/span&gt;
+    composable&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;HomeRoute&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;..&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+    composable&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;DetailRoute&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;..&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;코드 내 역할&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;NavHost의 블록({}) 내에 등록된 모든 &lt;code class=&quot;language-text&quot;&gt;composable&lt;/code&gt; 목적지들을 포함하여 &lt;strong&gt;&quot;이 앱에서는 HomeRoute와 DetailRoute로 이동할 수 있다&quot;&lt;/strong&gt; 는 전체 구조를 NavController에게 제공합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;startDestination = HomeRoute&lt;/code&gt;는 이 그래프의 시작점을 명시합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;마치며&lt;/h1&gt;
+&lt;p&gt;기본적인 Compose Navigation2 라이브러리의 사용방법을 간단하게 알아봤습니다.&lt;br&gt;
+Navigation3가 나온 시점에서 Navigation2 를 자세히 알아보기 보다는 기본적인 구성요소와 사용법만을 알아보고 다음 포스트에서 Navigation3 의 소개와 Navigation2와 비교했을 때의 장점을 알아보도록 하겠습니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Parcelize Parcelable 을 편하게 사용하기]]></title><description><![CDATA[Parcelize: Android 직렬화의 불편함을 해소 Parcelable은 안드로이드에서 객체를 효율적으로 직렬화하는 방법입니다. Serializable이 리플렉션을 사용해 런타임 오버헤드가 발생하는 것과 달리, Parcelable…]]></description><link>https://songwoody.github.io/android_etc/Parcelize/</link><guid isPermaLink="false">https://songwoody.github.io/android_etc/Parcelize/</guid><pubDate>Mon, 24 Nov 2025 11:12:12 GMT</pubDate><content:encoded>&lt;h1&gt;Parcelize: Android 직렬화의 불편함을 해소&lt;/h1&gt;
+&lt;p&gt;Parcelable은 안드로이드에서 객체를 효율적으로 직렬화하는 방법입니다.&lt;br&gt;
+Serializable이 리플렉션을 사용해 런타임 오버헤드가 발생하는 것과 달리, Parcelable은 &lt;strong&gt;컴파일 시점(Compile Time)&lt;/strong&gt; 에 코드를 변환하기 때문에 빠르고 런타임 오버헤드가 없습니다.&lt;/p&gt;
+&lt;p&gt;그러나 Parcelable을 사용하려면 개발자가 직렬화를 위한 보일러플레이트(Boilerplate) 코드를 직접 작성해야 하는 불편함이 따랐습니다.&lt;/p&gt;
+&lt;p&gt;이를 해결하기 위해 &lt;strong&gt;Parcelize 플러그인&lt;/strong&gt;이 등장했습니다.&lt;/p&gt;
+&lt;p&gt;Parcelize는 바이트코드로 변환되는 과정에 개입하여 @Parcelize 애너테이션 하나만 추가해도 필요한 모든 Parcelable 코드를 자동으로 생성해 줍니다. 이제 개발자는 수동으로 코드를 작성할 필요가 없습니다.&lt;/p&gt;
+&lt;p&gt;이 포스트에서는 &lt;code class=&quot;language-text&quot;&gt;@Parcelize&lt;/code&gt;의 기본적인 사용법과, 개발자가 직접 수정할 수 없는 외부 Class를 직렬화하는 @TypeParceler 사용법을 알아보겠습니다.&lt;/p&gt;
+&lt;h1&gt;프로젝트 설정&lt;/h1&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kts&quot;&gt;&lt;pre class=&quot;language-kts&quot;&gt;&lt;code class=&quot;language-kts&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// gradle(:app)&lt;/span&gt;
+plugins &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; 
+    &lt;span class=&quot;token function&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;kotlin-parcelize&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;or&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kts&quot;&gt;&lt;pre class=&quot;language-kts&quot;&gt;&lt;code class=&quot;language-kts&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// version catalog&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;// libs.versions.toml&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;plugins&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+kotlin&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;parcelize &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; id &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;org.jetbrains.kotlin.plugin.parcelize&quot;&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;// gradle(:app) &lt;/span&gt;
+plugins &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token function&quot;&gt;alias&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;libs&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;plugins&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;kotlin&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;parcelize&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;기본 사용법&lt;/h1&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; kotlinx&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;parcelize&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Parcelize
+
+&lt;span class=&quot;token annotation builtin&quot;&gt;@Parcelize&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; firstName&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; String&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; 
+    &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; lastName&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; String&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; 
+    &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; age&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Int
+&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Parcelable&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;지원 타입&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Primitive Types&lt;/strong&gt; (and their boxed versions)
+&lt;ul&gt;
+&lt;li&gt;Int, Boolean, Long 등 (java.lang.Integer, java.lang.Boolean 등)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Objects&lt;/strong&gt; 과 &lt;strong&gt;enums&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;String, CharSequence&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Exception&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;S&lt;strong&gt;ize, SizeF, Bundle, IBinder, IInterface, FileDescriptor&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;SparseArray, SparseIntArray, SparseLongArray, SparseBooleanArray&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;모든 Serializable (Date 포함), Parcelable 구현체&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;지원 되는 모든 타입에 대한 Collections&lt;/strong&gt;:
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;List&lt;/strong&gt; (내부적으로 ArrayList 로 처리하여 직렬화),&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Set&lt;/strong&gt; (내부적으로 LinkedHashSet 으로 처리하여 직렬화),&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Map&lt;/strong&gt; (내부적으로 LinkedHashMap 으로 처리하여 직렬화)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;지원 되는 모든 타입에 대한 Arrays&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;지원 되는 모든 타입에 대한 Nullable&lt;/strong&gt; (Int?, List&lt;String&gt;?)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;Custom Parcele&lt;/h1&gt;
+&lt;p&gt;Custom Parcele 은 &lt;code class=&quot;language-text&quot;&gt;Pacelable&lt;/code&gt; 인터페이스를 구현할 수 없는 타입을 Parcelable 객체에 포함시켜야할 때 사용됩니다.&lt;/p&gt;
+&lt;h4&gt;Custom Parceler 사용 케이스&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;외부/표준 라이브러리 타입 직렬화&lt;/strong&gt;: 개발자가 수정할 수 없는 클레스(java.util.UUID 등)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;커스텀 로직 사용&lt;/strong&gt;: 객체의 내부 상태를 그대로 직렬화하는 대신, 특정 필드만 직렬화하거나, 직렬화 과정에서 데이터를 압축 또는 변환하는 등의 커스텀 로직이 필요할 때&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;Parceler 사용법&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;Custom Parceler&lt;/strong&gt;는 &lt;code class=&quot;language-text&quot;&gt;kotlinx.parcelize.Parceler&amp;lt;T&gt;&lt;/code&gt; 인터페이스를 구현하여 정의합니다.&lt;br&gt;
+여기서 T는 직렬화하려는 타입입니다.&lt;/p&gt;
+&lt;h4&gt;Parceler 인터페이스 정의&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;create(parcel: Parcel)&lt;/strong&gt;: T (역직렬화, 읽기): Parcel에서 데이터를 읽어와 객체 T의 인스턴스를 생성하고 반환합니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;write(input: T, parcel: Parcel, flags: Int) (직렬화, 쓰기)&lt;/strong&gt;: 객체 T의 인스턴스(input)를 Parcel에 기록합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// 외부 데이터 예시&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;ExternalData&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; data1&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; String&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; data2&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; String
+&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;// Parceler 인터페이스 구현&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;object&lt;/span&gt; ExternalParceler &lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Parceler&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;ExternalData&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// 1. [쓰기 / 직렬화]: ExternalData 객체를 Parcel에 기록&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;fun&lt;/span&gt; ExternalData&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+        parcel&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Parcel&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+        flags&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Int&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;// data1을 기록&lt;/span&gt;
+        parcel&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;writeString&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;data1&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;// data2를 기록 (순서 중요!)&lt;/span&gt;
+        parcel&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;writeString&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;data2&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;// 2. [읽기 / 역직렬화]: Parcel에서 데이터를 읽어 ExternalData 객체 생성&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;parcel&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Parcel&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; ExternalData &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;// 쓴 순서와 정확히 일치하게 읽어야 합니다.&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; data1 &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; parcel&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;readString&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;?:&lt;/span&gt; &lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; data2 &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; parcel&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;readString&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;?:&lt;/span&gt; &lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;ExternalData&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;data1&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; data2&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;@TypeParceler&lt;/code&gt; 또는 &lt;code class=&quot;language-text&quot;&gt;@WriteWith&lt;/code&gt; 사용하여 Parcelable 클래스에 외부 클래스 추가&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// @TypeParceler 을 Class에 적용&lt;/span&gt;
+&lt;span class=&quot;token annotation builtin&quot;&gt;@Parcelize&lt;/span&gt;
+&lt;span class=&quot;token annotation builtin&quot;&gt;@TypeParceler&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;ExternalData&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; ExternalParceler&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; name&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; String&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; ExternalData&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Parcelable
+
+&lt;span class=&quot;token comment&quot;&gt;// @TypeParceler 을 프로퍼티에 적용&lt;/span&gt;
+&lt;span class=&quot;token annotation builtin&quot;&gt;@Parcelize&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; name&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; String&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token annotation builtin&quot;&gt;@TypeParceler&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;ExternalData&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; ExternalParceler&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; ExternalData&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Parcelable
+
+
+&lt;span class=&quot;token comment&quot;&gt;// @WriteWith 을 사용하여 파라미터에 적용&lt;/span&gt;
+&lt;span class=&quot;token annotation builtin&quot;&gt;@Parcelize&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; name&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; String&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token annotation builtin&quot;&gt;@WriteWith&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;ExternalParceler&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; ExternalData&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Parcelable
+
+&lt;span class=&quot;token comment&quot;&gt;//&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;@IgnoredOnParcel: 직렬화가 필요없는 프로퍼티 무시&lt;/h1&gt;
+&lt;p&gt;@IgnoredOnParcel 은 Parcelable 객체 내의 특정 프로퍼티를 직렬화 및 역질렬화 과정에서 제외하고 싶을 때 사용합니다.&lt;br&gt;
+보통 클래스 필드, 위임(by) 나 Callback 같은 경우 Warning 으로 표시해 줍니다.&lt;/p&gt;
+&lt;p&gt;사용 케이스&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;계산된 값일 경우&lt;/strong&gt;: 클래스의 다른 필드를 기반으로 런타임에 계산되는 프로퍼티인 경우 (firname+lastname = fullname)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;일시적인 상태&lt;/strong&gt;: 유지될 필요가 없는 임시 상태(예: UI 상태, 캐시된 값 등)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;직렬화 불가능 객체&lt;/strong&gt;: Parceler로도 처리할 수 없는 복잡한 객체나 &lt;strong&gt;메모리 참조(예: 콜백 리스너, Context 등)&lt;/strong&gt; 를 포함해야 할 때 사용&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;&lt;span class=&quot;token annotation builtin&quot;&gt;@Parcelize&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; firstName&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; String&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; lastName&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; String&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token annotation builtin&quot;&gt;@IgnoredOnParcel&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt; ignoredValue&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; String&lt;span class=&quot;token operator&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// 직렬화 제외가 필요한 값 제외&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Parcelable &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    
+    &lt;span class=&quot;token comment&quot;&gt;// (IgnoredOnParcel 을 사용하지 않아도 제외 됨)&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// 계산된 값: 런타임에 계산되므로 Parcel에 기록할 필요가 없습니다.&lt;/span&gt;
+    &lt;span class=&quot;token annotation builtin&quot;&gt;@IgnoredOnParcel&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; fullName&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; String &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string-literal singleline&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token interpolation-punctuation punctuation&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;token expression&quot;&gt;firstName&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt; &lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token interpolation-punctuation punctuation&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;token expression&quot;&gt;lastName&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;
+    
+    &lt;span class=&quot;token comment&quot;&gt;// (IgnoredOnParcel 을 사용하지 않아도 제외 됨)&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// 임시 상태 / 직렬화 불가 객체&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// @IgnoredOnParcel 어노테이션을 사용하여 이 필드를 Parcelable 로직에서 제외합니다.&lt;/span&gt;
+    &lt;span class=&quot;token annotation builtin&quot;&gt;@delegate:IgnoredOnParcel&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// 프로퍼티 위임 시 사용&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; tempCache&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; Map&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;String&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; Any&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;by&lt;/span&gt; lazy &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; 
+        &lt;span class=&quot;token comment&quot;&gt;// 무거운 초기화 로직...&lt;/span&gt;
+        &lt;span class=&quot;token function&quot;&gt;mutableMapOf&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;// (IgnoredOnParcel 을 사용하지 않아도 제외 됨)&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// 콜백 리스너: 보통 Parcelable로 전달할 수 없으므로 무시합니다.&lt;/span&gt;
+    &lt;span class=&quot;token annotation builtin&quot;&gt;@IgnoredOnParcel&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt; listener&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;-&gt;&lt;/span&gt; Unit&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;null&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;마무리&lt;/h1&gt;
+&lt;p&gt;더 자세한 내용을 알고 싶으면 &lt;a href=&quot;https://developer.android.com/kotlin/parcelize&quot;&gt;공식 문서&lt;/a&gt; 참고하시면 됩니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[::compose:: 컴포즈 단계 이해하기]]></title><description><![CDATA[Jetpack Compose 단계 사용자한테 시각적인 UI가 보일 때까지 Jetpack Compose 는 3개의 주요 단계를 거치게 됩니다. 이는 컴포즈가 컴포저블 함수를 실행해서 UI 트리를 만드는 컴포지션 단계, UI…]]></description><link>https://songwoody.github.io/compose/04_Compose 단계 이해하기/</link><guid isPermaLink="false">https://songwoody.github.io/compose/04_Compose 단계 이해하기/</guid><pubDate>Mon, 17 Nov 2025 13:11:50 GMT</pubDate><content:encoded>&lt;h1&gt;Jetpack Compose 단계&lt;/h1&gt;
+&lt;p&gt;사용자한테 시각적인 UI가 보일 때까지 Jetpack Compose 는 3개의 주요 단계를 거치게 됩니다.&lt;br&gt;
+이는&lt;br&gt;
+컴포즈가 컴포저블 함수를 실행해서 UI 트리를 만드는 &lt;strong&gt;컴포지션&lt;/strong&gt; 단계,&lt;br&gt;
+UI 트리를 읽고 각 노드의 크기를 &lt;em&gt;&lt;strong&gt;측정&lt;/strong&gt;&lt;/em&gt; 하고 &lt;em&gt;&lt;strong&gt;배치&lt;/strong&gt;&lt;/em&gt; 하는 단계인 &lt;strong&gt;레이아웃&lt;/strong&gt; 단계,&lt;br&gt;
+배치된 UI를 기기 화면에 그리는 단계인 &lt;strong&gt;그리기(Drawing)&lt;/strong&gt; 단계가 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/4210a11634c15fa4a3d8a4c829babb03/compose_phasesl.svg&quot; alt=&quot;compose_phases&quot;&gt;&lt;/p&gt;
+&lt;p&gt;이러단 단계는 일반적으로 순서대로 진행하여 프레임을 생성합니다.
+하지만 BoxWithConstraints, LazyColumn, LazyRow은 예외로, 하위 요소의 컴포지션이 상위 요소의 레이아웃 단계에 따라 달라집니다.(이거는 나중에 분석해 보기로 합니다.)&lt;/p&gt;
+&lt;p&gt;또한 컴포즈는 성능을 최적화하기 위해서 동일 데이터(State)가 변경될 때에는 이러한 단계를 최대한 스킵한다.&lt;/p&gt;
+&lt;h1&gt;단계 과정 이해하기&lt;/h1&gt;
+&lt;h2&gt;1. 컴포지션(Composition)&lt;/h2&gt;
+&lt;p&gt;앞선 포스트 &quot;Compose 수명주기&quot; 에서도 여러번 설명한 &lt;strong&gt;컴포지션 단계&lt;/strong&gt; 입니다.&lt;br&gt;
+Compose 런타임이 컴포저블 함수를 실행하고 &lt;strong&gt;UI 트리를 출력&lt;/strong&gt; 합니다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;(조금 자세히 찾아보니 컴포지션은 &lt;strong&gt;SlotTable&lt;/strong&gt; 이라는 내부 구조에 UI 생성 로직과 데이터를 저장하며, 이 로직이 실행되어 &lt;strong&gt;LayoutNode&lt;/strong&gt; 라는 실제 렌더링 및 레이아웃을 위한 UI 트리를 구성한다고 하는데... 나중에 자세히 알아보는걸로..)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&quot;/b718201101eb96d62180caac60eda1cd/compose_ui_tree.svg&quot; alt=&quot;compose_ui_tree&quot;&gt;&lt;/p&gt;
+&lt;h2&gt;2. 레이아웃(Layout)&lt;/h2&gt;
+&lt;p&gt;앞선 컴포지션 단계에서 생성된 UI 트리를 바탕으로 &lt;strong&gt;측정(measure)&lt;/strong&gt;, &lt;strong&gt;배치(layout)&lt;/strong&gt; 순서로 진행됩니다.&lt;br&gt;
+레이아웃 단계는 루트를 시작으로 3단계 알고리즘을 순회 합니다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;하위 요소 측정(Measure children)&lt;/strong&gt;: 노드의 하위 요소가 있을 경우 하위 요소를 측정합니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;자체 크기 결정(Decide own size)&lt;/strong&gt;: 측정 값을 기반으로 노드가 자체 크기를 결정합니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;하위 요소 배치(Place Children)&lt;/strong&gt;: 각 하위 노드는 노드의 자체 위치를 기준으로 배치됩니다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;이 단계가 끝나면 각 레이아웃 노드는 자체 크기(너비/높이), 위치(x/y좌표) 를 가지게 됩니다.&lt;/p&gt;
+&lt;p&gt;아래의 UI 트리를 예를 들어서 설명해보면&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/7fadac1cc524c2df55af501c4a81f4f4/layout_phase_tree_exam2.svg&quot; alt=&quot;layout_phase_tree&quot;&gt;&lt;/p&gt;
+&lt;h4&gt;측정 및 크기 결정 단계&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;1단계&lt;/strong&gt;: Row가 하위 요소를 측정합니다.
+&lt;ul&gt;
+&lt;li&gt;Row는 자신의 하위 요소인 Image와 Column을 측정합니다. 이때 Row는 자신의 제약 조건을 각각의 하위 요소에 전달합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;2단계&lt;/strong&gt;: Image가 측정됩니다.
+&lt;ul&gt;
+&lt;li&gt;Image는 하위 요소가 없으므로 전달받은 제약 조건 내에서 자체 크기를 결정합니다.&lt;/li&gt;
+&lt;li&gt;결정된 크기(너비와 높이)를 Row에 다시 보고합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;3단계&lt;/strong&gt;: Column이 측정됩니다.
+&lt;ul&gt;
+&lt;li&gt;Column은 다음에 측정됩니다. Column은 자신의 하위 요소 (Text1, Text2)를 측정해야만 자신의 크기를 결정할 수 있습니다.&lt;/li&gt;
+&lt;li&gt;Column은 자신이 Row로부터 받은 제약 조건을 조정하여 하위 요소 (Text1, Text2)에 전달합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;4단계&lt;/strong&gt;: Text1과 Text2가 측정됩니다.
+&lt;ul&gt;
+&lt;li&gt;Text1이 먼저 측정됩니다. 하위 요소가 없으므로 전달받은 제약 조건 내에서 자체 크기를 결정하고 Column에 다시 보고합니다.&lt;/li&gt;
+&lt;li&gt;Text2도 마찬가지로 측정되고 Column에 크기를 보고합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;5단계&lt;/strong&gt;: Column이 자체 크기를 결정합니다.
+&lt;ul&gt;
+&lt;li&gt;Column은 하위 요소 (Text1, Text2)로부터 보고받은 크기를 사용하여 자체 크기를 결정합니다.
+&lt;ul&gt;
+&lt;li&gt;너비: 하위 요소 중 가장 큰 너비를 자신의 너비로 사용합니다.&lt;/li&gt;
+&lt;li&gt;높이: 하위 요소 높이의 합을 자신의 높이로 사용합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;결정된 최종 크기를 Row에 다시 보고합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;6단계&lt;/strong&gt;: Row가 자체 크기를 결정합니다.
+&lt;ul&gt;
+&lt;li&gt;Row는 하위 요소 (Image, Column)로부터 보고받은 크기를 사용하여 자체 크기를 결정합니다.
+&lt;ul&gt;
+&lt;li&gt;너비: 하위 요소 너위의 합을 자신의 너비로 사용합니다.&lt;/li&gt;
+&lt;li&gt;높이: 하위 요소 중 가장 큰 높이를 자신의 높이로 사용합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;배치 단계&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;7단계&lt;/strong&gt;: Column이 하위 요소를 배치합니다.
+&lt;ul&gt;
+&lt;li&gt;Column은 Text1과 Text2를 자체에 상대적으로 세로로 서로 아래에 배치합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;8단계&lt;/strong&gt;: Row가 하위 요소를 배치합니다.
+&lt;ul&gt;
+&lt;li&gt;Row는 Image와 Column을 자체에 상대적으로 가로로 나란히 배치합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;💡 하위 요소의 최종 너비/높이는 Modifier.height(), Modifier.width(), Modifier.padding(), 그리고 상위 요소가 전달한 제약 조건 등 모든 &lt;strong&gt;수정자(Modifier)&lt;/strong&gt; 의 영향을 받아 결정됩니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2&gt;3. 그리기(Drawing)&lt;/h2&gt;
+&lt;p&gt;그리기 단계는 UI 트리가 다시 위에서 아래로 순회하면서 각 노드가 차례로 그려지게 됩니다.&lt;/p&gt;
+&lt;p&gt;아까의 레이아웃 단계의 예로 들면&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Row 의 배경색과 같은 컨텐츠를 그립니다.&lt;/li&gt;
+&lt;li&gt;Image 가 자체적으로 그려집니다.&lt;/li&gt;
+&lt;li&gt;Coloumn 이 자체적으로 그려집니다.&lt;/li&gt;
+&lt;li&gt;Text1, Text2 가 각각 자체적으로 그려집니다.&lt;/li&gt;
+&lt;/ol&gt;</content:encoded></item><item><title><![CDATA[::compose:: Side-effect(부수효과) 개념]]></title><description><![CDATA[Side-effect 소개 Side-effect 는 Composable 함수가 자신의 주요 임무(UI…]]></description><link>https://songwoody.github.io/compose/03_Compose 부수효과/</link><guid isPermaLink="false">https://songwoody.github.io/compose/03_Compose 부수효과/</guid><pubDate>Wed, 12 Nov 2025 22:55:00 GMT</pubDate><content:encoded>&lt;h1&gt;Side-effect 소개&lt;/h1&gt;
 &lt;p&gt;Side-effect 는 Composable 함수가 자신의 주요 임무(UI를 계산하는 일) 외에 외부 세계에 영향을 미치는 모든 행위 또는 변경 사항을 의미합니다.&lt;br&gt;
 예를 들어&lt;/p&gt;
 &lt;ul&gt;
@@ -392,9 +1104,9 @@ Compose의 상태를 외부와 공유할 때 사용됩니다. 만약, 특정 화
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;produceState&lt;/code&gt; 는 실무에서 활용 범위가 넓으므로 유용하게 사용할 수 있습니다.&lt;/p&gt;
 &lt;h2&gt;derivedStateOf&lt;/h2&gt;
-&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;derivedStateOf 는 상태가 너무 자주 바뀌어서 리컴포지션이 자주 불리는 문제가 있을 경우 사용됩니다.  
-스크롤 위치와 같은 상태는 자주 변경되는 항목이지만 내가 필요로 하는건 특정 임계치 이상일 때에만 UI를 변경 시켜줘야하는 경우가 있을 때 일단적인 State 는 너무 자주 바뀌어서 리컴포지션이 여러번 호출되어 오버헤드가 발생하니, 이럴 때에는 derivedStateOf 를 사용해서 특정 임계치 일때만 방응 하도록 할 수 있습니다.(Flow를 사용해봤다면 &lt;/code&gt;distinctUntilChanged()&lt;code class=&quot;language-text&quot;&gt;와 유사하다고 생각하시면 됩니다.)  
-단,&lt;/code&gt;derivedStateOf` 는 공식 문서에서도 강조하길 비용이 많이드는 작업이므로 꼭 불필요한 리컴포지션 방지를 위해서만 사용해야지, A상태와 B상태를 합쳐서 새로운 상태를 만들때와 같은 의도와 다른 사용은 피해야합니다.(안티 패턴)&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;derivedStateOf&lt;/code&gt; 는 상태가 너무 자주 바뀌어서 리컴포지션이 자주 불리는 문제가 있을 경우 사용됩니다.&lt;br&gt;
+스크롤 위치와 같은 상태는 자주 변경되는 항목이지만 내가 필요로 하는건 특정 임계치 이상일 때에만 UI를 변경 시켜줘야하는 경우가 있을 때 일단적인 State 는 너무 자주 바뀌어서 리컴포지션이 여러번 호출되어 오버헤드가 발생하니, 이럴 때에는 derivedStateOf 를 사용해서 특정 임계치 일때만 방응 하도록 할 수 있습니다.(Flow를 사용해봤다면 &lt;code class=&quot;language-text&quot;&gt;distinctUntilChanged()&lt;/code&gt; 와 유사하다고 생각하시면 됩니다.)&lt;br&gt;
+단, &lt;code class=&quot;language-text&quot;&gt;derivedStateOf&lt;/code&gt; 는 공식 문서에서도 강조하길 비용이 많이드는 작업이므로 꼭 불필요한 리컴포지션 방지를 위해서만 사용해야지, A상태와 B상태를 합쳐서 새로운 상태를 만들때와 같은 의도와 다른 사용은 피해야합니다.(안티 패턴)&lt;/p&gt;
 &lt;h3&gt;올바른 사용 예시&lt;/h3&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;&lt;span class=&quot;token annotation builtin&quot;&gt;@Composable&lt;/span&gt;
 &lt;span class=&quot;token keyword&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;MessageList&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;messages&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; List&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;Message&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// MessageList 함수는 메시지 목록을 매개변수로 받습니다.&lt;/span&gt;
@@ -439,7 +1151,28 @@ Compose의 상태를 외부와 공유할 때 사용됩니다. 만약, 특정 화
 &lt;li&gt;이 리컴포지션 과정에서 fullNameBad의 **내부 블록(&quot;$firstName $lastName&quot;)**이 어차피 다시 실행되어 새로운 전체 이름이 계산됩니다.&lt;/li&gt;
 &lt;li&gt;derivedStateOf는 이렇게 이미 리컴포지션되는 상황에서, 계산된 결과를 또 다른 State 객체로 한 번 더 감싸서 관리하므로, &lt;strong&gt;불필요한 오버헤드&lt;/strong&gt; 만 추가하게 됩니다.&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;#SideEffects 사용시 주의 사항&lt;/p&gt;
+&lt;h1&gt;snapshotFlow&lt;/h1&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;snapshotFlow&lt;/code&gt; 는 Compose State 를 Flow 로 바꿔줍니다.(Compose State → Flow)&lt;br&gt;
+Flow 의 강력한 연산자(예: debounce, filter, map)를 사용하여 코루틴 환경에서 처리하기 위해 사용합니다.
+collect 연산자를 사용하여 로그를 전달하는 등 작업을 처리할 때 주로 사용합니다.&lt;br&gt;
+단, collect 에서 상태를 변경하는 행위는 안티 패턴으로 &lt;strong&gt;양방향 상태 순환(Circular State Dependency)&lt;/strong&gt; 를 유발해 버그(무한 리컴포지션, 성능 저하)를 발생 시킬 수 있습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;val&lt;/span&gt; listState &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;rememberLazyListState&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token function&quot;&gt;LazyColumn&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;state &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; listState&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// ...&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token function&quot;&gt;LaunchedEffect&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;listState&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    snapshotFlow &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; listState&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;firstVisibleItemIndex &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;map&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; index &lt;span class=&quot;token operator&quot;&gt;-&gt;&lt;/span&gt; index &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;distinctUntilChanged&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;filter&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; it &lt;span class=&quot;token operator&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;true&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;collect&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;token comment&quot;&gt;// 이벤트 전송&lt;/span&gt;
+            MyAnalyticsService&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;sendScrolledPastFirstItemEvent&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;SideEffects API 사용시 주의 사항&lt;/h1&gt;
 &lt;p&gt;LaunchedEffect, produceStateof, DisposableEffect 와 같은 SdieEffects는 키를 가지고 효과를 재시작할 수 있다.&lt;/p&gt;
 &lt;p&gt;이 API 들은 아래와 같은 형태를 취합니다.&lt;/p&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;kotlin&quot;&gt;&lt;pre class=&quot;language-kotlin&quot;&gt;&lt;code class=&quot;language-kotlin&quot;&gt;&lt;span class=&quot;token function&quot;&gt;EffectName&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;restartIfThisKeyChanges&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; orThisKey&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; orThisKey&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;..&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; block &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
@@ -461,7 +1194,7 @@ Compose의 상태를 외부와 공유할 때 사용됩니다. 만약, 특정 화
 &lt;h1&gt;마무리&lt;/h1&gt;
 &lt;p&gt;이렇게 공식문서에 나와있는 API 들을 정리해 봤습니다.&lt;br&gt;
 이 API들을 이해하는 것은 Compose에서 &lt;strong&gt;비동기 작업&lt;/strong&gt;, &lt;strong&gt;외부 시스템과의 통합&lt;/strong&gt;, &lt;strong&gt;생명 주기 관리&lt;/strong&gt;, 그리고 &lt;strong&gt;불필요한 리컴포지션 방지&lt;/strong&gt;라는 네 가지 주요 과제를 해결하는 데 필수적입니다.&lt;br&gt;
-자세히 정리하려고 조금 길어진 감이 있는데.. 요약하는 포스트도 하나 올려서 빠르게 볼수 있게 정리해 보겠습니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[ComposeStudy - 02.UI 아키텍쳐, 수명주기 이해하기]]></title><description><![CDATA[Compose 수명주기 이해하기 참고: https://developer.android.com/develop/ui/compose/lifecycle?hl=ko 핵심 내용 컴포저블의 수명 주기 3단계 호출 사이트 (Call Site…]]></description><link>https://songwoody.github.io/compose/02_Compose 수명주기/</link><guid isPermaLink="false">https://songwoody.github.io/compose/02_Compose 수명주기/</guid><pubDate>Fri, 24 Oct 2025 06:12:00 GMT</pubDate><content:encoded>&lt;h1&gt;Compose 수명주기 이해하기&lt;/h1&gt;
+자세히 정리하려고 조금 길어진 감이 있는데.. 요약하는 포스트도 하나 올려서 빠르게 볼수 있게 정리해 보겠습니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[::compose:: UI 아키텍쳐, 수명주기 이해하기]]></title><description><![CDATA[Compose 수명주기 이해하기 참고: https://developer.android.com/develop/ui/compose/lifecycle?hl=ko 핵심 내용 컴포저블의 수명 주기 3단계 호출 사이트 (Call Site…]]></description><link>https://songwoody.github.io/compose/02_Compose 수명주기/</link><guid isPermaLink="false">https://songwoody.github.io/compose/02_Compose 수명주기/</guid><pubDate>Fri, 24 Oct 2025 06:12:00 GMT</pubDate><content:encoded>&lt;h1&gt;Compose 수명주기 이해하기&lt;/h1&gt;
 &lt;p&gt;참고: &lt;a href=&quot;https://developer.android.com/develop/ui/compose/lifecycle?hl=ko&quot;&gt;https://developer.android.com/develop/ui/compose/lifecycle?hl=ko&lt;/a&gt;&lt;/p&gt;
 &lt;h2&gt;핵심 내용&lt;/h2&gt;
 &lt;ol&gt;
@@ -579,7 +1312,7 @@ Initial composition with text: 라&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;위에 제시된 for 루프와 key() 컴포저블의 사용 예시는 &apos;컴포저블 인스턴스 식별&apos; 메커니즘을 명확히 설명하기 위한 목적입니다.&lt;br&gt;
 실제 대규모 리스트 UI를 개발할 때는 성능이 최적화된 &lt;strong&gt;LazyColumn&lt;/strong&gt;이나 &lt;strong&gt;LazyRow&lt;/strong&gt;를 사용해야 합니다.&lt;br&gt;
 Lazy Composable 역시 내부적으로 동일한 key 메커니즘을 활용하여 인스턴스를 효율적으로 관리하므로,&lt;br&gt;
-이 원리를 이해하여 Lazy List의 성능 최적화 방법을 이해하는데 도움이 되기를 바랍니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[ComposeStudy - 01.컴포즈 이해]]></title><description><![CDATA[Compose 이해 참고: https://developer.android.com/develop/ui/compose/mental-model?hl=ko 들어가며 과거 프로젝트에서 Jetpack Compose…]]></description><link>https://songwoody.github.io/compose/01_Compose 이해/</link><guid isPermaLink="false">https://songwoody.github.io/compose/01_Compose 이해/</guid><pubDate>Mon, 20 Oct 2025 21:14:03 GMT</pubDate><content:encoded>&lt;h1&gt;Compose 이해&lt;/h1&gt;
+이 원리를 이해하여 Lazy List의 성능 최적화 방법을 이해하는데 도움이 되기를 바랍니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[::compose:: 컴포즈의 이해]]></title><description><![CDATA[Compose 이해 참고: https://developer.android.com/develop/ui/compose/mental-model?hl=ko 들어가며 과거 프로젝트에서 Jetpack Compose…]]></description><link>https://songwoody.github.io/compose/01_Compose 이해/</link><guid isPermaLink="false">https://songwoody.github.io/compose/01_Compose 이해/</guid><pubDate>Mon, 20 Oct 2025 21:14:03 GMT</pubDate><content:encoded>&lt;h1&gt;Compose 이해&lt;/h1&gt;
 &lt;p&gt;참고: &lt;a href=&quot;https://developer.android.com/develop/ui/compose/mental-model?hl=ko&quot;&gt;https://developer.android.com/develop/ui/compose/mental-model?hl=ko&lt;/a&gt;&lt;/p&gt;
 &lt;h3&gt;들어가며&lt;/h3&gt;
 &lt;p&gt;과거 프로젝트에서 Jetpack Compose를 활용한 경험이 있지만,
