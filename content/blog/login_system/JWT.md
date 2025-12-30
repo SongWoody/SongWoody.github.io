@@ -4,7 +4,7 @@ date: "2025-12-02T22:12:30.0001"
 description: "전직 로그인 관리자가 서명키를 이용해 JWT 토큰을 위변조하고 사용자 정보를 탈취한 쿠팡 사태를 통해, JWT의 기본 동작 원리, 서명(Signature)의 역할 및 키 관리의 중요성을 알아봅니다."
 categories: ["보안", "웹/백엔드", "인증"]
 tags: ["JWT", "JSON Web Token", "서명키", "Signature Key", "정보보안", "인증", "쿠팡 해킹"]
-
+draft: true
 ---
 
 # 들어가며

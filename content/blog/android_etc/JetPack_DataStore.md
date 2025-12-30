@@ -1,10 +1,11 @@
 ---
 title: "Jetpack DataStore: Android 데이터 저장을 위한 최신 솔루션"
-date: "2023-12-03T09:00:00.000Z"
+date: "2025-12-03T09:00:00.000Z"
 description: "Android 앱에서 데이터를 효율적이고 안전하게 저장하는 Jetpack DataStore에 대해 알아봅니다."
 category: "Android"
 tags: ["Android", "Jetpack", "DataStore", "Kotlin", "Preferences", "Proto"]
 featuredImage: "../markdown_description/salty_egg.jpg"
+draft: true
 ---
 
 ## 왜 DataStore인가? (SharedPreferences의 한계)
