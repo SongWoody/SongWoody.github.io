@@ -6,11 +6,13 @@ import Layout from "../components/Layout"
 import Seo from "../components/Seo"
 import TitleRenderer from "../components/TitleRenderer";
 import "../components/TagList.css"
+import TableOfContents from "../components/TableOfContents";
 
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
 
 const BlogPostTemplate = ({ data, location }: PageProps) => {
   const { previous, next, site, markdownRemark: post } = data as any;
+  const { headings } = post; // 가져온 목차 데이터
   const siteTitle = site.siteMetadata?.title || `Title`
   const { featuredImage } = post.frontmatter;
   const image = featuredImage && getImage(featuredImage);
@@ -40,6 +42,7 @@ const BlogPostTemplate = ({ data, location }: PageProps) => {
             </div>
           )}
         </header>
+        <TableOfContents headings={headings} />
         <section style={{ marginTop: '2rem' }}
           dangerouslySetInnerHTML={{ __html: post.html }}
           itemProp="articleBody"
@@ -106,6 +109,11 @@ export const pageQuery = graphql`
       id
       excerpt(pruneLength: 160)
       html
+      headings { # 이 부분을 추가하세요!
+        depth
+        id
+        value
+      }
       frontmatter {
         title
         date(formatString: "MMMM DD, YYYY")

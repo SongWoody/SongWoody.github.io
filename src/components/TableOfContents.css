@@ -1,0 +1,56 @@
+.toc-container {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background-color: #f8f9fa; /* 연한 회색 배경 */
+  border-radius: 1rem;
+  position: sticky; top: 2rem;
+}
+
+.toc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* 항목 간 간격 */
+}
+
+.toc-item button {
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #495057;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+/* 마우스 올렸을 때 효과 */
+.toc-item button:hover {
+  background-color: #e9ecef;
+  color: #212529;
+}
+
+.toc-item.depth-1 button{
+  font-weight: 700;
+}
+
+/* H2 (depth 2) 스타일 */
+.toc-item.depth-2 button {
+  font-weight: 400;
+  padding-left: 1.5rem;
+  font-size: 1rem;
+}
+
+/* H3 (depth 3) 스타일 - 들여쓰기 적용 */
+.toc-item.depth-3 {
+  padding-left: 1.8rem;
+}
+
+.toc-item.depth-3 button {
+  font-weight: 400;
+  font-size: 0.9rem;
+  color: #868e96;
+}
