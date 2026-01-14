@@ -4,6 +4,7 @@ date: "2025-10-20T21:14:03.284Z"
 description: "안드로이드 공식 사이트의 '컴포트 이해' 를 이해하기 쉽게 정리합니다."
 categories: ["안드로이드", "컴포즈"]
 tags: ["android", "jetpack compose"]
+slug: "compose/01-compose-understanding/"
 ---
 
 # Compose 이해

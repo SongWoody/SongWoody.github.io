@@ -4,6 +4,7 @@ date: "2025-11-12T22:55:00.284Z"
 description: "Side-effect(부수효과) 개념을 설명하고 자주 사용하는 Side-effect 를 정리합니다."
 categories: ["안드로이드", "컴포즈"]
 tags: ["android", "jetpack compose", "Side-effect", "부수효과"]
+slug: "compose/03-compose-side-effects/"
 ---
 
 # Side-effect 소개

@@ -5,6 +5,7 @@ description: "전직 로그인 관리자가 서명키를 이용해 JWT 토큰을
 categories: ["보안", "웹/백엔드", "인증"]
 tags: ["JWT", "JSON Web Token", "서명키", "Signature Key", "정보보안", "인증", "쿠팡 해킹"]
 draft: true
+slug: "login-system/jwt/"
 ---
 
 # 들어가며

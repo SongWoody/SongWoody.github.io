@@ -6,6 +6,7 @@ categories: ["GraphQL"]
 tags: ["GraphQL"]
 featuredImage: "./graphql_featured_img_1.svg"
 draft: false
+slug: "grqphql/graphql-basic-concepts-overview/"
 ---
 
 # 들어가며 

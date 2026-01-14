@@ -5,6 +5,7 @@ description: "로그인&안 실전 - 초안."
 categories: ["백엔드", "보안"]
 tags: ["backend", "security", "login"]
 draft: true
+slug: "login-system/index/"
 ---
 # 시리즈 구성
   
