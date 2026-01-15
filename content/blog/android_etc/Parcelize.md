@@ -4,6 +4,7 @@ date: "2025-11-24T11:12:12.284Z"
 description: "Parcelize 플러그인을 사용하여 Parcelable 구현을 자동으로하는 방법을 소개합니다."
 categories: ["안드로이드"]
 tags: ["android", "parcelize", "parcelable"]
+slug: "android-etc/parcelize/"
 ---
 
 # Parcelize: Android 직렬화의 불편함을 해소

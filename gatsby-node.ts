@@ -113,16 +113,43 @@ export const createPages: GatsbyNode['createPages'] = async ({ graphql, actions,
   })
 }
 
-export const onCreateNode: GatsbyNode['onCreateNode'] = ({ node, actions, getNode }) => {
+export const onCreateNode: GatsbyNode['onCreateNode'] = ({ node, actions, getNode, reporter }) => {
   const { createNodeField } = actions
 
   if (node.internal.type === `MarkdownRemark`) {
-    const value = createFilePath({ node, getNode })
+    const fileNode = getNode(node.parent as string);
+    const sourceInstanceName = fileNode?.sourceInstanceName;
 
+    let computedSlug: string;
+
+    if (sourceInstanceName === 'blog') {
+      // For 'blog' source, slug is mandatory in frontmatter
+      if (!node.frontmatter || !(node.frontmatter as { slug?: string }).slug) {
+        reporter.panicOnBuild(
+          `Markdown file "${fileNode?.relativePath}" in the 'blog' source is missing a 'slug' field in its frontmatter. 'slug' is mandatory for blog posts.`
+        );
+        return;
+      }
+      const rawSlug = (node.frontmatter as { slug: string }).slug
+      let fmSlug = rawSlug.startsWith('/') ? rawSlug.substring(1) : rawSlug;
+      computedSlug = `/${sourceInstanceName}/${fmSlug}`;
+      computedSlug = computedSlug.endsWith('/') ? computedSlug : `${computedSlug}/`;
+
+    } else {
+      // For other source types (not 'blog'), use createFilePath as default behavior
+      computedSlug = createFilePath({ node, getNode });
+      // If a sourceInstanceName exists and createFilePath gives a relative path, prepend it
+      if (sourceInstanceName && !computedSlug.startsWith(`/${sourceInstanceName}`)) {
+        computedSlug = `/${sourceInstanceName}${computedSlug.startsWith('/') ? '' : '/'}${computedSlug}`;
+      }
+      // Ensure trailing slash
+      computedSlug = computedSlug.endsWith('/') ? computedSlug : `${computedSlug}/`;
+    }
+    
     createNodeField({
       name: `slug`,
       node,
-      value,
+      value: computedSlug,
     })
   }
 }
@@ -164,6 +191,7 @@ export const createSchemaCustomization: GatsbyNode['createSchemaCustomization'] 
       tags: [String]
       draft: Boolean
       featuredImage: File @fileByRelativePath
+      slug: String # Add slug field to Frontmatter type
     }
 
     type Fields {

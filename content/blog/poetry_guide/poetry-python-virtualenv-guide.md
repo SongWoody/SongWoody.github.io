@@ -4,6 +4,7 @@ date: "2025-05-12T22:30:00.284Z"
 description: "python 가상환경 관리 툴인 Poetry 사용법을 정리합니다."
 categories: ["Python"]
 tags: ["Python", "가상환경"]
+slug: "poetry-python-virtualenv-guide/"
 ---
 
 최근 SAM(Segment-Anything-Model)을 활용해 이미지 처리 데스크톱 앱을 만들 일이 생겨,  

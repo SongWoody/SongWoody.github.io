@@ -5,6 +5,7 @@ description: "마크다운(Markdown)의 여러 기호 등에 익숙해 질수 �
 categories: ["기타", "마크다운"]
 tags: ["Markdown", "마크다운"]
 featuredImage: "./Markdown-mark.svg"
+slug: "markdown-summary/"
 ---
 
 # 마크다운이란?

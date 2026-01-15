@@ -4,6 +4,7 @@ date: "2025-11-26T20:46:12.1112"
 description: "Jetpack compose Navigation2 라이브러리에 대해 기본적인 사용법을 간단하게 알아봅니다. 이후 포스트에서 Navigation3 와 비교하여 알아봅니다."
 categories: ["안드로이드", "컴포즈"]
 tags: ["android", "jetpack compose", "navigation", "네비게이션"]
+slug: "compose/05-compose-navigation2-basic/"
 ---
 
 # Compose Navigation2

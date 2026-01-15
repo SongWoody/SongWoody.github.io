@@ -6,6 +6,7 @@ category: "Android"
 tags: ["Android", "Jetpack", "DataStore", "Kotlin", "Preferences", "Proto"]
 featuredImage: "../markdown_description/salty_egg.jpg"
 draft: true
+slug: "android-etc/jetpack-datastore/"
 ---
 
 ## 왜 DataStore인가? (SharedPreferences의 한계)

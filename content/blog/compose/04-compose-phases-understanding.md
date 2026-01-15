@@ -4,6 +4,7 @@ date: "2025-11-17T22:11:50.1557"
 description: "제트팩 컴포즈의 단계(컴포지션-레이아웃-그리기) 에 대해 정리합니다."
 categories: ["안드로이드", "컴포즈"]
 tags: ["android", "jetpack compose", "컴포즈 단계"]
+slug: "compose/04-compose-phases-understanding/"
 ---
 
 
