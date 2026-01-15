@@ -82,7 +82,34 @@ type Post {
 스키마는 위에서 만든 타입들을 한데 모으고, 클라이언트가 **어떤 행동(읽기, 쓰기 등)** 을 할 수 있는지 정의한 최종 문서입니다.  
 스키마를 보면 이 서비스의 모든 것을 알 수 있습니다.
 
->    "이 서비스는 Post를 조회(Query)할 수 있고, User의 정보를 담고 있으며, 새로운 글을 작성(Mutaiton)하는 기능도 있네!, 글이 등록될 때 마다 알림(Subscription)도 받을 수 있네"
+실제 스키마 파일은 보통 이런 식으로 구성됩니다. 마치 메뉴판의 '전체 카테고리'를 정해주는 것과 같아 보입니다.
+```GraphQL
+# 1. 데이터 타입 정의
+type Post {
+  id: ID
+  title: String
+  author: User
+}
+
+type User {
+  id: ID
+  name: String
+}
+
+# 2. 할 수 있는 행동(Query, Mutation 등) 정의
+type Query {
+  # "id를 주면 Post 하나를 줄게" 라는 약속
+  post(id: ID): Post
+}
+
+type Mutation {
+  # "제목을 주면 새로운 포스트를 만들고 그 결과를 보여줄게" 라는 약속
+  createPost(title: String): Post
+}
+```
+
+요약하자면 스키마는 **"어떤 타입의 데이터를(Type), 어떤 방식으로(Query/Mutation) 주고받을 것인가"** 에 대한 서버와 클라이언트의 표준이라고 할 수 있습니다.  
+마치 REST API 에서 API 명세서(API Specification)를 정의한 것과 같습니다.
 
 ### 3. 스키마&타입 작성의 장점
 - **안정성**: 정의되지 않은 엉뚱한 데이터를 요청하면 서버가 실행되기도 전에 "그건 없는 데이터야"라고 알려줄 수 있습니다.
@@ -91,13 +118,56 @@ type Post {
 이제 스키마와 타입이 준비되었습니다. 그럼 이 스키마를 보고 실제로 데이터를 요청하는 방법인 **쿼리(Query)**에 대해 알아보겠습니다.
 
 ## 핵심2. 쿼리(Query) - 데이터 읽기
-> 클라이언트가 원하는 데이터만 정확히 요청하는 필드 설명
-> 인자를 줘 특정 데이터만 필터링하는 방법
-> REST API 와 비교하기
+쿼리는 클라이언트가 서버에 데이터를 요청하는 방식입니다. REST API의 GET 요청과 비슷하지만, 훨씬 더 효율적입니다.
+
+REST API는 서버가 정해준 데이터를 통째로 받아야 했지만, GraphQL 쿼리는 **내가 필요한 필드(Field)** 만 적어서 보냅니다.  
+만약 블로그 포스트 `id:1` 의 제목, 작성자 이름을 가져오고 싶으면
+- REST API: /posts/1 호출 시 제목, 본문, 작성일, 댓글 등 모든 데이터를 다 줍니다. (Overfetching)
+- GraphQL: "제목이랑 작성자 이름만 줘!"라고 요청하면 딱 그 데이터만 줍니다.
+```GraphQL
+# "포스트 1번의 제목(title)과 작성자 이름(name)만 필요해"
+{
+    post(id: 1) {
+        title
+        author {
+            name
+        }
+    }
+}
+```
+
+위와 같이 스키마만 알면 어떤 데이터를 가져올지는 **클라이언트에게 주도권(Client-driven)'** 이 있습니다.
 
 ## 핵심3. 뮤테이션(Mutation) - 데이서 수정
-> CUD 작업 처리 방법
-> 쿼리와의 차이점 소개
+뮤테이션은 REST API의 POST, PUT, DELETE를 하나로 합쳐놓은 것이라고 생각하면 쉽습니다.  
+쿼리가 데이터를 가져오는 '읽기' 전용이라면, **뮤테이션(Mutation)**은 서버의 데이터를 변경하는 '쓰기' 전용 통로입니다. 이름 그대로 데이터에 '변화(Mutation)'를 주는 작업이죠.
+
+### CUD(생성, 수정, 삭제) 작업 처리
+뮤테이션을 사용하면 새로운 포스트를 만들거나(Create), 기존 내용을 고치거나(Update), 마음에 안 드는 데이터를 지우는(Delete) 작업을 할 수 있습니다.
+```GraphQL
+# 새로운 포스트를 작성하는 Mutation 예시
+mutation {
+    createPost(title: "뮤테이션 배우기", content: "생각보다 쉬워요") {
+        id
+        title
+        createdAt
+    }
+}
+```
+위 코드는 createPost 로 title, content 를 전달해주고 성공 시 id, title, createdAt 를 전달 받습니다. 
+```json
+{
+    "data": {
+        "createPost": {
+        "id": "101",
+        "title": "뮤테이션 배우기",
+        "createdAt": "2026-01-15T10:00:00Z"
+        }
+    }
+}
+```
+
+//todo: input 에 대해선 간단하게 소개(type 과 차이점도 작성)
 
 ## 핵심 개념 3: 서브스크립션 (Subscription) - 실시간 데이터
 > 웹소켓(WebSocket)을 통해 서버에서 클라이언트로 데이터를 푸시(Push)하는 방식 설명
