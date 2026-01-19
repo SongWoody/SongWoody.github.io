@@ -7,6 +7,8 @@ import Seo from "../components/Seo"
 import TitleRenderer from "../components/TitleRenderer";
 import "../components/TagList.css"
 import TableOfContents from "../components/TableOfContents";
+import BlogPostNav from "../components/BlogPostNav" // Added this import
+import * as styles from "./blog-post.module.css"; // Import css modules
 
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
 
@@ -42,7 +44,6 @@ const BlogPostTemplate = ({ data, location }: PageProps) => {
             </div>
           )}
         </header>
-        <TableOfContents headings={headings} />
         <section style={{ marginTop: '2rem' }}
           dangerouslySetInnerHTML={{ __html: post.html }}
           itemProp="articleBody"
@@ -52,32 +53,10 @@ const BlogPostTemplate = ({ data, location }: PageProps) => {
           <Bio />
         </footer>
       </article>
-      <nav className="blog-post-nav">
-        <ul
-          style={{
-            display: `flex`,
-            flexWrap: `wrap`,
-            justifyContent: `space-between`,
-            listStyle: `none`,
-            padding: 0,
-          }}
-        >
-          <li>
-            {previous && (
-              <Link to={previous.fields.slug} rel="prev">
-                ← <TitleRenderer title={previous.frontmatter.title} />
-              </Link>
-            )}
-          </li>
-          <li>
-            {next && (
-              <Link to={next.fields.slug} rel="next">
-                <TitleRenderer title={next.frontmatter.title} /> →
-              </Link>
-            )}
-          </li>
-        </ul>
-      </nav>
+      <aside className={styles.tocContainer}>
+        <TableOfContents headings={headings} />
+      </aside>
+      <BlogPostNav previous={previous} next={next} />
     </Layout>
   )
 }
