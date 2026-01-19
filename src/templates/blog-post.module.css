@@ -1,0 +1,15 @@
+.tocContainer {
+    position: fixed;
+    top: 10rem;
+    left: calc(50% + 434px + 2rem); /* 868px/2 = 434px */
+    width: 250px;
+    height: calc(100vh - 12rem);
+    overflow-y: auto;
+}
+
+/* Hide Table of Contents on screens narrower than 1200px */
+@media (max-width: 1200px) {
+    .tocContainer {
+        display: none;
+    }
+}
