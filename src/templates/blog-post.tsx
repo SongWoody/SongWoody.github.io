@@ -11,13 +11,23 @@ import BlogPostNav from "../components/BlogPostNav" // Added this import
 import * as styles from "./blog-post.module.css"; // Import css modules
 
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
+import { PostNode, SiteMetadata } from "../types/post";
 
-const BlogPostTemplate = ({ data, location }: PageProps) => {
-  const { previous, next, site, markdownRemark: post } = data as any;
+interface DataProps {
+  site: {
+    siteMetadata: Pick<SiteMetadata, "title">
+  }
+  markdownRemark: PostNode
+  previous?: PostNode
+  next?: PostNode
+}
+
+const BlogPostTemplate = ({ data, location }: PageProps<DataProps>) => {
+  const { previous, next, site, markdownRemark: post } = data;
   const { headings } = post; // 가져온 목차 데이터
   const siteTitle = site.siteMetadata?.title || `Title`
   const { featuredImage } = post.frontmatter;
-  const image = featuredImage && getImage(featuredImage);
+  const image = featuredImage && getImage(featuredImage.childImageSharp);
 
   return (
     <Layout location={location} title={siteTitle}>
@@ -27,9 +37,9 @@ const BlogPostTemplate = ({ data, location }: PageProps) => {
         itemType="http://schema.org/Article"
       >
         {featuredImage && (
-            (featuredImage.extension === 'svg' && featuredImage.publicURL) ?
-                <img src={featuredImage.publicURL} alt={post.frontmatter.title} style={{ marginBottom: '1rem', width: '100%', borderRadius: '1.6rem' }}/> :
-                (image && <GatsbyImage image={image} alt={post.frontmatter.title} style={{ marginBottom: '1rem', borderRadius: '1.6rem' }}/>)
+          (featuredImage.extension === 'svg' && featuredImage.publicURL) ?
+            <img src={featuredImage.publicURL} alt={post.frontmatter.title} style={{ marginBottom: '1rem', width: '100%', borderRadius: '1.6rem' }} /> :
+            (image && <GatsbyImage image={image} alt={post.frontmatter.title} style={{ marginBottom: '1rem', borderRadius: '1.6rem' }} />)
         )}
         <header>
           <h1 itemProp="headline"><TitleRenderer title={post.frontmatter.title} /></h1>
@@ -61,8 +71,8 @@ const BlogPostTemplate = ({ data, location }: PageProps) => {
   )
 }
 
-export const Head = ({ data }: PageProps) => {
-  const { markdownRemark: post } = data as any;
+export const Head = ({ data }: PageProps<DataProps>) => {
+  const { markdownRemark: post } = data;
   return (
     <Seo
       title={post.frontmatter.title}

@@ -3,26 +3,10 @@ import { Link } from "gatsby";
 import TitleRenderer from "./TitleRenderer";
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
 import * as styles from "./PostListItem.module.css";
+import { PostNode } from "../types/post";
 
 interface PostListItemProps {
-  post: {
-    excerpt: string;
-    fields: {
-      slug: string;
-    };
-    frontmatter: {
-      date: string;
-      title: string;
-      description: string;
-      featuredImage?: {
-        childImageSharp: {
-          gatsbyImageData: any;
-        };
-        publicURL: string;
-        extension: string;
-      } | null;
-    };
-  };
+  post: PostNode;
 }
 
 const PostListItem = ({ post }: PostListItemProps) => {

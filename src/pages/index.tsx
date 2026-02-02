@@ -1,13 +1,23 @@
 import * as React from "react"
-import { graphql } from "gatsby"
+import { graphql, PageProps } from "gatsby"
 
 import Bio from "../components/bio"
 import Layout from "../components/Layout"
 import Seo from "../components/Seo"
-import PostListItem from "../components/PostListItem";
+import PostListItem from "../components/PostListItem"
+import { SiteMetadata, PostNode } from "../types/post"
 
-const BlogIndex = ({ data, location }) => {
-  const { title: siteTitle } = data.site.siteMetadata
+interface DataProps {
+  site: {
+    siteMetadata: Pick<SiteMetadata, "title">
+  }
+  allMarkdownRemark: {
+    nodes: PostNode[]
+  }
+}
+
+const BlogIndex = ({ data, location }: PageProps<DataProps>) => {
+  const siteTitle = data.site.siteMetadata.title
   const posts = data.allMarkdownRemark.nodes
 
   if (!posts.length) {
