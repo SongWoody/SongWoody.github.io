@@ -100,7 +100,7 @@ const config: GatsbyConfig = {
               }
             }`,
             output: "/rss.xml",
-            title: "Gatsby Starter Blog RSS Feed",
+            title: "NiNyYoon Blog RSS Feed",
           },
         ],
       },
@@ -108,8 +108,8 @@ const config: GatsbyConfig = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `Gatsby Starter Blog`,
-        short_name: `Gatsby`,
+        name: `NiNyYoon Blog`,
+        short_name: `NiNyYoon`,
         start_url: `/`,
         background_color: `#ffffff`,
         // This will impact how browsers show your PWA/website
