@@ -42,7 +42,7 @@ const BlogPostTemplate = ({ data, location }: PageProps<DataProps>) => {
             (image && <GatsbyImage image={image} alt={post.frontmatter.title} style={{ marginBottom: '1rem', borderRadius: '1.6rem' }} />)
         )}
         <header>
-          <h1 itemProp="headline"><TitleRenderer title={post.frontmatter.title} /></h1>
+          <h1 itemProp="headline"><TitleRenderer title={post.frontmatter.title} subject={post.frontmatter.subject} /></h1>
           <p style={{ fontSize: '1rem' }}>{post.frontmatter.date}</p>
           {post.frontmatter.tags && (
             <div className="tags">
@@ -105,6 +105,7 @@ export const pageQuery = graphql`
       }
       frontmatter {
         title
+        subject
         date(formatString: "MMMM DD, YYYY")
         description
         tags
@@ -123,6 +124,7 @@ export const pageQuery = graphql`
       }
       frontmatter {
         title
+        subject
       }
     }
     next: markdownRemark(id: { eq: $nextPostId }) {
@@ -131,6 +133,7 @@ export const pageQuery = graphql`
       }
       frontmatter {
         title
+        subject
       }
     }
   }

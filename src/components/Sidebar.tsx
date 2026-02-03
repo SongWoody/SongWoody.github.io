@@ -16,6 +16,7 @@ interface SidebarData {
         tags?: string[]
         categories?: string[]
         title: string
+        subject?: string
       }
       fields: {
         slug: string
@@ -51,6 +52,7 @@ const Sidebar = () => {
                 tags
                 categories
                 title
+                subject
               }
               fields {
                 slug
@@ -65,9 +67,9 @@ const Sidebar = () => {
 
         return (
           <aside className={`sidebar ${isMenuOpen ? 'open' : ''}`}>
-            <button 
-              className="close-button" 
-              onClick={toggleMenu} 
+            <button
+              className="close-button"
+              onClick={toggleMenu}
               aria-label="Close Menu"
             >
               <span className="close-icon" />

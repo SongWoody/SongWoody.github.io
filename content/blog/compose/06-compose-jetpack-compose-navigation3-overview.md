@@ -1,5 +1,6 @@
 ---
-title: '::compose:: Navigation3 핵심개념 살펴보기'
+title: 'Navigation3 핵심개념 살펴보기'
+subject: "compose"
 date: "2025-12-16T22:02:55.1112"
 description: "Jetpack Navigation3의 핵심적인 개념과 전반적인 사용방법을 살펴봅니다."
 categories: ["안드로이드", "컴포즈"]

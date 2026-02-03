@@ -2,7 +2,16 @@
 import React from "react";
 import ComposeLogo from "./ComposeLogo";
 
-const TitleRenderer = ({ title }: { title: string }) => {
+const TitleRenderer = ({ title, subject }: { title: string, subject?: string }) => {
+  if (subject === 'compose') {
+    return (
+      <>
+        <ComposeLogo />
+        {title.replace("::compose::", "")}
+      </>
+    );
+  }
+
   if (!title.includes("::compose::")) {
     return <>{title}</>;
   }

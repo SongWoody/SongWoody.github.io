@@ -9,6 +9,7 @@ interface BlogPostNavProps {
     };
     frontmatter: {
       title: string;
+      subject?: string;
     };
   } | null;
   next: {
@@ -17,6 +18,7 @@ interface BlogPostNavProps {
     };
     frontmatter: {
       title: string;
+      subject?: string;
     };
   } | null;
 }
@@ -36,14 +38,14 @@ const BlogPostNav: React.FC<BlogPostNavProps> = ({ previous, next }) => {
         <li>
           {previous && (
             <Link to={previous.fields.slug} rel="prev">
-              ← <TitleRenderer title={previous.frontmatter.title} />
+              ← <TitleRenderer title={previous.frontmatter.title} subject={previous.frontmatter.subject} />
             </Link>
           )}
         </li>
         <li>
           {next && (
             <Link to={next.fields.slug} rel="next">
-              <TitleRenderer title={next.frontmatter.title} /> →
+              <TitleRenderer title={next.frontmatter.title} subject={next.frontmatter.subject} /> →
             </Link>
           )}
         </li>

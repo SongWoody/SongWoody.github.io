@@ -11,6 +11,7 @@ interface Post {
   frontmatter: {
     title: string
     categories?: string[]
+    subject?: string
   }
 }
 
@@ -34,7 +35,16 @@ interface CategoryTreeProps {
   }
 }
 
-const renderSidebarTitle = (title: string) => {
+const renderSidebarTitle = (title: string, subject?: string) => {
+  if (subject === 'compose') {
+    return (
+      <>
+        <ComposeLogo />
+        {title.replace("::compose::", "")}
+      </>
+    );
+  }
+
   if (!title.includes("::compose::")) {
     return title;
   }
@@ -87,7 +97,7 @@ const CategoryNode = ({ category, posts, level = 0 }: CategoryNodeProps) => {
                   to={post.fields.slug}
                   className="post-link"
                 >
-                  {renderSidebarTitle(post.frontmatter.title)}
+                  {renderSidebarTitle(post.frontmatter.title, post.frontmatter.subject)}
                 </Link>
               ))}
             </div>
@@ -99,7 +109,7 @@ const CategoryNode = ({ category, posts, level = 0 }: CategoryNodeProps) => {
 
   return (
     <div className="category-node">
-      <button 
+      <button
         className="category-header"
         onClick={() => setIsOpen(!isOpen)}
         onKeyDown={(e: React.KeyboardEvent) => {
@@ -139,7 +149,7 @@ const CategoryNode = ({ category, posts, level = 0 }: CategoryNodeProps) => {
                   to={post.fields.slug}
                   className="post-link"
                 >
-                  {renderSidebarTitle(post.frontmatter.title)}
+                  {renderSidebarTitle(post.frontmatter.title, post.frontmatter.subject)}
                 </Link>
               ))}
             </div>

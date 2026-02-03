@@ -4,6 +4,7 @@ export interface PostFrontmatter {
     title: string
     date: string
     description?: string
+    subject?: string
     tags?: string[]
     featuredImage?: {
         childImageSharp: {

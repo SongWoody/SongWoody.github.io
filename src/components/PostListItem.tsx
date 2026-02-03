@@ -12,7 +12,7 @@ interface PostListItemProps {
 const PostListItem = ({ post }: PostListItemProps) => {
   const {
     fields: { slug },
-    frontmatter: { title, date, description, featuredImage },
+    frontmatter: { title, date, description, featuredImage, subject },
     excerpt,
   } = post;
 
@@ -32,7 +32,7 @@ const PostListItem = ({ post }: PostListItemProps) => {
             <header>
               <h2>
                 <span itemProp="headline">
-                  <TitleRenderer title={displayTitle} />
+                  <TitleRenderer title={displayTitle} subject={subject} />
                 </span>
               </h2>
               <small>{date}</small>
