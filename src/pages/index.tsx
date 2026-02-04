@@ -1,7 +1,7 @@
 import * as React from "react"
 import { graphql, PageProps } from "gatsby"
 
-import Bio from "../components/bio"
+import Bio from "../components/Bio"
 import Layout from "../components/Layout"
 import Seo from "../components/Seo"
 import PostListItem from "../components/PostListItem"

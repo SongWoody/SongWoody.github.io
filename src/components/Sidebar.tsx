@@ -2,7 +2,7 @@ import React from "react"
 import { Link, StaticQuery, graphql } from "gatsby"
 import { useSidebar } from "./SidebarContext"
 import CategoryTree from "./CategoryTree"
-import "./sidebarStyle.css"
+import "./SidebarStyle.css"
 
 // TypeScript 인터페이스 정의
 interface TagListProps {

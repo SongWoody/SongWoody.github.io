@@ -10,7 +10,7 @@ import { useStaticQuery, graphql } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
 import SocialLink from "./SocialLink"
 
-import * as styles from "./bio.module.css"
+import * as styles from "./Bio.module.css"
 
 const Bio = () => {
   const data = useStaticQuery(graphql`

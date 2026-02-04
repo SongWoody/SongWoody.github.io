@@ -2,7 +2,7 @@ import * as React from "react"
 import { Link } from "gatsby"
 import TitleRenderer from "./TitleRenderer"
 
-import * as styles from "./blog-post-nav.module.css"
+import * as styles from "./BlogPostNav.module.css"
 
 interface BlogPostNavProps {
   previous: {
