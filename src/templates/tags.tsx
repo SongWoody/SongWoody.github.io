@@ -4,13 +4,15 @@ import { Link, graphql, PageProps } from "gatsby"
 import Layout from "../components/Layout"
 import Seo from "../components/Seo"
 
-const TagsPage = ({ data, location }: PageProps<any>) => {
+import { AllMarkdownRemarkResponse } from "../types/post"
+
+const TagsPage = ({ data, location }: PageProps<AllMarkdownRemarkResponse>) => {
   const siteTitle = data.site.siteMetadata?.title || `Title`
   const posts = data.allMarkdownRemark.nodes
   const tags: string[] = [
     ...new Set(
-      (posts as any[])
-        .flatMap((post: any) => post.frontmatter?.tags || [])
+      posts
+        .flatMap(post => post.frontmatter?.tags || [])
         .filter((tag): tag is string => Boolean(tag))
     )
   ].sort()

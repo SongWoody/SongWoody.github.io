@@ -10,7 +10,11 @@ import Layout from "../components/Layout"
 import Seo from "../components/Seo"
 import PostListItem from "../components/PostListItem";
 
-const TagPage = ({ data, location, pageContext }: PageProps<any, { tag: string }>) => {
+import { AllMarkdownRemarkResponse } from "../types/post";
+
+import * as styles from "./tag-page.module.css";
+
+const TagPage = ({ data, location, pageContext }: PageProps<AllMarkdownRemarkResponse, { tag: string }>) => {
   const siteTitle = data.site.siteMetadata?.title || `Title`
   const posts = data.allMarkdownRemark.nodes
   const { tag } = pageContext
@@ -19,7 +23,7 @@ const TagPage = ({ data, location, pageContext }: PageProps<any, { tag: string }
     <Layout location={location} title={siteTitle}>
       <Seo title={`Posts tagged with #${tag}`} />
       <h1>Posts tagged with #{tag}</h1>
-      <ol style={{ listStyle: `none` }}>
+      <ol className={styles.postList}>
         {posts.map(post => (
           <PostListItem key={post.fields.slug} post={post} />
         ))}

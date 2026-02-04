@@ -1,7 +1,8 @@
 .tocContainer {
     position: fixed;
     top: 10rem;
-    left: calc(50% + 434px + 2rem); /* 868px/2 = 434px */
+    left: calc(50% + 434px + 2rem);
+    /* 868px/2 = 434px */
     width: 250px;
     height: calc(100vh - 12rem);
     overflow-y: auto;
@@ -12,4 +13,23 @@
     .tocContainer {
         display: none;
     }
+}
+
+.featuredImage {
+    margin-bottom: 1rem;
+    border-radius: 1.6rem;
+}
+
+.featuredImageSvg {
+    margin-bottom: 1rem;
+    width: 100%;
+    border-radius: 1.6rem;
+}
+
+.metaDate {
+    font-size: 1rem;
+}
+
+.contentSection {
+    margin-top: 2rem;
 }

@@ -16,6 +16,8 @@ interface DataProps {
   }
 }
 
+import * as styles from "./index.module.css"
+
 const BlogIndex = ({ data, location }: PageProps<DataProps>) => {
   const siteTitle = data.site.siteMetadata.title
   const posts = data.allMarkdownRemark.nodes
@@ -36,7 +38,7 @@ const BlogIndex = ({ data, location }: PageProps<DataProps>) => {
       <div className="bio-container">
         <Bio />
       </div>
-      <ol style={{ listStyle: "none", padding: 0 }}>
+      <ol className={styles.postList}>
         {posts.map(post => (
           <PostListItem key={post.fields.slug} post={post} />
         ))}

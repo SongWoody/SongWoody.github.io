@@ -10,6 +10,8 @@ import { useStaticQuery, graphql } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
 import SocialLink from "./SocialLink"
 
+import * as styles from "./bio.module.css"
+
 const Bio = () => {
   const data = useStaticQuery(graphql`
     query BioQuery {
@@ -47,11 +49,11 @@ const Bio = () => {
         )}
       </div>
       <SocialLink
-          href="https://github.com/SongWoody"
-          imgSrc="/github-mark.svg"
-          alt="GitHub 프로필"
-          style={{ width: "20px", height: "20px" }}
-       />
+        href="https://github.com/SongWoody"
+        imgSrc="/github-mark.svg"
+        alt="GitHub 프로필"
+        className={styles.socialIcon}
+      />
     </div>
   )
 }

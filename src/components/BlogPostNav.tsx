@@ -2,6 +2,8 @@ import * as React from "react"
 import { Link } from "gatsby"
 import TitleRenderer from "./TitleRenderer"
 
+import * as styles from "./blog-post-nav.module.css"
+
 interface BlogPostNavProps {
   previous: {
     fields: {
@@ -26,14 +28,7 @@ interface BlogPostNavProps {
 const BlogPostNav: React.FC<BlogPostNavProps> = ({ previous, next }) => {
   return (
     <nav className="blog-post-nav">
-      <ul
-        style={{
-          display: `flex`,
-          flexWrap: `wrap`,
-          justifyContent: `space-between`,
-          listStyle: `none`,
-          padding: 0,
-        }}
+      <ul className={styles.navInfo}
       >
         <li>
           {previous && (

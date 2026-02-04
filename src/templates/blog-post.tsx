@@ -38,12 +38,12 @@ const BlogPostTemplate = ({ data, location }: PageProps<DataProps>) => {
       >
         {featuredImage && (
           (featuredImage.extension === 'svg' && featuredImage.publicURL) ?
-            <img src={featuredImage.publicURL} alt={post.frontmatter.title} style={{ marginBottom: '1rem', width: '100%', borderRadius: '1.6rem' }} /> :
-            (image && <GatsbyImage image={image} alt={post.frontmatter.title} style={{ marginBottom: '1rem', borderRadius: '1.6rem' }} />)
+            <img src={featuredImage.publicURL} alt={post.frontmatter.title} className={styles.featuredImageSvg} /> :
+            (image && <GatsbyImage image={image} alt={post.frontmatter.title} className={styles.featuredImage} />)
         )}
         <header>
           <h1 itemProp="headline"><TitleRenderer title={post.frontmatter.title} subject={post.frontmatter.subject} /></h1>
-          <p style={{ fontSize: '1rem' }}>{post.frontmatter.date}</p>
+          <p className={styles.metaDate}>{post.frontmatter.date}</p>
           {post.frontmatter.tags && (
             <div className="tags">
               {post.frontmatter.tags.map((tag, index) => (
@@ -54,7 +54,7 @@ const BlogPostTemplate = ({ data, location }: PageProps<DataProps>) => {
             </div>
           )}
         </header>
-        <section style={{ marginTop: '2rem' }}
+        <section className={styles.contentSection}
           dangerouslySetInnerHTML={{ __html: post.html }}
           itemProp="articleBody"
         />

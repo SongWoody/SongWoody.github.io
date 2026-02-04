@@ -39,3 +39,14 @@ export interface SiteMetadata {
         summary: string
     }
 }
+
+export interface MarkdownRemarkConnection {
+    nodes: PostNode[]
+}
+
+export interface AllMarkdownRemarkResponse {
+    allMarkdownRemark: MarkdownRemarkConnection
+    site: {
+        siteMetadata: SiteMetadata
+    }
+}

@@ -5,6 +5,7 @@ interface SocialLinkProps {
   imgSrc: string
   alt: string
   style?: React.CSSProperties
+  className?: string
 }
 
 const SocialLink: React.FC<SocialLinkProps> = ({
@@ -12,10 +13,11 @@ const SocialLink: React.FC<SocialLinkProps> = ({
   imgSrc,
   alt,
   style,
+  className,
 }) => {
   return (
     <a href={href} target="_blank" rel="noopener noreferrer">
-      <img src={imgSrc} alt={alt} style={style} />
+      <img src={imgSrc} alt={alt} style={style} className={className} />
     </a>
   )
 }
